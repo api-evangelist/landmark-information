@@ -1,0 +1,2372 @@
+openapi: 3.0.1
+info:
+  version: 2.3.0
+  title: Intelliworks APIs
+  description: "The purpose of the Intelliworks Create Case API is to enable Case creation from outside Intelliworks environment, and to unlock a more efficient process for users, by reducing manual data entry.\n\nAny action performed via the API will be visible in the Intelliworks UI, and the further action can be performed either in the UI or via the API. The intent is to ensure data accuracy between applications, avoiding the need to re-key information. This is primarily a technical pack intended for developers. It will provide an explanation of the service, the calls involved and some sample requests.\n\n# Overview\n\nThis current released version of the API pack enables:\n\n## Cases\n### Create new case\n\nYou can create new cases via the API for the following types;\n\n<table>\n  <thead>\n    <tr>\n      <th>Workflow type</th>\n      <th>Workflow ID</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Sale</td>\n      <td>220-Sale</td>\n    </tr>\n    <tr>\n      <td>Purchase</td>\n      <td>210-Purchase</td>\n    </tr>\n    <tr>\n      <td>New build purchase</td>\n      <td>216-New Build Purchase</td>\n    </tr>\n    <tr>\n      <td>General Property</td>\n      <td>10200-General Property</td>\n    </tr>\n    <tr>\n      <td>Remortgage</td>\n      <td>300-Remortgage</td>\n    </tr>\n    <tr>\n      <td>Equity release</td>\n      <td>360-Equity Release (360)</td>\n    </tr>\n    <tr>\n      <td>Transfer of Equity</td>\n      <td>700-Transfer of Equity</td>\n    </tr>\n    <tr>\n      <td>Wills</td>\n      <td>415-Wills</td>\n    </tr>\n    <tr>\n      <td>Lasting Power of Attorney</td>\n      <td>500-Lasting Power of Attorney</td>\n    </tr>\n    <tr>\n      <td>Probate</td>\n      <td>601-Probate</td>\n    </tr>\n  </tbody>\n</table>\n\nIt provides the option to create a new case, via the API, instead of by manually initiating the case from the Intelliworks user interface. A case in Intelliworks consists of key details such as clients, a descriptive summary, and the type of case. For conveyancing cases, it also includes property, and price agreed. When you create a case, you need to include the appropriate WorkflowID for the type of case you want to create\n\nThe branch ID is a unique ID created by Ochresoft. Each branch ID relates to a branch or site (office) of the customer. When you create a case via API, you must specify which branch the case should be created in by including the branch ID. For example, if the customer has an Oxford office with branch ID \"926a95j1-c120-4cfd-80dd-9572c99345a6\", you will need to send that ID in the message. If you haven't already got the branch IDs for the customer, request them from Ochresoft.\n\nOnce the case is created, the workflow operates in the same way as if the case had been created manually, ensuring the conveyancer is guided through the process, but without the need to re-key details already held in another application.\n\n### Update case\n\nYou can update an existing Intelliworks case via the API using the same workflow-specific request body as create case. Supply the parent `transactionId` from the original create case response when updating case details.\n\n### Get case\n\nRetrieve read-only case summary details from Intelliworks by branch and either an Intelliworks case reference (`caseId`) and/or an external case reference (`externalCaseId`). At least one of `caseId` or `externalCaseId` must be supplied.\n\n### Get milestone\n\nReturns the actual completion date of a milestone for a case. Supply `branchId`, `milestoneId`, and at least one of `caseId` or `externalCaseId`. Optionally include `workflowId` when required for the target workflow. Valid `milestoneId` values are listed in [Supported milestone IDs by workflow](#supported-milestone-ids).\n\n<a id=\"supported-milestone-ids\"></a>\nSupported milestone IDs by workflow:\n\n<details>\n<summary>Gen. Priv. Cli.</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>FileOpened</td>\n      <td id=\"gen-priv-cli-milestone-499\"><a href=\"#gen-priv-cli-milestone-499\">499</a></td>\n    </tr>\n    <tr>\n      <td>ClientCareLetterSent</td>\n      <td id=\"gen-priv-cli-milestone-500\"><a href=\"#gen-priv-cli-milestone-500\">500</a></td>\n    </tr>\n    <tr>\n      <td>SignedClientCareLetterReceived</td>\n      <td id=\"gen-priv-cli-milestone-501\"><a href=\"#gen-priv-cli-milestone-501\">501</a></td>\n    </tr>\n    <tr>\n      <td>ClientsIDVerified</td>\n      <td id=\"gen-priv-cli-milestone-502\"><a href=\"#gen-priv-cli-milestone-502\">502</a></td>\n    </tr>\n    <tr>\n      <td>FileReview1</td>\n      <td id=\"gen-priv-cli-milestone-503\"><a href=\"#gen-priv-cli-milestone-503\">503</a></td>\n    </tr>\n    <tr>\n      <td>FileReview2</td>\n      <td id=\"gen-priv-cli-milestone-504\"><a href=\"#gen-priv-cli-milestone-504\">504</a></td>\n    </tr>\n    <tr>\n      <td>FileReview3</td>\n      <td id=\"gen-priv-cli-milestone-505\"><a href=\"#gen-priv-cli-milestone-505\">505</a></td>\n    </tr>\n    <tr>\n      <td>FileReview4</td>\n      <td id=\"gen-priv-cli-milestone-506\"><a href=\"#gen-priv-cli-milestone-506\">506</a></td>\n    </tr>\n    <tr>\n      <td>FileReview5</td>\n      <td id=\"gen-priv-cli-milestone-507\"><a href=\"#gen-priv-cli-milestone-507\">507</a></td>\n    </tr>\n    <tr>\n      <td>FileReview6</td>\n      <td id=\"gen-priv-cli-milestone-508\"><a href=\"#gen-priv-cli-milestone-508\">508</a></td>\n    </tr>\n    <tr>\n      <td>FileReview7</td>\n      <td id=\"gen-priv-cli-milestone-509\"><a href=\"#gen-priv-cli-milestone-509\">509</a></td>\n    </tr>\n    <tr>\n      <td>FileReview8</td>\n      <td id=\"gen-priv-cli-milestone-510\"><a href=\"#gen-priv-cli-milestone-510\">510</a></td>\n    </tr>\n    <tr>\n      <td>FileReview9</td>\n      <td id=\"gen-priv-cli-milestone-511\"><a href=\"#gen-priv-cli-milestone-511\">511</a></td>\n    </tr>\n    <tr>\n      <td>FileReview10</td>\n      <td id=\"gen-priv-cli-milestone-512\"><a href=\"#gen-priv-cli-milestone-512\">512</a></td>\n    </tr>\n    <tr>\n      <td>DateClosed</td>\n      <td id=\"gen-priv-cli-milestone-513\"><a href=\"#gen-priv-cli-milestone-513\">513</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>General Property</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>FileOpened</td>\n      <td id=\"general-property-milestone-237\"><a href=\"#general-property-milestone-237\">237</a></td>\n    </tr>\n    <tr>\n      <td>ClientCareSent</td>\n      <td id=\"general-property-milestone-238\"><a href=\"#general-property-milestone-238\">238</a></td>\n    </tr>\n    <tr>\n      <td>SignedCareRecd</td>\n      <td id=\"general-property-milestone-239\"><a href=\"#general-property-milestone-239\">239</a></td>\n    </tr>\n    <tr>\n      <td>ClientsIDVerified</td>\n      <td id=\"general-property-milestone-240\"><a href=\"#general-property-milestone-240\">240</a></td>\n    </tr>\n    <tr>\n      <td>2ndFileReview</td>\n      <td id=\"general-property-milestone-242\"><a href=\"#general-property-milestone-242\">242</a></td>\n    </tr>\n    <tr>\n      <td>3rdFileReview</td>\n      <td id=\"general-property-milestone-243\"><a href=\"#general-property-milestone-243\">243</a></td>\n    </tr>\n    <tr>\n      <td>4thFileReview</td>\n      <td id=\"general-property-milestone-244\"><a href=\"#general-property-milestone-244\">244</a></td>\n    </tr>\n    <tr>\n      <td>5thFileReview</td>\n      <td id=\"general-property-milestone-245\"><a href=\"#general-property-milestone-245\">245</a></td>\n    </tr>\n    <tr>\n      <td>LastestFileReview</td>\n      <td id=\"general-property-milestone-246\"><a href=\"#general-property-milestone-246\">246</a></td>\n    </tr>\n    <tr>\n      <td>DateClosed</td>\n      <td id=\"general-property-milestone-247\"><a href=\"#general-property-milestone-247\">247</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>LPAs</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>FileOpened</td>\n      <td id=\"lpas-milestone-307\"><a href=\"#lpas-milestone-307\">307</a></td>\n    </tr>\n    <tr>\n      <td>ClientCareLetterSent</td>\n      <td id=\"lpas-milestone-308\"><a href=\"#lpas-milestone-308\">308</a></td>\n    </tr>\n    <tr>\n      <td>SignedCopyClientCareLetterReturned</td>\n      <td id=\"lpas-milestone-309\"><a href=\"#lpas-milestone-309\">309</a></td>\n    </tr>\n    <tr>\n      <td>ClientIDVerified</td>\n      <td id=\"lpas-milestone-310\"><a href=\"#lpas-milestone-310\">310</a></td>\n    </tr>\n    <tr>\n      <td>AppointmentConfirmationSent</td>\n      <td id=\"lpas-milestone-311\"><a href=\"#lpas-milestone-311\">311</a></td>\n    </tr>\n    <tr>\n      <td>LPAQuestionnaireSent</td>\n      <td id=\"lpas-milestone-312\"><a href=\"#lpas-milestone-312\">312</a></td>\n    </tr>\n    <tr>\n      <td>LPAQuestionnaireReturned</td>\n      <td id=\"lpas-milestone-313\"><a href=\"#lpas-milestone-313\">313</a></td>\n    </tr>\n    <tr>\n      <td>InitialMeeting</td>\n      <td id=\"lpas-milestone-314\"><a href=\"#lpas-milestone-314\">314</a></td>\n    </tr>\n    <tr>\n      <td>AttorneyBankruptcySearchesDone</td>\n      <td id=\"lpas-milestone-315\"><a href=\"#lpas-milestone-315\">315</a></td>\n    </tr>\n    <tr>\n      <td>MedicalChecksComplete</td>\n      <td id=\"lpas-milestone-316\"><a href=\"#lpas-milestone-316\">316</a></td>\n    </tr>\n    <tr>\n      <td>FeeEarnerRiskManagementReview</td>\n      <td id=\"lpas-milestone-317\"><a href=\"#lpas-milestone-317\">317</a></td>\n    </tr>\n    <tr>\n      <td>CertificateProviderRequestSent</td>\n      <td id=\"lpas-milestone-318\"><a href=\"#lpas-milestone-318\">318</a></td>\n    </tr>\n    <tr>\n      <td>CertificateProviderReplyReceived</td>\n      <td id=\"lpas-milestone-319\"><a href=\"#lpas-milestone-319\">319</a></td>\n    </tr>\n    <tr>\n      <td>LPAFormsSentForSigning</td>\n      <td id=\"lpas-milestone-320\"><a href=\"#lpas-milestone-320\">320</a></td>\n    </tr>\n    <tr>\n      <td>SignedLPAFormsReceived</td>\n      <td id=\"lpas-milestone-321\"><a href=\"#lpas-milestone-321\">321</a></td>\n    </tr>\n    <tr>\n      <td>LPAsSigned</td>\n      <td id=\"lpas-milestone-322\"><a href=\"#lpas-milestone-322\">322</a></td>\n    </tr>\n    <tr>\n      <td>NoticeSent</td>\n      <td id=\"lpas-milestone-323\"><a href=\"#lpas-milestone-323\">323</a></td>\n    </tr>\n    <tr>\n      <td>LPASubmittedToOPG</td>\n      <td id=\"lpas-milestone-324\"><a href=\"#lpas-milestone-324\">324</a></td>\n    </tr>\n    <tr>\n      <td>NotificationOfSubmissionSent</td>\n      <td id=\"lpas-milestone-325\"><a href=\"#lpas-milestone-325\">325</a></td>\n    </tr>\n    <tr>\n      <td>LPAsRegistered</td>\n      <td id=\"lpas-milestone-326\"><a href=\"#lpas-milestone-326\">326</a></td>\n    </tr>\n    <tr>\n      <td>LPACopiesIssued</td>\n      <td id=\"lpas-milestone-327\"><a href=\"#lpas-milestone-327\">327</a></td>\n    </tr>\n    <tr>\n      <td>BillIssued</td>\n      <td id=\"lpas-milestone-328\"><a href=\"#lpas-milestone-328\">328</a></td>\n    </tr>\n    <tr>\n      <td>FileClosed</td>\n      <td id=\"lpas-milestone-329\"><a href=\"#lpas-milestone-329\">329</a></td>\n    </tr>\n    <tr>\n      <td>LPAExecutedDate</td>\n      <td id=\"lpas-milestone-330\"><a href=\"#lpas-milestone-330\">330</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>New Build Purchase</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>QuoteProduced</td>\n      <td id=\"new-build-purchase-milestone-399\"><a href=\"#new-build-purchase-milestone-399\">399</a></td>\n    </tr>\n    <tr>\n      <td>DateInstructed</td>\n      <td id=\"new-build-purchase-milestone-400\"><a href=\"#new-build-purchase-milestone-400\">400</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientAttempted</td>\n      <td id=\"new-build-purchase-milestone-401\"><a href=\"#new-build-purchase-milestone-401\">401</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientCompleted</td>\n      <td id=\"new-build-purchase-milestone-402\"><a href=\"#new-build-purchase-milestone-402\">402</a></td>\n    </tr>\n    <tr>\n      <td>CareLetterSent</td>\n      <td id=\"new-build-purchase-milestone-403\"><a href=\"#new-build-purchase-milestone-403\">403</a></td>\n    </tr>\n    <tr>\n      <td>WelcomePackSent</td>\n      <td id=\"new-build-purchase-milestone-404\"><a href=\"#new-build-purchase-milestone-404\">404</a></td>\n    </tr>\n    <tr>\n      <td>VirtualFirmCredentials</td>\n      <td id=\"new-build-purchase-milestone-405\"><a href=\"#new-build-purchase-milestone-405\">405</a></td>\n    </tr>\n    <tr>\n      <td>IntroductorySMS</td>\n      <td id=\"new-build-purchase-milestone-406\"><a href=\"#new-build-purchase-milestone-406\">406</a></td>\n    </tr>\n    <tr>\n      <td>ClientIdVerified</td>\n      <td id=\"new-build-purchase-milestone-407\"><a href=\"#new-build-purchase-milestone-407\">407</a></td>\n    </tr>\n    <tr>\n      <td>ClientInfoForm</td>\n      <td id=\"new-build-purchase-milestone-408\"><a href=\"#new-build-purchase-milestone-408\">408</a></td>\n    </tr>\n    <tr>\n      <td>SignedCareLetterReceived</td>\n      <td id=\"new-build-purchase-milestone-409\"><a href=\"#new-build-purchase-milestone-409\">409</a></td>\n    </tr>\n    <tr>\n      <td>AllInitialDocumentReceived</td>\n      <td id=\"new-build-purchase-milestone-410\"><a href=\"#new-build-purchase-milestone-410\">410</a></td>\n    </tr>\n    <tr>\n      <td>SignedDeclarationReceived</td>\n      <td id=\"new-build-purchase-milestone-411\"><a href=\"#new-build-purchase-milestone-411\">411</a></td>\n    </tr>\n    <tr>\n      <td>MemoOfSaleReceived</td>\n      <td id=\"new-build-purchase-milestone-412\"><a href=\"#new-build-purchase-milestone-412\">412</a></td>\n    </tr>\n    <tr>\n      <td>ContractRequested</td>\n      <td id=\"new-build-purchase-milestone-413\"><a href=\"#new-build-purchase-milestone-413\">413</a></td>\n    </tr>\n    <tr>\n      <td>ContractReceived</td>\n      <td id=\"new-build-purchase-milestone-414\"><a href=\"#new-build-purchase-milestone-414\">414</a></td>\n    </tr>\n    <tr>\n      <td>PropInfoFormReceived</td>\n      <td id=\"new-build-purchase-milestone-415\"><a href=\"#new-build-purchase-milestone-415\">415</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInfoFormReceived</td>\n      <td id=\"new-build-purchase-milestone-416\"><a href=\"#new-build-purchase-milestone-416\">416</a></td>\n    </tr>\n    <tr>\n      <td>FFFormReceived</td>\n      <td id=\"new-build-purchase-milestone-417\"><a href=\"#new-build-purchase-milestone-417\">417</a></td>\n    </tr>\n    <tr>\n      <td>EPCReceived</td>\n      <td id=\"new-build-purchase-milestone-418\"><a href=\"#new-build-purchase-milestone-418\">418</a></td>\n    </tr>\n    <tr>\n      <td>LocalSearchRequested</td>\n      <td id=\"new-build-purchase-milestone-419\"><a href=\"#new-build-purchase-milestone-419\">419</a></td>\n    </tr>\n    <tr>\n      <td>LocalSearchReceived</td>\n      <td id=\"new-build-purchase-milestone-420\"><a href=\"#new-build-purchase-milestone-420\">420</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesRaised</td>\n      <td id=\"new-build-purchase-milestone-421\"><a href=\"#new-build-purchase-milestone-421\">421</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesReceived</td>\n      <td id=\"new-build-purchase-milestone-422\"><a href=\"#new-build-purchase-milestone-422\">422</a></td>\n    </tr>\n    <tr>\n      <td>FurtherEnquiriesRaised</td>\n      <td id=\"new-build-purchase-milestone-423\"><a href=\"#new-build-purchase-milestone-423\">423</a></td>\n    </tr>\n    <tr>\n      <td>FurtherEnquiriesReceived</td>\n      <td id=\"new-build-purchase-milestone-424\"><a href=\"#new-build-purchase-milestone-424\">424</a></td>\n    </tr>\n    <tr>\n      <td>RepliesToSomeEnquiriesRecd</td>\n      <td id=\"new-build-purchase-milestone-425\"><a href=\"#new-build-purchase-milestone-425\">425</a></td>\n    </tr>\n    <tr>\n      <td>RepliesToAllEnquiriesRecd</td>\n      <td id=\"new-build-purchase-milestone-426\"><a href=\"#new-build-purchase-milestone-426\">426</a></td>\n    </tr>\n    <tr>\n      <td>ReportOnSearchesSentToClient</td>\n      <td id=\"new-build-purchase-milestone-427\"><a href=\"#new-build-purchase-milestone-427\">427</a></td>\n    </tr>\n    <tr>\n      <td>SearchesSatisfactory</td>\n      <td id=\"new-build-purchase-milestone-428\"><a href=\"#new-build-purchase-milestone-428\">428</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationRequested</td>\n      <td id=\"new-build-purchase-milestone-429\"><a href=\"#new-build-purchase-milestone-429\">429</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationReceived</td>\n      <td id=\"new-build-purchase-milestone-430\"><a href=\"#new-build-purchase-milestone-430\">430</a></td>\n    </tr>\n    <tr>\n      <td>TitleChecked</td>\n      <td id=\"new-build-purchase-milestone-431\"><a href=\"#new-build-purchase-milestone-431\">431</a></td>\n    </tr>\n    <tr>\n      <td>ContractApproved</td>\n      <td id=\"new-build-purchase-milestone-432\"><a href=\"#new-build-purchase-milestone-432\">432</a></td>\n    </tr>\n    <tr>\n      <td>ContractSentToClient</td>\n      <td id=\"new-build-purchase-milestone-433\"><a href=\"#new-build-purchase-milestone-433\">433</a></td>\n    </tr>\n    <tr>\n      <td>SignedContractHeld</td>\n      <td id=\"new-build-purchase-milestone-434\"><a href=\"#new-build-purchase-milestone-434\">434</a></td>\n    </tr>\n    <tr>\n      <td>ReportToClient</td>\n      <td id=\"new-build-purchase-milestone-435\"><a href=\"#new-build-purchase-milestone-435\">435</a></td>\n    </tr>\n    <tr>\n      <td>MortgageOfferReceived</td>\n      <td id=\"new-build-purchase-milestone-436\"><a href=\"#new-build-purchase-milestone-436\">436</a></td>\n    </tr>\n    <tr>\n      <td>OfferReportMortgageDeedSent</td>\n      <td id=\"new-build-purchase-milestone-437\"><a href=\"#new-build-purchase-milestone-437\">437</a></td>\n    </tr>\n    <tr>\n      <td>SignedMortgageDeedReceived</td>\n      <td id=\"new-build-purchase-milestone-438\"><a href=\"#new-build-purchase-milestone-438\">438</a></td>\n    </tr>\n    <tr>\n      <td>PropertyInsuranceConfirmed</td>\n      <td id=\"new-build-purchase-milestone-439\"><a href=\"#new-build-purchase-milestone-439\">439</a></td>\n    </tr>\n    <tr>\n      <td>TransferApproved</td>\n      <td id=\"new-build-purchase-milestone-440\"><a href=\"#new-build-purchase-milestone-440\">440</a></td>\n    </tr>\n    <tr>\n      <td>SignedTransferReceived</td>\n      <td id=\"new-build-purchase-milestone-441\"><a href=\"#new-build-purchase-milestone-441\">441</a></td>\n    </tr>\n    <tr>\n      <td>AssessReadinessForExchange</td>\n      <td id=\"new-build-purchase-milestone-442\"><a href=\"#new-build-purchase-milestone-442\">442</a></td>\n    </tr>\n    <tr>\n      <td>ReadyToExchange</td>\n      <td id=\"new-build-purchase-milestone-443\"><a href=\"#new-build-purchase-milestone-443\">443</a></td>\n    </tr>\n    <tr>\n      <td>BillPrepared</td>\n      <td id=\"new-build-purchase-milestone-444\"><a href=\"#new-build-purchase-milestone-444\">444</a></td>\n    </tr>\n    <tr>\n      <td>ClientCompletionStatement</td>\n      <td id=\"new-build-purchase-milestone-445\"><a href=\"#new-build-purchase-milestone-445\">445</a></td>\n    </tr>\n    <tr>\n      <td>RequisitionsOnTitleSent</td>\n      <td id=\"new-build-purchase-milestone-446\"><a href=\"#new-build-purchase-milestone-446\">446</a></td>\n    </tr>\n    <tr>\n      <td>RequisitionsOnTitleReceived</td>\n      <td id=\"new-build-purchase-milestone-447\"><a href=\"#new-build-purchase-milestone-447\">447</a></td>\n    </tr>\n    <tr>\n      <td>SignedSDLTFormsHeld</td>\n      <td id=\"new-build-purchase-milestone-448\"><a href=\"#new-build-purchase-milestone-448\">448</a></td>\n    </tr>\n    <tr>\n      <td>ActualExchange</td>\n      <td id=\"new-build-purchase-milestone-449\"><a href=\"#new-build-purchase-milestone-449\">449</a></td>\n    </tr>\n    <tr>\n      <td>PrioritySearchesSubmitted</td>\n      <td id=\"new-build-purchase-milestone-450\"><a href=\"#new-build-purchase-milestone-450\">450</a></td>\n    </tr>\n    <tr>\n      <td>CompletionDateNoticeReceived</td>\n      <td id=\"new-build-purchase-milestone-451\"><a href=\"#new-build-purchase-milestone-451\">451</a></td>\n    </tr>\n    <tr>\n      <td>ContractualCompletion</td>\n      <td id=\"new-build-purchase-milestone-452\"><a href=\"#new-build-purchase-milestone-452\">452</a></td>\n    </tr>\n    <tr>\n      <td>ActualCompletion</td>\n      <td id=\"new-build-purchase-milestone-453\"><a href=\"#new-build-purchase-milestone-453\">453</a></td>\n    </tr>\n    <tr>\n      <td>SDLTSubmission</td>\n      <td id=\"new-build-purchase-milestone-455\"><a href=\"#new-build-purchase-milestone-455\">455</a></td>\n    </tr>\n    <tr>\n      <td>SDLT5Received</td>\n      <td id=\"new-build-purchase-milestone-456\"><a href=\"#new-build-purchase-milestone-456\">456</a></td>\n    </tr>\n    <tr>\n      <td>RegistrationApplicationSent</td>\n      <td id=\"new-build-purchase-milestone-457\"><a href=\"#new-build-purchase-milestone-457\">457</a></td>\n    </tr>\n    <tr>\n      <td>CompletedRegistrationReceived</td>\n      <td id=\"new-build-purchase-milestone-458\"><a href=\"#new-build-purchase-milestone-458\">458</a></td>\n    </tr>\n    <tr>\n      <td>SatisfactionQuestionnaireSent</td>\n      <td id=\"new-build-purchase-milestone-459\"><a href=\"#new-build-purchase-milestone-459\">459</a></td>\n    </tr>\n    <tr>\n      <td>CaseClosed</td>\n      <td id=\"new-build-purchase-milestone-460\"><a href=\"#new-build-purchase-milestone-460\">460</a></td>\n    </tr>\n    <tr>\n      <td>DateAbortInterim</td>\n      <td id=\"new-build-purchase-milestone-461\"><a href=\"#new-build-purchase-milestone-461\">461</a></td>\n    </tr>\n    <tr>\n      <td>DateAborted</td>\n      <td id=\"new-build-purchase-milestone-462\"><a href=\"#new-build-purchase-milestone-462\">462</a></td>\n    </tr>\n    <tr>\n      <td>HTBAuthorityToProceedReceived</td>\n      <td id=\"new-build-purchase-milestone-463\"><a href=\"#new-build-purchase-milestone-463\">463</a></td>\n    </tr>\n    <tr>\n      <td>HTBAuthorityToProceedDate</td>\n      <td id=\"new-build-purchase-milestone-464\"><a href=\"#new-build-purchase-milestone-464\">464</a></td>\n    </tr>\n    <tr>\n      <td>HTBSolicitorsForm1Prepared</td>\n      <td id=\"new-build-purchase-milestone-465\"><a href=\"#new-build-purchase-milestone-465\">465</a></td>\n    </tr>\n    <tr>\n      <td>HTBSolicitorsForm1Sent</td>\n      <td id=\"new-build-purchase-milestone-466\"><a href=\"#new-build-purchase-milestone-466\">466</a></td>\n    </tr>\n    <tr>\n      <td>HTBDisclosuresMadeToHelpToBuyAgent</td>\n      <td id=\"new-build-purchase-milestone-467\"><a href=\"#new-build-purchase-milestone-467\">467</a></td>\n    </tr>\n    <tr>\n      <td>HTBAgrentHasAgreedToProceedafterDisclosures</td>\n      <td id=\"new-build-purchase-milestone-468\"><a href=\"#new-build-purchase-milestone-468\">468</a></td>\n    </tr>\n    <tr>\n      <td>HTBNoticeGivenToQualifiyingLender</td>\n      <td id=\"new-build-purchase-milestone-469\"><a href=\"#new-build-purchase-milestone-469\">469</a></td>\n    </tr>\n    <tr>\n      <td>HTBReportedOnHelpToBuySchemeToClient</td>\n      <td id=\"new-build-purchase-milestone-470\"><a href=\"#new-build-purchase-milestone-470\">470</a></td>\n    </tr>\n    <tr>\n      <td>HTBSignedHTBFirstTimeBuyerDeclarationRecd</td>\n      <td id=\"new-build-purchase-milestone-471\"><a href=\"#new-build-purchase-milestone-471\">471</a></td>\n    </tr>\n    <tr>\n      <td>HTBSolicitorsForm2Prepared</td>\n      <td id=\"new-build-purchase-milestone-472\"><a href=\"#new-build-purchase-milestone-472\">472</a></td>\n    </tr>\n    <tr>\n      <td>HTBSolicitorsForm2Sent</td>\n      <td id=\"new-build-purchase-milestone-473\"><a href=\"#new-build-purchase-milestone-473\">473</a></td>\n    </tr>\n    <tr>\n      <td>HTBAuthorityToExchangeReceived</td>\n      <td id=\"new-build-purchase-milestone-474\"><a href=\"#new-build-purchase-milestone-474\">474</a></td>\n    </tr>\n    <tr>\n      <td>HTBNoticeOfHelpToBuyChargesServedOnLender</td>\n      <td id=\"new-build-purchase-milestone-475\"><a href=\"#new-build-purchase-milestone-475\">475</a></td>\n    </tr>\n    <tr>\n      <td>HTBPostCompletionDocumentsSentToHomeAgent</td>\n      <td id=\"new-build-purchase-milestone-476\"><a href=\"#new-build-purchase-milestone-476\">476</a></td>\n    </tr>\n    <tr>\n      <td>HTBHelpToBuyISABonusAppliedFor</td>\n      <td id=\"new-build-purchase-milestone-477\"><a href=\"#new-build-purchase-milestone-477\">477</a></td>\n    </tr>\n    <tr>\n      <td>HTBHelpToBuyISABonusReceived</td>\n      <td id=\"new-build-purchase-milestone-478\"><a href=\"#new-build-purchase-milestone-478\">478</a></td>\n    </tr>\n    <tr>\n      <td>MoneyOnAccountReceived</td>\n      <td id=\"new-build-purchase-milestone-520\"><a href=\"#new-build-purchase-milestone-520\">520</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>Probate</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>FileOpened</td>\n      <td id=\"probate-milestone-248\"><a href=\"#probate-milestone-248\">248</a></td>\n    </tr>\n    <tr>\n      <td>ClientCareLetterSent</td>\n      <td id=\"probate-milestone-249\"><a href=\"#probate-milestone-249\">249</a></td>\n    </tr>\n    <tr>\n      <td>SignedCopyClientCareLetterRecd</td>\n      <td id=\"probate-milestone-250\"><a href=\"#probate-milestone-250\">250</a></td>\n    </tr>\n    <tr>\n      <td>SignedGeneralAuthorityRecd</td>\n      <td id=\"probate-milestone-251\"><a href=\"#probate-milestone-251\">251</a></td>\n    </tr>\n    <tr>\n      <td>SignedAuthorityToObtainWillRecd</td>\n      <td id=\"probate-milestone-252\"><a href=\"#probate-milestone-252\">252</a></td>\n    </tr>\n    <tr>\n      <td>PowerOfAttorneyCompleted</td>\n      <td id=\"probate-milestone-253\"><a href=\"#probate-milestone-253\">253</a></td>\n    </tr>\n    <tr>\n      <td>ProbateQuestionnaireReceived</td>\n      <td id=\"probate-milestone-254\"><a href=\"#probate-milestone-254\">254</a></td>\n    </tr>\n    <tr>\n      <td>ForeignDomicileQuestRecd</td>\n      <td id=\"probate-milestone-255\"><a href=\"#probate-milestone-255\">255</a></td>\n    </tr>\n    <tr>\n      <td>DeathRegistered</td>\n      <td id=\"probate-milestone-256\"><a href=\"#probate-milestone-256\">256</a></td>\n    </tr>\n    <tr>\n      <td>DeathCertificateReceived</td>\n      <td id=\"probate-milestone-257\"><a href=\"#probate-milestone-257\">257</a></td>\n    </tr>\n    <tr>\n      <td>DeathCertVerificationFormPrepared</td>\n      <td id=\"probate-milestone-258\"><a href=\"#probate-milestone-258\">258</a></td>\n    </tr>\n    <tr>\n      <td>DeceasedBankruptcySearchDone</td>\n      <td id=\"probate-milestone-259\"><a href=\"#probate-milestone-259\">259</a></td>\n    </tr>\n    <tr>\n      <td>WillObtained</td>\n      <td id=\"probate-milestone-260\"><a href=\"#probate-milestone-260\">260</a></td>\n    </tr>\n    <tr>\n      <td>AllPersonalRepresentativesIDVerified</td>\n      <td id=\"probate-milestone-261\"><a href=\"#probate-milestone-261\">261</a></td>\n    </tr>\n    <tr>\n      <td>PRsBankruptcySearchesDone</td>\n      <td id=\"probate-milestone-262\"><a href=\"#probate-milestone-262\">262</a></td>\n    </tr>\n    <tr>\n      <td>BeneficiaryIDChecksDone</td>\n      <td id=\"probate-milestone-263\"><a href=\"#probate-milestone-263\">263</a></td>\n    </tr>\n    <tr>\n      <td>BeneficiariesEntitlementAdvised</td>\n      <td id=\"probate-milestone-264\"><a href=\"#probate-milestone-264\">264</a></td>\n    </tr>\n    <tr>\n      <td>MinorsBirthCertsReceived</td>\n      <td id=\"probate-milestone-265\"><a href=\"#probate-milestone-265\">265</a></td>\n    </tr>\n    <tr>\n      <td>StatutoryAdvertInLondonGazette</td>\n      <td id=\"probate-milestone-266\"><a href=\"#probate-milestone-266\">266</a></td>\n    </tr>\n    <tr>\n      <td>StatutoryAdvertInLocalPaper</td>\n      <td id=\"probate-milestone-267\"><a href=\"#probate-milestone-267\">267</a></td>\n    </tr>\n    <tr>\n      <td>NilRateBandDetailsReceived</td>\n      <td id=\"probate-milestone-268\"><a href=\"#probate-milestone-268\">268</a></td>\n    </tr>\n    <tr>\n      <td>FuneralAccountPaid</td>\n      <td id=\"probate-milestone-269\"><a href=\"#probate-milestone-269\">269</a></td>\n    </tr>\n    <tr>\n      <td>IHTReferenceAppliedFor</td>\n      <td id=\"probate-milestone-270\"><a href=\"#probate-milestone-270\">270</a></td>\n    </tr>\n    <tr>\n      <td>IHTReferenceAppliedReceived</td>\n      <td id=\"probate-milestone-271\"><a href=\"#probate-milestone-271\">271</a></td>\n    </tr>\n    <tr>\n      <td>IHTPaymentArranged</td>\n      <td id=\"probate-milestone-272\"><a href=\"#probate-milestone-272\">272</a></td>\n    </tr>\n    <tr>\n      <td>IHTFormsSentToPRsForSignature</td>\n      <td id=\"probate-milestone-273\"><a href=\"#probate-milestone-273\">273</a></td>\n    </tr>\n    <tr>\n      <td>OathAffidavitsIHTFormsSworn</td>\n      <td id=\"probate-milestone-274\"><a href=\"#probate-milestone-274\">274</a></td>\n    </tr>\n    <tr>\n      <td>IHTFormsPrepared</td>\n      <td id=\"probate-milestone-275\"><a href=\"#probate-milestone-275\">275</a></td>\n    </tr>\n    <tr>\n      <td>IHTFormsSubmitted</td>\n      <td id=\"probate-milestone-276\"><a href=\"#probate-milestone-276\">276</a></td>\n    </tr>\n    <tr>\n      <td>NoticesServedOnNonProvingExecs</td>\n      <td id=\"probate-milestone-277\"><a href=\"#probate-milestone-277\">277</a></td>\n    </tr>\n    <tr>\n      <td>GrantApplicationLodged</td>\n      <td id=\"probate-milestone-278\"><a href=\"#probate-milestone-278\">278</a></td>\n    </tr>\n    <tr>\n      <td>GrantIssued</td>\n      <td id=\"probate-milestone-279\"><a href=\"#probate-milestone-279\">279</a></td>\n    </tr>\n    <tr>\n      <td>CashRaisedForAdminPurposes</td>\n      <td id=\"probate-milestone-280\"><a href=\"#probate-milestone-280\">280</a></td>\n    </tr>\n    <tr>\n      <td>EstateDebtsPaid</td>\n      <td id=\"probate-milestone-281\"><a href=\"#probate-milestone-281\">281</a></td>\n    </tr>\n    <tr>\n      <td>DeedOfVariationPrepared</td>\n      <td id=\"probate-milestone-282\"><a href=\"#probate-milestone-282\">282</a></td>\n    </tr>\n    <tr>\n      <td>IncomeTaxToDateOfDeathSettled</td>\n      <td id=\"probate-milestone-283\"><a href=\"#probate-milestone-283\">283</a></td>\n    </tr>\n    <tr>\n      <td>InterimAccountsSentToPRs</td>\n      <td id=\"probate-milestone-284\"><a href=\"#probate-milestone-284\">284</a></td>\n    </tr>\n    <tr>\n      <td>PRsApprovedInterimAccounts</td>\n      <td id=\"probate-milestone-285\"><a href=\"#probate-milestone-285\">285</a></td>\n    </tr>\n    <tr>\n      <td>InterimEstateAccountsToResiduaryBens</td>\n      <td id=\"probate-milestone-286\"><a href=\"#probate-milestone-286\">286</a></td>\n    </tr>\n    <tr>\n      <td>BeneficiaryBankruptcySearchesDone</td>\n      <td id=\"probate-milestone-287\"><a href=\"#probate-milestone-287\">287</a></td>\n    </tr>\n    <tr>\n      <td>CorrectiveAccountLodged</td>\n      <td id=\"probate-milestone-288\"><a href=\"#probate-milestone-288\">288</a></td>\n    </tr>\n    <tr>\n      <td>PecuniaryLegateesConfirmedLegacysRecd</td>\n      <td id=\"probate-milestone-289\"><a href=\"#probate-milestone-289\">289</a></td>\n    </tr>\n    <tr>\n      <td>SpecificDevisesConfirmedLegacysRecd</td>\n      <td id=\"probate-milestone-290\"><a href=\"#probate-milestone-290\">290</a></td>\n    </tr>\n    <tr>\n      <td>SpecificLegacysConfirmedLegacysRecd</td>\n      <td id=\"probate-milestone-291\"><a href=\"#probate-milestone-291\">291</a></td>\n    </tr>\n    <tr>\n      <td>InterimDistributionToResiduaryBeneficiarys</td>\n      <td id=\"probate-milestone-292\"><a href=\"#probate-milestone-292\">292</a></td>\n    </tr>\n    <tr>\n      <td>TaxPositionDuringAdminSettled</td>\n      <td id=\"probate-milestone-293\"><a href=\"#probate-milestone-293\">293</a></td>\n    </tr>\n    <tr>\n      <td>IHTClearanceCertAppliedFor</td>\n      <td id=\"probate-milestone-294\"><a href=\"#probate-milestone-294\">294</a></td>\n    </tr>\n    <tr>\n      <td>IHTClearanceCertificateRecd</td>\n      <td id=\"probate-milestone-295\"><a href=\"#probate-milestone-295\">295</a></td>\n    </tr>\n    <tr>\n      <td>EstateAccountsPrepared</td>\n      <td id=\"probate-milestone-296\"><a href=\"#probate-milestone-296\">296</a></td>\n    </tr>\n    <tr>\n      <td>FinalAccountsToPRsForApproval</td>\n      <td id=\"probate-milestone-297\"><a href=\"#probate-milestone-297\">297</a></td>\n    </tr>\n    <tr>\n      <td>PRsApprovalOfAccountsRecd</td>\n      <td id=\"probate-milestone-298\"><a href=\"#probate-milestone-298\">298</a></td>\n    </tr>\n    <tr>\n      <td>FinalEstateAccountsSentToResiduaryBeneficiarys</td>\n      <td id=\"probate-milestone-299\"><a href=\"#probate-milestone-299\">299</a></td>\n    </tr>\n    <tr>\n      <td>FinalDistributionMadeToResiduaryBeneficiarys</td>\n      <td id=\"probate-milestone-300\"><a href=\"#probate-milestone-300\">300</a></td>\n    </tr>\n    <tr>\n      <td>ResiduaryBeneficiarysConfirmedReceiptOfResidue</td>\n      <td id=\"probate-milestone-301\"><a href=\"#probate-milestone-301\">301</a></td>\n    </tr>\n    <tr>\n      <td>EstateClosed</td>\n      <td id=\"probate-milestone-302\"><a href=\"#probate-milestone-302\">302</a></td>\n    </tr>\n    <tr>\n      <td>FileClosed</td>\n      <td id=\"probate-milestone-303\"><a href=\"#probate-milestone-303\">303</a></td>\n    </tr>\n    <tr>\n      <td>ReferrerAccountPaid</td>\n      <td id=\"probate-milestone-304\"><a href=\"#probate-milestone-304\">304</a></td>\n    </tr>\n    <tr>\n      <td>AllRepliesReceivedToInitialLetters</td>\n      <td id=\"probate-milestone-305\"><a href=\"#probate-milestone-305\">305</a></td>\n    </tr>\n    <tr>\n      <td>InitialLettersToOrganisationsSent</td>\n      <td id=\"probate-milestone-306\"><a href=\"#probate-milestone-306\">306</a></td>\n    </tr>\n    <tr>\n      <td>InitialContactCallAttempted</td>\n      <td id=\"probate-milestone-490\"><a href=\"#probate-milestone-490\">490</a></td>\n    </tr>\n    <tr>\n      <td>InitialContactCallMade</td>\n      <td id=\"probate-milestone-491\"><a href=\"#probate-milestone-491\">491</a></td>\n    </tr>\n    <tr>\n      <td>IntroductorySMSsent</td>\n      <td id=\"probate-milestone-492\"><a href=\"#probate-milestone-492\">492</a></td>\n    </tr>\n    <tr>\n      <td>VirtualFirmCredentialsSent</td>\n      <td id=\"probate-milestone-493\"><a href=\"#probate-milestone-493\">493</a></td>\n    </tr>\n    <tr>\n      <td>AcknowledgeSignedToBreceived</td>\n      <td id=\"probate-milestone-494\"><a href=\"#probate-milestone-494\">494</a></td>\n    </tr>\n    <tr>\n      <td>RenunciationRequested</td>\n      <td id=\"probate-milestone-495\"><a href=\"#probate-milestone-495\">495</a></td>\n    </tr>\n    <tr>\n      <td>RenunciationAccepted</td>\n      <td id=\"probate-milestone-496\"><a href=\"#probate-milestone-496\">496</a></td>\n    </tr>\n    <tr>\n      <td>InitialAdvice</td>\n      <td id=\"probate-milestone-497\"><a href=\"#probate-milestone-497\">497</a></td>\n    </tr>\n    <tr>\n      <td>PRAdvisedGrantReceived</td>\n      <td id=\"probate-milestone-498\"><a href=\"#probate-milestone-498\">498</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>Purchase</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>QuoteProduced</td>\n      <td id=\"purchase-milestone-1\"><a href=\"#purchase-milestone-1\">1</a></td>\n    </tr>\n    <tr>\n      <td>DateInstructed</td>\n      <td id=\"purchase-milestone-2\"><a href=\"#purchase-milestone-2\">2</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientCompleted</td>\n      <td id=\"purchase-milestone-3\"><a href=\"#purchase-milestone-3\">3</a></td>\n    </tr>\n    <tr>\n      <td>CareLetterSent</td>\n      <td id=\"purchase-milestone-4\"><a href=\"#purchase-milestone-4\">4</a></td>\n    </tr>\n    <tr>\n      <td>VirtualFirmCredentials</td>\n      <td id=\"purchase-milestone-5\"><a href=\"#purchase-milestone-5\">5</a></td>\n    </tr>\n    <tr>\n      <td>IntroductorySMS</td>\n      <td id=\"purchase-milestone-6\"><a href=\"#purchase-milestone-6\">6</a></td>\n    </tr>\n    <tr>\n      <td>ClientIdVerified</td>\n      <td id=\"purchase-milestone-7\"><a href=\"#purchase-milestone-7\">7</a></td>\n    </tr>\n    <tr>\n      <td>ClientInfoForm</td>\n      <td id=\"purchase-milestone-8\"><a href=\"#purchase-milestone-8\">8</a></td>\n    </tr>\n    <tr>\n      <td>SignedCareLetterReceived</td>\n      <td id=\"purchase-milestone-9\"><a href=\"#purchase-milestone-9\">9</a></td>\n    </tr>\n    <tr>\n      <td>MemoOfSaleReceived</td>\n      <td id=\"purchase-milestone-10\"><a href=\"#purchase-milestone-10\">10</a></td>\n    </tr>\n    <tr>\n      <td>ContractRequested</td>\n      <td id=\"purchase-milestone-11\"><a href=\"#purchase-milestone-11\">11</a></td>\n    </tr>\n    <tr>\n      <td>ContractReceived</td>\n      <td id=\"purchase-milestone-12\"><a href=\"#purchase-milestone-12\">12</a></td>\n    </tr>\n    <tr>\n      <td>PropInfoFormReceived</td>\n      <td id=\"purchase-milestone-13\"><a href=\"#purchase-milestone-13\">13</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInfoFormReceived</td>\n      <td id=\"purchase-milestone-14\"><a href=\"#purchase-milestone-14\">14</a></td>\n    </tr>\n    <tr>\n      <td>FFFormReceived</td>\n      <td id=\"purchase-milestone-15\"><a href=\"#purchase-milestone-15\">15</a></td>\n    </tr>\n    <tr>\n      <td>EPCReceived</td>\n      <td id=\"purchase-milestone-16\"><a href=\"#purchase-milestone-16\">16</a></td>\n    </tr>\n    <tr>\n      <td>LocalSearchRequested</td>\n      <td id=\"purchase-milestone-17\"><a href=\"#purchase-milestone-17\">17</a></td>\n    </tr>\n    <tr>\n      <td>LocalSearchReceived</td>\n      <td id=\"purchase-milestone-18\"><a href=\"#purchase-milestone-18\">18</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesRaised</td>\n      <td id=\"purchase-milestone-19\"><a href=\"#purchase-milestone-19\">19</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesReceived</td>\n      <td id=\"purchase-milestone-20\"><a href=\"#purchase-milestone-20\">20</a></td>\n    </tr>\n    <tr>\n      <td>FurtherEnquiriesRaised</td>\n      <td id=\"purchase-milestone-21\"><a href=\"#purchase-milestone-21\">21</a></td>\n    </tr>\n    <tr>\n      <td>FurtherEnquiriesReceived</td>\n      <td id=\"purchase-milestone-22\"><a href=\"#purchase-milestone-22\">22</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationRequested</td>\n      <td id=\"purchase-milestone-23\"><a href=\"#purchase-milestone-23\">23</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationReceived</td>\n      <td id=\"purchase-milestone-24\"><a href=\"#purchase-milestone-24\">24</a></td>\n    </tr>\n    <tr>\n      <td>TitleChecked</td>\n      <td id=\"purchase-milestone-25\"><a href=\"#purchase-milestone-25\">25</a></td>\n    </tr>\n    <tr>\n      <td>ContractApproved</td>\n      <td id=\"purchase-milestone-26\"><a href=\"#purchase-milestone-26\">26</a></td>\n    </tr>\n    <tr>\n      <td>ContractSentToClient</td>\n      <td id=\"purchase-milestone-27\"><a href=\"#purchase-milestone-27\">27</a></td>\n    </tr>\n    <tr>\n      <td>SignedContractHeld</td>\n      <td id=\"purchase-milestone-28\"><a href=\"#purchase-milestone-28\">28</a></td>\n    </tr>\n    <tr>\n      <td>ReportToClient</td>\n      <td id=\"purchase-milestone-29\"><a href=\"#purchase-milestone-29\">29</a></td>\n    </tr>\n    <tr>\n      <td>MortgageOfferReceived</td>\n      <td id=\"purchase-milestone-30\"><a href=\"#purchase-milestone-30\">30</a></td>\n    </tr>\n    <tr>\n      <td>TransferApproved</td>\n      <td id=\"purchase-milestone-31\"><a href=\"#purchase-milestone-31\">31</a></td>\n    </tr>\n    <tr>\n      <td>AssessReadinessForExchange</td>\n      <td id=\"purchase-milestone-32\"><a href=\"#purchase-milestone-32\">32</a></td>\n    </tr>\n    <tr>\n      <td>ReadyToExchange</td>\n      <td id=\"purchase-milestone-33\"><a href=\"#purchase-milestone-33\">33</a></td>\n    </tr>\n    <tr>\n      <td>BillPrepared</td>\n      <td id=\"purchase-milestone-34\"><a href=\"#purchase-milestone-34\">34</a></td>\n    </tr>\n    <tr>\n      <td>ClientCompletionStatement</td>\n      <td id=\"purchase-milestone-35\"><a href=\"#purchase-milestone-35\">35</a></td>\n    </tr>\n    <tr>\n      <td>RequisitionsOnTitleSent</td>\n      <td id=\"purchase-milestone-36\"><a href=\"#purchase-milestone-36\">36</a></td>\n    </tr>\n    <tr>\n      <td>RequisitionsOnTitleReceived</td>\n      <td id=\"purchase-milestone-37\"><a href=\"#purchase-milestone-37\">37</a></td>\n    </tr>\n    <tr>\n      <td>ActualExchange</td>\n      <td id=\"purchase-milestone-39\"><a href=\"#purchase-milestone-39\">39</a></td>\n    </tr>\n    <tr>\n      <td>ContractualCompletion</td>\n      <td id=\"purchase-milestone-40\"><a href=\"#purchase-milestone-40\">40</a></td>\n    </tr>\n    <tr>\n      <td>LenderCompletionMoney</td>\n      <td id=\"purchase-milestone-41\"><a href=\"#purchase-milestone-41\">41</a></td>\n    </tr>\n    <tr>\n      <td>ActualCompletion</td>\n      <td id=\"purchase-milestone-42\"><a href=\"#purchase-milestone-42\">42</a></td>\n    </tr>\n    <tr>\n      <td>SDLTSubmission</td>\n      <td id=\"purchase-milestone-43\"><a href=\"#purchase-milestone-43\">43</a></td>\n    </tr>\n    <tr>\n      <td>RegistrationApplicationSent</td>\n      <td id=\"purchase-milestone-45\"><a href=\"#purchase-milestone-45\">45</a></td>\n    </tr>\n    <tr>\n      <td>CompletedRegistrationReceived</td>\n      <td id=\"purchase-milestone-46\"><a href=\"#purchase-milestone-46\">46</a></td>\n    </tr>\n    <tr>\n      <td>SatisfactionQuestionnaireSent</td>\n      <td id=\"purchase-milestone-47\"><a href=\"#purchase-milestone-47\">47</a></td>\n    </tr>\n    <tr>\n      <td>DateAborted</td>\n      <td id=\"purchase-milestone-49\"><a href=\"#purchase-milestone-49\">49</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientAttempted</td>\n      <td id=\"purchase-milestone-357\"><a href=\"#purchase-milestone-357\">357</a></td>\n    </tr>\n    <tr>\n      <td>WelcomePackSent</td>\n      <td id=\"purchase-milestone-358\"><a href=\"#purchase-milestone-358\">358</a></td>\n    </tr>\n    <tr>\n      <td>AllInitialDocumentsReceived</td>\n      <td id=\"purchase-milestone-359\"><a href=\"#purchase-milestone-359\">359</a></td>\n    </tr>\n    <tr>\n      <td>SignedDeclarationReceived</td>\n      <td id=\"purchase-milestone-360\"><a href=\"#purchase-milestone-360\">360</a></td>\n    </tr>\n    <tr>\n      <td>RepliesToSomeEnquiries</td>\n      <td id=\"purchase-milestone-361\"><a href=\"#purchase-milestone-361\">361</a></td>\n    </tr>\n    <tr>\n      <td>RepliesToAllEnquiries</td>\n      <td id=\"purchase-milestone-362\"><a href=\"#purchase-milestone-362\">362</a></td>\n    </tr>\n    <tr>\n      <td>ReportOnSearchesToClient</td>\n      <td id=\"purchase-milestone-363\"><a href=\"#purchase-milestone-363\">363</a></td>\n    </tr>\n    <tr>\n      <td>SearchesOk</td>\n      <td id=\"purchase-milestone-364\"><a href=\"#purchase-milestone-364\">364</a></td>\n    </tr>\n    <tr>\n      <td>HelptoBuyClientReport</td>\n      <td id=\"purchase-milestone-365\"><a href=\"#purchase-milestone-365\">365</a></td>\n    </tr>\n    <tr>\n      <td>MortgageOffertoClient</td>\n      <td id=\"purchase-milestone-366\"><a href=\"#purchase-milestone-366\">366</a></td>\n    </tr>\n    <tr>\n      <td>SignedMortgageDeed</td>\n      <td id=\"purchase-milestone-367\"><a href=\"#purchase-milestone-367\">367</a></td>\n    </tr>\n    <tr>\n      <td>PropertyInsuranceConfirmed</td>\n      <td id=\"purchase-milestone-368\"><a href=\"#purchase-milestone-368\">368</a></td>\n    </tr>\n    <tr>\n      <td>SignedTransferReceived</td>\n      <td id=\"purchase-milestone-369\"><a href=\"#purchase-milestone-369\">369</a></td>\n    </tr>\n    <tr>\n      <td>HelptoBuyISABonusAppliedFor</td>\n      <td id=\"purchase-milestone-370\"><a href=\"#purchase-milestone-370\">370</a></td>\n    </tr>\n    <tr>\n      <td>HelptoBuyBonusReceived</td>\n      <td id=\"purchase-milestone-371\"><a href=\"#purchase-milestone-371\">371</a></td>\n    </tr>\n    <tr>\n      <td>BankruptcySearchesSubmitted</td>\n      <td id=\"purchase-milestone-372\"><a href=\"#purchase-milestone-372\">372</a></td>\n    </tr>\n    <tr>\n      <td>PrioritySearchesSubmitted</td>\n      <td id=\"purchase-milestone-373\"><a href=\"#purchase-milestone-373\">373</a></td>\n    </tr>\n    <tr>\n      <td>DateAbortInterim</td>\n      <td id=\"purchase-milestone-374\"><a href=\"#purchase-milestone-374\">374</a></td>\n    </tr>\n    <tr>\n      <td>MoneyOnAccountReceived</td>\n      <td id=\"purchase-milestone-519\"><a href=\"#purchase-milestone-519\">519</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>Remortgage</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>QuoteProduced</td>\n      <td id=\"remortgage-milestone-151\"><a href=\"#remortgage-milestone-151\">151</a></td>\n    </tr>\n    <tr>\n      <td>DateInstructed</td>\n      <td id=\"remortgage-milestone-152\"><a href=\"#remortgage-milestone-152\">152</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientCompleted</td>\n      <td id=\"remortgage-milestone-153\"><a href=\"#remortgage-milestone-153\">153</a></td>\n    </tr>\n    <tr>\n      <td>CareLetterSent</td>\n      <td id=\"remortgage-milestone-154\"><a href=\"#remortgage-milestone-154\">154</a></td>\n    </tr>\n    <tr>\n      <td>VirtualFirmCredentials</td>\n      <td id=\"remortgage-milestone-155\"><a href=\"#remortgage-milestone-155\">155</a></td>\n    </tr>\n    <tr>\n      <td>IntroductorySMS</td>\n      <td id=\"remortgage-milestone-156\"><a href=\"#remortgage-milestone-156\">156</a></td>\n    </tr>\n    <tr>\n      <td>SignedCareLetterReceived</td>\n      <td id=\"remortgage-milestone-157\"><a href=\"#remortgage-milestone-157\">157</a></td>\n    </tr>\n    <tr>\n      <td>ClientInfoForm</td>\n      <td id=\"remortgage-milestone-158\"><a href=\"#remortgage-milestone-158\">158</a></td>\n    </tr>\n    <tr>\n      <td>ClientIdVerified</td>\n      <td id=\"remortgage-milestone-159\"><a href=\"#remortgage-milestone-159\">159</a></td>\n    </tr>\n    <tr>\n      <td>MoneyOnAccountIn</td>\n      <td id=\"remortgage-milestone-160\"><a href=\"#remortgage-milestone-160\">160</a></td>\n    </tr>\n    <tr>\n      <td>IndexMapRequested</td>\n      <td id=\"remortgage-milestone-161\"><a href=\"#remortgage-milestone-161\">161</a></td>\n    </tr>\n    <tr>\n      <td>IndexMapReceived</td>\n      <td id=\"remortgage-milestone-162\"><a href=\"#remortgage-milestone-162\">162</a></td>\n    </tr>\n    <tr>\n      <td>DeedsRequested</td>\n      <td id=\"remortgage-milestone-163\"><a href=\"#remortgage-milestone-163\">163</a></td>\n    </tr>\n    <tr>\n      <td>DeedsReceived</td>\n      <td id=\"remortgage-milestone-164\"><a href=\"#remortgage-milestone-164\">164</a></td>\n    </tr>\n    <tr>\n      <td>OfficialCopiesRequested</td>\n      <td id=\"remortgage-milestone-165\"><a href=\"#remortgage-milestone-165\">165</a></td>\n    </tr>\n    <tr>\n      <td>OfficialCopiesReceived</td>\n      <td id=\"remortgage-milestone-166\"><a href=\"#remortgage-milestone-166\">166</a></td>\n    </tr>\n    <tr>\n      <td>RedStatsRequested</td>\n      <td id=\"remortgage-milestone-167\"><a href=\"#remortgage-milestone-167\">167</a></td>\n    </tr>\n    <tr>\n      <td>RedStatsReceived</td>\n      <td id=\"remortgage-milestone-168\"><a href=\"#remortgage-milestone-168\">168</a></td>\n    </tr>\n    <tr>\n      <td>MortgageOfferReceived</td>\n      <td id=\"remortgage-milestone-169\"><a href=\"#remortgage-milestone-169\">169</a></td>\n    </tr>\n    <tr>\n      <td>MortgageDeedSent</td>\n      <td id=\"remortgage-milestone-170\"><a href=\"#remortgage-milestone-170\">170</a></td>\n    </tr>\n    <tr>\n      <td>MortgageDeedHeld</td>\n      <td id=\"remortgage-milestone-171\"><a href=\"#remortgage-milestone-171\">171</a></td>\n    </tr>\n    <tr>\n      <td>RevisedMortgageOfferReceived</td>\n      <td id=\"remortgage-milestone-172\"><a href=\"#remortgage-milestone-172\">172</a></td>\n    </tr>\n    <tr>\n      <td>RevisedMortgageDeedSent</td>\n      <td id=\"remortgage-milestone-173\"><a href=\"#remortgage-milestone-173\">173</a></td>\n    </tr>\n    <tr>\n      <td>RevisedMortgageDeedHeld</td>\n      <td id=\"remortgage-milestone-174\"><a href=\"#remortgage-milestone-174\">174</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationRequested</td>\n      <td id=\"remortgage-milestone-175\"><a href=\"#remortgage-milestone-175\">175</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationReceived</td>\n      <td id=\"remortgage-milestone-176\"><a href=\"#remortgage-milestone-176\">176</a></td>\n    </tr>\n    <tr>\n      <td>LocalSearchRequested</td>\n      <td id=\"remortgage-milestone-177\"><a href=\"#remortgage-milestone-177\">177</a></td>\n    </tr>\n    <tr>\n      <td>LocalSearchReceived</td>\n      <td id=\"remortgage-milestone-178\"><a href=\"#remortgage-milestone-178\">178</a></td>\n    </tr>\n    <tr>\n      <td>CertifciateofTitle</td>\n      <td id=\"remortgage-milestone-179\"><a href=\"#remortgage-milestone-179\">179</a></td>\n    </tr>\n    <tr>\n      <td>FeeEarnerRevew</td>\n      <td id=\"remortgage-milestone-180\"><a href=\"#remortgage-milestone-180\">180</a></td>\n    </tr>\n    <tr>\n      <td>BillPrepared</td>\n      <td id=\"remortgage-milestone-181\"><a href=\"#remortgage-milestone-181\">181</a></td>\n    </tr>\n    <tr>\n      <td>ClientCompletionStatement</td>\n      <td id=\"remortgage-milestone-182\"><a href=\"#remortgage-milestone-182\">182</a></td>\n    </tr>\n    <tr>\n      <td>SignedTransfer</td>\n      <td id=\"remortgage-milestone-183\"><a href=\"#remortgage-milestone-183\">183</a></td>\n    </tr>\n    <tr>\n      <td>TenancyAgreementReceived</td>\n      <td id=\"remortgage-milestone-184\"><a href=\"#remortgage-milestone-184\">184</a></td>\n    </tr>\n    <tr>\n      <td>CompletionSetFor</td>\n      <td id=\"remortgage-milestone-185\"><a href=\"#remortgage-milestone-185\">185</a></td>\n    </tr>\n    <tr>\n      <td>LenderCompletionMoney</td>\n      <td id=\"remortgage-milestone-186\"><a href=\"#remortgage-milestone-186\">186</a></td>\n    </tr>\n    <tr>\n      <td>ActualCompletion</td>\n      <td id=\"remortgage-milestone-187\"><a href=\"#remortgage-milestone-187\">187</a></td>\n    </tr>\n    <tr>\n      <td>RegistrationApplicationSent</td>\n      <td id=\"remortgage-milestone-188\"><a href=\"#remortgage-milestone-188\">188</a></td>\n    </tr>\n    <tr>\n      <td>CompletedRegistrationReceived</td>\n      <td id=\"remortgage-milestone-189\"><a href=\"#remortgage-milestone-189\">189</a></td>\n    </tr>\n    <tr>\n      <td>SatisfactionQuestionnaireSent</td>\n      <td id=\"remortgage-milestone-190\"><a href=\"#remortgage-milestone-190\">190</a></td>\n    </tr>\n    <tr>\n      <td>DateAborted</td>\n      <td id=\"remortgage-milestone-191\"><a href=\"#remortgage-milestone-191\">191</a></td>\n    </tr>\n    <tr>\n      <td>CaseClosed</td>\n      <td id=\"remortgage-milestone-192\"><a href=\"#remortgage-milestone-192\">192</a></td>\n    </tr>\n    <tr>\n      <td>TitleChecked</td>\n      <td id=\"remortgage-milestone-203\"><a href=\"#remortgage-milestone-203\">203</a></td>\n    </tr>\n    <tr>\n      <td>ReportToClient</td>\n      <td id=\"remortgage-milestone-204\"><a href=\"#remortgage-milestone-204\">204</a></td>\n    </tr>\n    <tr>\n      <td>AllReceivedClient</td>\n      <td id=\"remortgage-milestone-205\"><a href=\"#remortgage-milestone-205\">205</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientAttempted</td>\n      <td id=\"remortgage-milestone-487\"><a href=\"#remortgage-milestone-487\">487</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>Sale</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>QuoteProduced</td>\n      <td id=\"sale-milestone-100\"><a href=\"#sale-milestone-100\">100</a></td>\n    </tr>\n    <tr>\n      <td>DateInstructed</td>\n      <td id=\"sale-milestone-101\"><a href=\"#sale-milestone-101\">101</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientCompleted</td>\n      <td id=\"sale-milestone-102\"><a href=\"#sale-milestone-102\">102</a></td>\n    </tr>\n    <tr>\n      <td>CareLetterSent</td>\n      <td id=\"sale-milestone-103\"><a href=\"#sale-milestone-103\">103</a></td>\n    </tr>\n    <tr>\n      <td>VirtualFirmCredentials</td>\n      <td id=\"sale-milestone-104\"><a href=\"#sale-milestone-104\">104</a></td>\n    </tr>\n    <tr>\n      <td>IntroductorySMS</td>\n      <td id=\"sale-milestone-105\"><a href=\"#sale-milestone-105\">105</a></td>\n    </tr>\n    <tr>\n      <td>IndexSearchRequested</td>\n      <td id=\"sale-milestone-106\"><a href=\"#sale-milestone-106\">106</a></td>\n    </tr>\n    <tr>\n      <td>IndexSearchReceived</td>\n      <td id=\"sale-milestone-107\"><a href=\"#sale-milestone-107\">107</a></td>\n    </tr>\n    <tr>\n      <td>ClientInfoForm</td>\n      <td id=\"sale-milestone-108\"><a href=\"#sale-milestone-108\">108</a></td>\n    </tr>\n    <tr>\n      <td>ClientIdVerified</td>\n      <td id=\"sale-milestone-109\"><a href=\"#sale-milestone-109\">109</a></td>\n    </tr>\n    <tr>\n      <td>MemoOfSaleReceived</td>\n      <td id=\"sale-milestone-110\"><a href=\"#sale-milestone-110\">110</a></td>\n    </tr>\n    <tr>\n      <td>FFFormReceived</td>\n      <td id=\"sale-milestone-111\"><a href=\"#sale-milestone-111\">111</a></td>\n    </tr>\n    <tr>\n      <td>PropInfoFormReceived</td>\n      <td id=\"sale-milestone-112\"><a href=\"#sale-milestone-112\">112</a></td>\n    </tr>\n    <tr>\n      <td>PropQuestFormReceived</td>\n      <td id=\"sale-milestone-113\"><a href=\"#sale-milestone-113\">113</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInfoFormReceived</td>\n      <td id=\"sale-milestone-114\"><a href=\"#sale-milestone-114\">114</a></td>\n    </tr>\n    <tr>\n      <td>OverridingQuestionnaireReceived</td>\n      <td id=\"sale-milestone-115\"><a href=\"#sale-milestone-115\">115</a></td>\n    </tr>\n    <tr>\n      <td>SurplusFormReceived</td>\n      <td id=\"sale-milestone-116\"><a href=\"#sale-milestone-116\">116</a></td>\n    </tr>\n    <tr>\n      <td>SignedCareLetterReceived</td>\n      <td id=\"sale-milestone-117\"><a href=\"#sale-milestone-117\">117</a></td>\n    </tr>\n    <tr>\n      <td>MoneyOnAccountReceived</td>\n      <td id=\"sale-milestone-118\"><a href=\"#sale-milestone-118\">118</a></td>\n    </tr>\n    <tr>\n      <td>DeedsRequested</td>\n      <td id=\"sale-milestone-119\"><a href=\"#sale-milestone-119\">119</a></td>\n    </tr>\n    <tr>\n      <td>RedStatsRequested</td>\n      <td id=\"sale-milestone-120\"><a href=\"#sale-milestone-120\">120</a></td>\n    </tr>\n    <tr>\n      <td>DeedsReceived</td>\n      <td id=\"sale-milestone-121\"><a href=\"#sale-milestone-121\">121</a></td>\n    </tr>\n    <tr>\n      <td>SolsInitialLetter</td>\n      <td id=\"sale-milestone-122\"><a href=\"#sale-milestone-122\">122</a></td>\n    </tr>\n    <tr>\n      <td>ContractIssued</td>\n      <td id=\"sale-milestone-123\"><a href=\"#sale-milestone-123\">123</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationRequested</td>\n      <td id=\"sale-milestone-124\"><a href=\"#sale-milestone-124\">124</a></td>\n    </tr>\n    <tr>\n      <td>LeaseholdInformationReceived</td>\n      <td id=\"sale-milestone-125\"><a href=\"#sale-milestone-125\">125</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesClientAnswered</td>\n      <td id=\"sale-milestone-126\"><a href=\"#sale-milestone-126\">126</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesReply</td>\n      <td id=\"sale-milestone-127\"><a href=\"#sale-milestone-127\">127</a></td>\n    </tr>\n    <tr>\n      <td>ContractApproved</td>\n      <td id=\"sale-milestone-128\"><a href=\"#sale-milestone-128\">128</a></td>\n    </tr>\n    <tr>\n      <td>RequisitionsOnTitleReceived</td>\n      <td id=\"sale-milestone-129\"><a href=\"#sale-milestone-129\">129</a></td>\n    </tr>\n    <tr>\n      <td>DraftTransferReceived</td>\n      <td id=\"sale-milestone-130\"><a href=\"#sale-milestone-130\">130</a></td>\n    </tr>\n    <tr>\n      <td>RepliesToRequisitionsOnTitle</td>\n      <td id=\"sale-milestone-131\"><a href=\"#sale-milestone-131\">131</a></td>\n    </tr>\n    <tr>\n      <td>FurtherEnquiriesReceived</td>\n      <td id=\"sale-milestone-132\"><a href=\"#sale-milestone-132\">132</a></td>\n    </tr>\n    <tr>\n      <td>FurtherEnquiriesReply</td>\n      <td id=\"sale-milestone-133\"><a href=\"#sale-milestone-133\">133</a></td>\n    </tr>\n    <tr>\n      <td>TransferApproved</td>\n      <td id=\"sale-milestone-134\"><a href=\"#sale-milestone-134\">134</a></td>\n    </tr>\n    <tr>\n      <td>ContractSentToClient</td>\n      <td id=\"sale-milestone-135\"><a href=\"#sale-milestone-135\">135</a></td>\n    </tr>\n    <tr>\n      <td>SignedContractHeld</td>\n      <td id=\"sale-milestone-136\"><a href=\"#sale-milestone-136\">136</a></td>\n    </tr>\n    <tr>\n      <td>ReadyToExchange</td>\n      <td id=\"sale-milestone-137\"><a href=\"#sale-milestone-137\">137</a></td>\n    </tr>\n    <tr>\n      <td>BillPrepared</td>\n      <td id=\"sale-milestone-138\"><a href=\"#sale-milestone-138\">138</a></td>\n    </tr>\n    <tr>\n      <td>ClientCompletionStatement</td>\n      <td id=\"sale-milestone-139\"><a href=\"#sale-milestone-139\">139</a></td>\n    </tr>\n    <tr>\n      <td>ActualExchange</td>\n      <td id=\"sale-milestone-140\"><a href=\"#sale-milestone-140\">140</a></td>\n    </tr>\n    <tr>\n      <td>ContractualCompletion</td>\n      <td id=\"sale-milestone-141\"><a href=\"#sale-milestone-141\">141</a></td>\n    </tr>\n    <tr>\n      <td>ActualCompletion</td>\n      <td id=\"sale-milestone-142\"><a href=\"#sale-milestone-142\">142</a></td>\n    </tr>\n    <tr>\n      <td>SatisfactionQuestionnaireSent</td>\n      <td id=\"sale-milestone-143\"><a href=\"#sale-milestone-143\">143</a></td>\n    </tr>\n    <tr>\n      <td>CaseClosed</td>\n      <td id=\"sale-milestone-144\"><a href=\"#sale-milestone-144\">144</a></td>\n    </tr>\n    <tr>\n      <td>DateAborted</td>\n      <td id=\"sale-milestone-145\"><a href=\"#sale-milestone-145\">145</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesReceived</td>\n      <td id=\"sale-milestone-146\"><a href=\"#sale-milestone-146\">146</a></td>\n    </tr>\n    <tr>\n      <td>EnquiriesToClient</td>\n      <td id=\"sale-milestone-147\"><a href=\"#sale-milestone-147\">147</a></td>\n    </tr>\n    <tr>\n      <td>RedStatsReceived</td>\n      <td id=\"sale-milestone-148\"><a href=\"#sale-milestone-148\">148</a></td>\n    </tr>\n    <tr>\n      <td>FinalRedStatsReceived</td>\n      <td id=\"sale-milestone-149\"><a href=\"#sale-milestone-149\">149</a></td>\n    </tr>\n    <tr>\n      <td>FinalRedStatsRequested</td>\n      <td id=\"sale-milestone-150\"><a href=\"#sale-milestone-150\">150</a></td>\n    </tr>\n    <tr>\n      <td>TitleInformationRequested</td>\n      <td id=\"sale-milestone-201\"><a href=\"#sale-milestone-201\">201</a></td>\n    </tr>\n    <tr>\n      <td>TitleInformationReceived</td>\n      <td id=\"sale-milestone-202\"><a href=\"#sale-milestone-202\">202</a></td>\n    </tr>\n    <tr>\n      <td>InitialCallToClientAttempted</td>\n      <td id=\"sale-milestone-479\"><a href=\"#sale-milestone-479\">479</a></td>\n    </tr>\n    <tr>\n      <td>WelcomePackSent</td>\n      <td id=\"sale-milestone-480\"><a href=\"#sale-milestone-480\">480</a></td>\n    </tr>\n    <tr>\n      <td>FFFormSent</td>\n      <td id=\"sale-milestone-481\"><a href=\"#sale-milestone-481\">481</a></td>\n    </tr>\n    <tr>\n      <td>AllRepliesToEnquiriesAnswered</td>\n      <td id=\"sale-milestone-482\"><a href=\"#sale-milestone-482\">482</a></td>\n    </tr>\n    <tr>\n      <td>BuyersConveyancerSatisfiedWithReplies</td>\n      <td id=\"sale-milestone-483\"><a href=\"#sale-milestone-483\">483</a></td>\n    </tr>\n    <tr>\n      <td>SignedTransferReceived</td>\n      <td id=\"sale-milestone-484\"><a href=\"#sale-milestone-484\">484</a></td>\n    </tr>\n    <tr>\n      <td>BankruptcySearchSubmitted</td>\n      <td id=\"sale-milestone-485\"><a href=\"#sale-milestone-485\">485</a></td>\n    </tr>\n    <tr>\n      <td>DateAbortedInterim</td>\n      <td id=\"sale-milestone-486\"><a href=\"#sale-milestone-486\">486</a></td>\n    </tr>\n  </tbody></table></details>\n\n<details>\n<summary>Wills</summary>\n<table>\n  <thead><tr><th>Milestone</th><th>Milestone ID</th></tr></thead>\n  <tbody>\n    <tr>\n      <td>FileOpened</td>\n      <td id=\"wills-milestone-332\"><a href=\"#wills-milestone-332\">332</a></td>\n    </tr>\n    <tr>\n      <td>ClientCareLetterSent</td>\n      <td id=\"wills-milestone-333\"><a href=\"#wills-milestone-333\">333</a></td>\n    </tr>\n    <tr>\n      <td>SignedCareLetterReceived</td>\n      <td id=\"wills-milestone-334\"><a href=\"#wills-milestone-334\">334</a></td>\n    </tr>\n    <tr>\n      <td>ClientsIDVerified</td>\n      <td id=\"wills-milestone-335\"><a href=\"#wills-milestone-335\">335</a></td>\n    </tr>\n    <tr>\n      <td>WillQuestionnairePrepared</td>\n      <td id=\"wills-milestone-336\"><a href=\"#wills-milestone-336\">336</a></td>\n    </tr>\n    <tr>\n      <td>WillQuestionnaireReceived</td>\n      <td id=\"wills-milestone-337\"><a href=\"#wills-milestone-337\">337</a></td>\n    </tr>\n    <tr>\n      <td>PreviousWillRequested</td>\n      <td id=\"wills-milestone-338\"><a href=\"#wills-milestone-338\">338</a></td>\n    </tr>\n    <tr>\n      <td>PreviousWillReceived</td>\n      <td id=\"wills-milestone-339\"><a href=\"#wills-milestone-339\">339</a></td>\n    </tr>\n    <tr>\n      <td>InitialMeetingAttendanceNotePrepared</td>\n      <td id=\"wills-milestone-341\"><a href=\"#wills-milestone-341\">341</a></td>\n    </tr>\n    <tr>\n      <td>DraftWillPrepared</td>\n      <td id=\"wills-milestone-342\"><a href=\"#wills-milestone-342\">342</a></td>\n    </tr>\n    <tr>\n      <td>DoctorsCapacityReportRequested</td>\n      <td id=\"wills-milestone-343\"><a href=\"#wills-milestone-343\">343</a></td>\n    </tr>\n    <tr>\n      <td>DoctorsCapacityReportReceived</td>\n      <td id=\"wills-milestone-344\"><a href=\"#wills-milestone-344\">344</a></td>\n    </tr>\n    <tr>\n      <td>SeveranceOfJointTenancyApplicationPrepared</td>\n      <td id=\"wills-milestone-345\"><a href=\"#wills-milestone-345\">345</a></td>\n    </tr>\n    <tr>\n      <td>NoticeOfSeveranceOfJointTenancyPrepared</td>\n      <td id=\"wills-milestone-346\"><a href=\"#wills-milestone-346\">346</a></td>\n    </tr>\n    <tr>\n      <td>FeeEarnerRiskManagementReview</td>\n      <td id=\"wills-milestone-347\"><a href=\"#wills-milestone-347\">347</a></td>\n    </tr>\n    <tr>\n      <td>CaseLockedDownRiskConcerns</td>\n      <td id=\"wills-milestone-348\"><a href=\"#wills-milestone-348\">348</a></td>\n    </tr>\n    <tr>\n      <td>CaseUnlocked</td>\n      <td id=\"wills-milestone-349\"><a href=\"#wills-milestone-349\">349</a></td>\n    </tr>\n    <tr>\n      <td>WillSentForExecutionWithoutSupervision</td>\n      <td id=\"wills-milestone-350\"><a href=\"#wills-milestone-350\">350</a></td>\n    </tr>\n    <tr>\n      <td>MeetingWithClientForWillExecution</td>\n      <td id=\"wills-milestone-351\"><a href=\"#wills-milestone-351\">351</a></td>\n    </tr>\n    <tr>\n      <td>WillExecuted</td>\n      <td id=\"wills-milestone-352\"><a href=\"#wills-milestone-352\">352</a></td>\n    </tr>\n    <tr>\n      <td>ExecutedWillReceivedForStorage</td>\n      <td id=\"wills-milestone-353\"><a href=\"#wills-milestone-353\">353</a></td>\n    </tr>\n    <tr>\n      <td>DateClosed</td>\n      <td id=\"wills-milestone-354\"><a href=\"#wills-milestone-354\">354</a></td>\n    </tr>\n    <tr>\n      <td>DraftWillApproved</td>\n      <td id=\"wills-milestone-355\"><a href=\"#wills-milestone-355\">355</a></td>\n    </tr>\n    <tr>\n      <td>DraftWillSentForApproval</td>\n      <td id=\"wills-milestone-356\"><a href=\"#wills-milestone-356\">356</a></td>\n    </tr>\n  </tbody></table></details>\n\n### Asynchronous processing and status notifications\n\nSeveral endpoints, including create/update case, create/update task, create/update milestone, and upload document, are processed asynchronously. Each accepted request returns a `transactionRequestId` that you use to track progress.\n\nYou can receive status in either of the following ways:\n\n**1. Poll transaction status**\n\nCall `GET /transaction-requests/{transactionRequestId}`. See [Get transaction request status](#get-transaction-request-status) for supported `status` values.\n\n**2. Webhook callback (optional)**\n\nOptionally include a callback URL on the request. When processing completes, the Experience API sends an HTTP `POST` to that URL with the same status response.\n\nIf you use webhooks, tell Ochresoft in advance how your callback endpoint should be authenticated so we can configure it for your integration.\n\n### Create or update task\n\nCreate or update an **unscheduled** task on an existing Intelliworks case. Intelliworks is workflow-driven: scheduled workflow tasks cannot be created through this API. Only the unscheduled task combinations listed in [Supported unscheduled task mappings](#supported-unscheduled-task-mappings) are valid.\n\n* **Create** - omit `clientTaskId`; a new identifier is returned in the response.\n* **Update** - supply the `clientTaskId` returned from the original create response.\n* At least one of `caseId` or `externalCaseId` is required.\n* `completionDate` is mandatory when `status` is `Closed`.\n\nRequests that use a `processReference`, `taskReference`, and `taskType` combination outside the supported mapping may be rejected with an error, or the task may be created in Intelliworks but not function correctly in the workflow.\n\n<a id=\"supported-unscheduled-task-mappings\"></a>\nSupported unscheduled task mappings:\n\n<table>\n  <thead><tr><th>Task name</th><th>Process reference (Pref)</th><th>Task reference</th><th>Task type</th></tr></thead>\n  <tbody>\n    <tr><td>ATTACHMAIL</td><td>USP</td><td>MAIL2</td><td>Email</td></tr>\n    <tr><td>CDATAIMPORT</td><td>USP</td><td>IMPORTCASEDATA</td><td>Import</td></tr>\n    <tr><td>CLONEDCONTENT_EXTERNAL_ACCOUNTSTRANSACTION_ADDED</td><td>USP</td><td>SYST09</td><td>Query</td></tr>\n    <tr><td>CLONEDCONTENT_FAX</td><td>USP</td><td>SYST06</td><td>Fax</td></tr>\n    <tr><td>CLONEDCONTENT_IMPORT</td><td>USP</td><td>SYST04</td><td>Import</td></tr>\n    <tr><td>CLONEDCONTENT_SCANNER</td><td>USP</td><td>SYST05</td><td>Scanner</td></tr>\n    <tr><td>CLONEDCONTENT_VF_MESSAGE</td><td>USP</td><td>SYST08</td><td>VirtualFirmMessage</td></tr>\n    <tr><td>FAXIMPORT</td><td>USP</td><td>SYST07</td><td>Fax</td></tr>\n    <tr><td>IMPORTFILE</td><td>USP</td><td>IMPF1</td><td>Import</td></tr>\n    <tr><td>IMPORTSCAN</td><td>USP</td><td>IMPORTSCAN</td><td>Import</td></tr>\n    <tr><td>MULTI_EMAIL_IMPORT</td><td>USP</td><td>MAIL3</td><td>Action</td></tr>\n    <tr><td>SCANNERIMPORT</td><td>USP</td><td>SYST01</td><td>Scanner</td></tr>\n    <tr><td>SENDMAIL</td><td>USP</td><td>MAIL1</td><td>Email</td></tr>\n  </tbody>\n</table>\n\nMap `processReference` to **Pref**, `taskReference` to **Task reference**, and `taskType` to **Task type**. Use the **Task name** value as the task `description` unless your integration agreement specifies otherwise.\n\n### Create or update milestone\n\nSet or update milestone actual and/or forecast dates for a case. Supply `branchId`, at least one of `caseId` or `externalCaseId`, and one or more milestones. Valid `milestoneId` values are listed in [Supported milestone IDs by workflow](#supported-milestone-ids).\n\n### Upload document\n\nUpload a document against an Intelliworks case. A document can be uploaded as part of an `IMPORTFILE` task.\n\n### List case documents\n\nReturns the list of completed documents held against a case in Intelliworks for the specified branch. Supply at least one of `caseId` (Intelliworks case reference, e.g. `EXP-000762`) and/or `externalCaseId` (e.g. `AAR801/1`). Each document in the response can be downloaded using the Download document endpoint (`GET /documents/{id}/download`).\n\n### Download document\n\nDownloads a document by document ID (as returned in the List case documents response).\n\n<a id=\"get-transaction-request-status\"></a>\n### Get transaction request status\n\nReturns the latest processing status for any asynchronous Experience API request identified by `transactionRequestId`.\n\nSupported `status` values:\n\n* `Accepted`\n* `Queued`\n* `Processing`\n* `Completed`\n* `Failed`\n\nPoll `GET /transaction-requests/{transactionRequestId}` until `status` is `Completed` or `Failed`.\n\n\n# Endpoints\nThe API is accessed by making HTTPS requests to an endpoint URL.\nEvery endpoint is accessed only via the SSL-enabled HTTPS (port 443) protocol.\nThe API uses semantic versioning, and the current release is v1.0.0\n\n# Environments\nThe API is available in two environments, both are identical in that they have the same specification infrastructure and functionality.\n\nThe 2 environments are:\n* User Acceptance Testing (UAT)\n* Production (PRD)\n\n## UAT\nThe UAT environment should be used during development, and interfaces with the Intelliworks UAT environment.\nYou should use this whilst implementing and testing your integration.\n\nThe URLs for the UAT APIs are:\n* Base URL: https://uat-api.landmarkcloudservices.com/intelliworks/experience\n* Auth: https://lmkmaster.eu.auth0.com/oauth/token\n\n## PRD\nThe PRD environment is a live instance, and this talks to the live Intelliworks environment.\nThis should only be used once the integration is considered production ready and all testing has been completed on the UAT environment.\nAny actions performed on PRD will result in the creation and syncing of real data that may be seen by users.\n\nThe URLs for the production APIs are:\n* Base URL: https://api.landmarkcloudservices.com/intelliworks/experience\n* Auth: https://lmkmaster.eu.auth0.com/oauth/token\n\n# Requests & Authentication\nRequests must be sent over HTTPS with any payload formatted in JSON. To authenticate against the API a Bearer Token Header must be provided.\n\n# Rate limiting\nThe API allows a maximum of 250 requests per customer per minute.\n"
+  contact:
+    name: API Support
+    email: support@ochresoft.com
+    x-phone-number: +44 (0)3300 366 700
+tags:
+- name: Cases
+  description: APIs related to your Cases
+- name: Documents
+  description: APIs related to case documents
+- name: Transaction Requests
+  description: APIs for tracking asynchronous request status
+x-tagGroups:
+- name: General
+  tags:
+  - Cases
+  - Documents
+  - Transaction Requests
+servers:
+- url: https://api.landmarkcloudservices.com/
+  description: Production API
+- url: https://uat-api.landmarkcloudservices.com/
+  description: UAT API
+paths:
+  /case:
+    post:
+      summary: Create case
+      operationId: createCase
+      tags:
+      - Cases
+      requestBody:
+        description: Request body containing workflow case data
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/createCaseRequestIw'
+              - $ref: '#/components/schemas/createCaseRequestIwPrivateClient'
+              - $ref: '#/components/schemas/createCaseRequestIwProbate'
+              discriminator:
+                propertyName: workflowId
+                mapping:
+                  '210': '#/components/schemas/createCaseRequestIw'
+                  '216': '#/components/schemas/createCaseRequestIw'
+                  '220': '#/components/schemas/createCaseRequestIw'
+                  '300': '#/components/schemas/createCaseRequestIw'
+                  '350': '#/components/schemas/createCaseRequestIw'
+                  '360': '#/components/schemas/createCaseRequestIw'
+                  '415': '#/components/schemas/createCaseRequestIwPrivateClient'
+                  '500': '#/components/schemas/createCaseRequestIwPrivateClient'
+                  '601': '#/components/schemas/createCaseRequestIwProbate'
+                  '700': '#/components/schemas/createCaseRequestIw'
+                  '10200': '#/components/schemas/createCaseRequestIw'
+                  '10400': '#/components/schemas/createCaseRequestIw'
+      responses:
+        '202':
+          description: Accepted case creation request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createCaseResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /updateCase:
+    post:
+      summary: Update case
+      operationId: updateIwCase
+      tags:
+      - Cases
+      requestBody:
+        description: Request body containing workflow case data
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/createCaseRequestIw'
+              - $ref: '#/components/schemas/createCaseRequestIwPrivateClient'
+              - $ref: '#/components/schemas/createCaseRequestIwProbate'
+              discriminator:
+                propertyName: workflowId
+                mapping:
+                  '210': '#/components/schemas/createCaseRequestIw'
+                  '216': '#/components/schemas/createCaseRequestIw'
+                  '220': '#/components/schemas/createCaseRequestIw'
+                  '300': '#/components/schemas/createCaseRequestIw'
+                  '350': '#/components/schemas/createCaseRequestIw'
+                  '360': '#/components/schemas/createCaseRequestIw'
+                  '415': '#/components/schemas/createCaseRequestIwPrivateClient'
+                  '500': '#/components/schemas/createCaseRequestIwPrivateClient'
+                  '601': '#/components/schemas/createCaseRequestIwProbate'
+                  '700': '#/components/schemas/createCaseRequestIw'
+                  '10200': '#/components/schemas/createCaseRequestIw'
+                  '10400': '#/components/schemas/createCaseRequestIw'
+      responses:
+        '202':
+          description: Accepted case update request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createCaseResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /cases:
+    get:
+      summary: Get case summary
+      description: 'Returns a read-only case summary for the specified branch. Supply at least one of `caseId` (Intelliworks case reference, e.g. `GPR-000856`) and/or `externalCaseId` (reference from the external system). Both are forwarded to Intelliworks when provided.
+
+        '
+      operationId: getCaseIw
+      tags:
+      - Cases
+      parameters:
+      - name: branchId
+        in: query
+        required: true
+        description: Branch identifier (UUID) used to resolve Intelliworks company and site identifiers.
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      - name: caseId
+        in: query
+        required: false
+        description: Intelliworks case reference (forwarded as `caseReference` to Intelliworks).
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          maxLength: 50
+      - name: externalCaseId
+        in: query
+        required: false
+        description: External case reference (forwarded as `externalCaseReference` to Intelliworks).
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          maxLength: 50
+      responses:
+        '200':
+          description: Case summary retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCaseIwResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /upsertTask:
+    post:
+      summary: Create or update task
+      operationId: upsertTask
+      tags:
+      - Cases
+      description: 'Create or update an unscheduled task on an existing case. At least one of `caseId` or `externalCaseId` must be supplied.
+
+        Only supported combinations of `processReference`, `taskReference`, and `taskType` may be used - see [Supported unscheduled task mappings](#supported-unscheduled-task-mappings).
+
+        '
+      requestBody:
+        description: Request body containing task data to create or update
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/upsertTaskRequest'
+              - if:
+                  properties:
+                    status:
+                      const: Closed
+                then:
+                  required:
+                  - completionDate
+      responses:
+        '202':
+          description: Task upsert request accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/upsertTaskResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /milestones:
+    get:
+      summary: Get milestone
+      description: 'Returns the actual completion date of a milestone for a case. Supply at least one of `caseId` or `externalCaseId`.
+
+        Valid `milestoneId` values are listed in [Supported milestone IDs by workflow](#supported-milestone-ids).
+
+        '
+      operationId: getMilestone
+      tags:
+      - Cases
+      parameters:
+      - name: branchId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      - name: caseId
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 25
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+      - name: externalCaseId
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+      - name: milestoneId
+        in: query
+        required: true
+        description: Milestone identifier. See [Supported milestone IDs by workflow](#supported-milestone-ids) for valid values per workflow.
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+      - name: workflowId
+        in: query
+        required: false
+        description: Optional workflow identifier. Include when required to resolve the milestone for the target workflow.
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+      responses:
+        '200':
+          description: Milestone actual completion date found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/milestoneQueryResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+    post:
+      summary: Create or update milestone dates
+      description: 'Set or update milestone actual and/or forecast dates for a case. The request is accepted for asynchronous processing.
+
+        '
+      operationId: upsertMilestone
+      tags:
+      - Cases
+      requestBody:
+        description: Request body containing milestone upsert data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/upsertMilestoneRequest'
+      responses:
+        '202':
+          description: Accepted milestone upsert request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/upsertMilestoneResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /transaction-requests/{transactionRequestId}:
+    get:
+      summary: Get transaction request status
+      description: 'Returns the latest processing status for an asynchronous Experience API request identified by
+
+        `transactionRequestId`. Supports create/update case, upsert task, upsert milestone, document upload, and future
+
+        asynchronous endpoints. Use this endpoint to poll for completion when a webhook callback is not used or not received.
+
+        '
+      operationId: getTransactionRequestStatus
+      tags:
+      - Transaction Requests
+      parameters:
+      - name: transactionRequestId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+        description: Unique Experience API transaction request identifier returned by asynchronous endpoints
+      responses:
+        '200':
+          description: Latest transaction request status found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionRequestStatusResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /documents:
+    post:
+      summary: Upload Document
+      description: 'Uploads a document for the specified case against a task or default. At least one of `caseId` or `externalCaseId` is required.
+
+        `taskId` is optional; when omitted the document is stored against a new default task rather than an existing task.
+
+        Upload the file directly using `multipart/form-data`, or optionally use `application/json` with document metadata.
+
+        '
+      operationId: uploadDocument
+      tags:
+      - Cases
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/uploadDocumentJsonRequest'
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - branchId
+              - file
+              anyOf:
+              - required:
+                - caseId
+              - required:
+                - externalCaseId
+              properties:
+                transactionId:
+                  $ref: '#/components/schemas/lgsUuid'
+                  description: Optional parent transaction from create case.
+                branchId:
+                  $ref: '#/components/schemas/lgsUuid'
+                workflowId:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  description: Optional workflow identifier.
+                caseId:
+                  type: string
+                  maxLength: 50
+                  pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+                  description: Intelliworks case reference (e.g. `EXP-000762`).
+                externalCaseId:
+                  type: string
+                  maxLength: 50
+                  pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+                  description: External case reference (e.g. `AAR801/1`).
+                taskId:
+                  $ref: '#/components/schemas/lgsUuid'
+                  description: Optional task identifier. When omitted, a new default task is created and the document is stored against it.
+                description:
+                  type: string
+                  maxLength: 500
+                  pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,' ]*$
+                file:
+                  type: string
+                  format: binary
+                  description: Document file to upload.
+      responses:
+        '202':
+          description: Document upload request accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uploadDocumentResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+    get:
+      summary: List case documents
+      description: 'Returns the list of completed documents held against a case in Intelliworks for the specified branch.
+
+        Supply at least one of `caseId` (Intelliworks case reference, e.g. `EXP-000762`) and/or `externalCaseId` (e.g. `AAR801/1`).
+
+        Both are forwarded to Intelliworks when provided.
+
+        Each document in the response can be downloaded using `GET /documents/{id}/download`.
+
+        '
+      operationId: getCompletedDocuments
+      tags:
+      - Documents
+      parameters:
+      - name: branchId
+        in: query
+        required: true
+        description: Branch identifier (UUID) used to resolve Intelliworks company and site identifiers.
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      - name: caseId
+        in: query
+        required: false
+        description: Intelliworks case reference (e.g. `EXP-000762`).
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          maxLength: 50
+      - name: externalCaseId
+        in: query
+        required: false
+        description: External case reference (e.g. `AAR801/1`).
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          maxLength: 50
+      - name: workflowId
+        in: query
+        required: false
+        description: Intelliworks workflow identifier.
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+      responses:
+        '200':
+          description: Completed documents retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/completedDocumentsResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /documents/{id}/download:
+    get:
+      summary: Download document
+      description: Downloads a document by document ID (as returned in the List case documents response). Auth0Id is extracted from the authenticated user context and forwarded to Intelliworks Web API.
+      operationId: downloadDocument
+      tags:
+      - Documents
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Document ID.
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      responses:
+        '200':
+          description: Document downloaded successfully
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request. Document ID is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User does not have access to the requested document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  responses:
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    403Forbidden:
+      description: Forbidden
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '403'
+                code: '40300'
+                title: Invalid Entitlement
+            No Entitlement:
+              value:
+                status: '403'
+                code: '40301'
+                title: No Entitlement
+            No permission to entity:
+              value:
+                status: '403'
+                code: '40302'
+                title: No permission to entity
+            User not registered:
+              value:
+                status: '403'
+                code: '40303'
+                title: User not registered
+            Usage limit reached:
+              value:
+                status: '403'
+                code: '40304'
+                title: Usage limit reached
+            Email account not verified:
+              value:
+                status: '403'
+                code: '40305'
+                title: Email account not verified
+            Token expiry too long:
+              value:
+                status: '403'
+                code: '40306'
+                title: Token expiry too long
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    406NotAcceptable:
+      $ref: '#/components/responses/500InternalServerError'
+    409Conflict:
+      description: Conflict
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '409'
+                code: '40900'
+                title: Entity in wrong state
+    413PayloadTooLarge:
+      description: Payload Too Large
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+    415Unsupported:
+      $ref: '#/components/responses/500InternalServerError'
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+  schemas:
+    address:
+      allOf:
+      - $ref: '#/components/schemas/lgsAddressAddressBaseCore'
+      - type: object
+        additionalProperties: false
+        description: address to associate with case
+        required:
+        - postcode
+        - addressType
+        - townName
+        - streetName
+        - locality
+    uuid:
+      $ref: '#/components/schemas/lgsUuid'
+    createCaseRequestIw:
+      type: object
+      additionalProperties: false
+      title: A case data as a request for Conveyancing workflow
+      description: request for a Conveyancing workflow create case
+      required:
+      - workflowId
+      - caseSummary
+      - externalCaseId
+      - clients
+      - dateInstructed
+      - workflowOptions
+      properties:
+        workflowId:
+          type: string
+          enum:
+          - '10200'
+          - '10400'
+          - '210'
+          - '216'
+          - '220'
+          - '300'
+          - '350'
+          - '360'
+          - '700'
+          title: A workflowid for workflow
+          description: A workflowid is associated with a case which belongs to specific workflow
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+        caseSummary:
+          type: string
+          pattern: ^.*$
+          maxLength: 60
+          title: case summary for a workflow case
+          description: A casesummary is what we are creating for a case
+          default: ''
+        externalCaseId:
+          type: string
+          pattern: ^.*$
+          maxLength: 50
+          title: externalCaseId
+          description: The case reference from the external system
+          default: ''
+        casePriorty:
+          type: string
+          title: The casepriorty
+          enum:
+          - '3'
+          - '2'
+          - '1'
+          description: ''
+          default: '3'
+        clients:
+          $ref: '#/components/schemas/clientsIw'
+          title: The clients details
+          description: Up to 4 clients - consists of names, contact and address details
+        dateInstructed:
+          type: string
+          title: The dateInstructed
+          description: Date / time case created
+          format: datetime
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          title: The transactionid
+          description: every case is associated with a transaction
+        workflowOptions:
+          type: object
+          additionalProperties: true
+          description: These options are workflow specific
+        transactionRequestSubject:
+          description: Address of property for the new case eg lgsAddressAddressBaseCore
+          oneOf:
+          - $ref: '#/components/schemas/address'
+    createCaseRequestIwPrivateClient:
+      type: object
+      additionalProperties: false
+      title: A case data as a request for Private Client workflow (LPA, Wills)
+      description: request for a Private Client workflow (LPA, Wills) create case
+      required:
+      - workflowId
+      - caseSummary
+      - externalCaseId
+      - clients
+      properties:
+        workflowId:
+          type: string
+          enum:
+          - '415'
+          - '500'
+          title: A workflowid for workflow
+          description: A workflowid is associated with a case which belongs to specific workflow
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+        caseSummary:
+          type: string
+          pattern: ^.*$
+          maxLength: 60
+          title: case summary for a workflow case
+          description: A casesummary is what we are creating for a case
+          default: ''
+        externalCaseId:
+          type: string
+          pattern: ^.*$
+          maxLength: 50
+          title: externalCaseId
+          description: The case reference from the external system
+          default: ''
+        casePriorty:
+          type: string
+          title: The casepriorty
+          enum:
+          - '3'
+          - '2'
+          - '1'
+          description: ''
+          default: '3'
+        clients:
+          $ref: '#/components/schemas/clientsIw'
+          title: The clients details
+          description: Up to 4 clients - consists of names, contact and address details
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          title: The transactionid
+          description: every case is associated with a transaction
+    createCaseRequestIwProbate:
+      type: object
+      additionalProperties: false
+      title: A case data as a request for Private Client workflow (Probate)
+      description: request for a Private Client workflow (Probate) create case
+      required:
+      - workflowId
+      - caseSummary
+      - externalCaseId
+      - clients
+      properties:
+        workflowId:
+          type: string
+          enum:
+          - '601'
+          title: A workflowid for workflow
+          description: A workflowid is associated with a case which belongs to specific workflow
+          default: ''
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+        caseSummary:
+          type: string
+          pattern: ^.*$
+          maxLength: 60
+          title: case summary for a workflow case
+          description: A casesummary is what we are creating for a case
+          default: ''
+        externalCaseId:
+          type: string
+          pattern: ^.*$
+          maxLength: 50
+          title: externalCaseId
+          description: The case reference from the external system
+          default: ''
+        casePriorty:
+          type: string
+          title: The casepriorty
+          enum:
+          - '3'
+          - '2'
+          - '1'
+          description: ''
+          default: '3'
+        clients:
+          $ref: '#/components/schemas/clientsIwProbate'
+          title: The clients details
+          description: Up to 4 clients - consists of names, contact and address details
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          title: The transactionid
+          description: every case is associated with a transaction
+    clientsIw:
+      type: array
+      additionalProperties: false
+      minItems: 1
+      maxItems: 4
+      items:
+        $ref: '#/components/schemas/lgsPerson'
+    clientsIwProbate:
+      type: array
+      additionalProperties: false
+      minItems: 1
+      maxItems: 4
+      items:
+        allOf:
+        - $ref: '#/components/schemas/lgsPerson'
+        - type: object
+          properties:
+            gender:
+              type: string
+              enum:
+              - Male
+              - Female
+              - Unknown
+            placeOfDeath:
+              type: string
+              pattern: ^.*$
+            dateOfBirth:
+              type: string
+              title: The dateOfBirth
+              description: dateofbirth
+              format: datetime
+            dateOfDeath:
+              type: string
+              title: The DateOfDeath
+              description: DateOfDeath
+              format: datetime
+          required:
+          - dateOfDeath
+    createCaseResponse:
+      type: object
+      additionalProperties: false
+      description: response for a workflow create case
+      properties:
+        case:
+          $ref: '#/components/schemas/caseResponse'
+    caseResponse:
+      type: object
+      properties:
+        lgsTransactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: A transactionId is associated with a case which belongs to specific workflow
+          default: ''
+        lgsTransactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: A transactionRequestId is associated with a case which belongs to specific workflow
+          default: ''
+        href:
+          type: string
+          format: url
+          description: href link in case request response
+          default: ''
+    clients:
+      type: array
+      additionalProperties: false
+      minItems: 1
+      maxItems: 4
+      items:
+        $ref: '#/components/schemas/lgsPerson'
+    person:
+      $ref: '#/components/schemas/lgsPerson'
+    upsertTaskRequest:
+      type: object
+      additionalProperties: false
+      description: Request to create or update an unscheduled task. Provide clientTaskId to update; omit to create. See [Supported unscheduled task mappings](#supported-unscheduled-task-mappings).
+      required:
+      - branchId
+      - processReference
+      - taskReference
+      - description
+      - taskType
+      - resource
+      anyOf:
+      - required:
+        - caseId
+      - required:
+        - externalCaseId
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Task transaction request identifier. Auto-generated on create when omitted.
+        transactionId:
+          type: string
+          nullable: true
+          pattern: ^$|^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          description: Parent case transaction identifier from create case. Optional.
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Branch identifier used to resolve customer and site details
+        clientTaskId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Client task identifier. Provide to update an existing task; omit to create.
+        callerId:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Landmark caller identifier. Defaults from x-landmark-caller-id header when omitted.
+        clientCallbackUrl:
+          type: string
+          nullable: true
+          format: url
+          description: Optional callback URL.
+        workflowId:
+          type: integer
+          enum:
+          - 10200
+          - 10400
+          - 210
+          - 216
+          - 220
+          - 300
+          - 350
+          - 360
+          - 700
+          - 415
+          - 500
+          - 601
+          description: Workflow identifier. Optional when resolved from the case.
+        caseId:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference. At least one of caseId or externalCaseId is required.
+        externalCaseId:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: External case reference. At least one of caseId or externalCaseId is required.
+        processReference:
+          type: string
+          maxLength: 15
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Process reference (Pref). Must match a supported unscheduled task mapping.
+        taskReference:
+          type: string
+          maxLength: 15
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Task reference. Must match a supported unscheduled task mapping.
+        description:
+          type: string
+          maxLength: 300
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,' ]*$
+          description: Task description. Use the Task name from the supported mapping table.
+        taskType:
+          type: string
+          enum:
+          - Email
+          - Import
+          - Document
+          - Query
+          - Fax
+          - Laserform
+          - Scanner
+          - VirtualFirmMessage
+          - Action
+          description: Task type. Must match a supported unscheduled task mapping.
+        priority:
+          type: integer
+          default: 3
+          description: Task priority
+        status:
+          type: string
+          enum:
+          - Open
+          - Complete
+          - InProgress
+          - Closed
+          - Cancelled
+          default: Open
+          description: Task status. completionDate is mandatory when status is Closed.
+        targetDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Target completion date
+        completionDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Actual completion date. Mandatory when status is Closed.
+        estimatedDuration:
+          type: string
+          pattern: ^\d{2}:\d{2}:\d{2}$
+          description: Estimated duration in HH:mm:ss format
+        category:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Task category
+        subType:
+          type: string
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Task sub-type
+        resource:
+          type: string
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Resource assigned to the task
+    upsertTaskResponse:
+      type: object
+      additionalProperties: false
+      description: Response for an accepted task upsert request
+      required:
+      - task
+      properties:
+        task:
+          $ref: '#/components/schemas/upsertTaskResult'
+    upsertTaskResult:
+      type: object
+      additionalProperties: false
+      description: Task details returned after a successful upsert acceptance
+      required:
+      - clientTaskId
+      - status
+      - transactionRequestId
+      properties:
+        clientTaskId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Client task identifier assigned to the task
+        status:
+          type: string
+          enum:
+          - Open
+          - Complete
+          - InProgress
+          - Closed
+          - Cancelled
+          description: Task status
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Transaction request id for polling or callback correlation
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Parent transaction id for the task
+    upsertMilestoneRequest:
+      type: object
+      additionalProperties: false
+      description: Request to create or update milestone dates for an Intelliworks case
+      required:
+      - branchId
+      - milestones
+      properties:
+        transactionId:
+          type: string
+          nullable: true
+          pattern: ^$|^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          description: Parent case transaction identifier from create case. Optional.
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Milestone transaction request identifier. Auto-generated when omitted.
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Branch identifier used to resolve company and site context
+        caseId:
+          type: string
+          maxLength: 25
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case identifier
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: External system case reference
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Optional Intelliworks workflow identifier. When omitted, workflow context is resolved from the case.
+        callbackUrl:
+          type: string
+          nullable: true
+          format: url
+          description: Optional callback URL.
+        milestones:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/milestoneUpsertItem'
+    milestoneUpsertItem:
+      type: object
+      additionalProperties: false
+      required:
+      - milestoneId
+      properties:
+        milestoneId:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Milestone identifier. See [Supported milestone IDs by workflow](#supported-milestone-ids).
+        actualDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Milestone actual completion date/time in UTC (ISO 8601)
+        forecastDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Milestone forecast date/time in UTC (ISO 8601)
+    upsertMilestoneResponse:
+      type: object
+      additionalProperties: false
+      description: Response indicating the milestone upsert request was accepted for asynchronous processing
+      required:
+      - transactionRequestId
+      - status
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Unique identifier for this milestone upsert transaction request
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          nullable: true
+          description: Parent case transaction identifier
+        status:
+          type: string
+          const: Accepted
+          description: Processing status of the accepted request
+    transactionRequestStatusResponse:
+      type: object
+      additionalProperties: false
+      description: Latest status of an asynchronous Experience API transaction request
+      required:
+      - transactionRequestId
+      - entityType
+      - operationType
+      - status
+      - updatedDateUtc
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          nullable: true
+        entityType:
+          type: string
+          enum:
+          - Case
+          - Milestone
+          - Task
+          - Document
+        operationType:
+          type: string
+          enum:
+          - Create
+          - Update
+          - Upload
+        status:
+          type: string
+          enum:
+          - Accepted
+          - Queued
+          - Processing
+          - Completed
+          - Failed
+          description: Latest processing status for the transaction request.
+        caseId:
+          type: string
+          nullable: true
+          maxLength: 25
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+        externalCaseId:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        taskId:
+          $ref: '#/components/schemas/lgsUuid'
+          nullable: true
+        documentId:
+          $ref: '#/components/schemas/lgsUuid'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        updatedDateUtc:
+          type: string
+          format: date-time
+          description: UTC timestamp of the latest audit record for this transaction request
+    milestoneQueryResponse:
+      type: object
+      additionalProperties: false
+      description: Response containing milestone actual completion date for a case
+      required:
+      - caseId
+      - milestoneId
+      - actualDate
+      properties:
+        caseId:
+          type: string
+          maxLength: 25
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case identifier (e.g. PBX-000867, GPR-000039)
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: External system case reference when supplied in the request
+          default: ''
+        milestoneId:
+          type: integer
+          format: int32
+          minimum: 1
+        actualDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Milestone actual completion date/time in UTC (ISO 8601)
+    getCaseIwResponse:
+      type: object
+      additionalProperties: false
+      title: Case summary
+      description: Read-only case summary returned by Get Case IW.
+      properties:
+        caseReference:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference.
+        externalCaseReference:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: External case reference from the originating system.
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 99999
+          description: Intelliworks workflow identifier.
+        workflowDisplayName:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Display name of the workflow.
+        caseType:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        caseDescription:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        caseStatus:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        caseProgress:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        purchaseDate:
+          type: string
+          maxLength: 10
+          pattern: ^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+          description: ISO 8601 date (yyyy-MM-dd) or empty when not set.
+        feeEarnerDetails:
+          $ref: '#/components/schemas/feeEarnerDetails'
+        clients:
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/clientParty'
+        workReferrer:
+          $ref: '#/components/schemas/workReferrer'
+        buyersConveyancer:
+          $ref: '#/components/schemas/buyersConveyancer'
+        sellersConveyancer:
+          $ref: '#/components/schemas/buyersConveyancer'
+        estateAgent:
+          $ref: '#/components/schemas/organisationParty'
+        lenders:
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/lenderParty'
+        lenderAccountNumbers:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        lenderNotes:
+          type: string
+          maxLength: 500
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*;()_+-/,.']*$
+        propertyAddress:
+          $ref: '#/components/schemas/propertyAddress'
+        sellers:
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/personParty'
+        price:
+          $ref: '#/components/schemas/price'
+    propertyAddress:
+      type: object
+      additionalProperties: false
+      properties:
+        subbuildingName:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Subbuilding name (flat / room / unit); mapped from Intelliworks subDwellingNumber.
+        subbuildingRange:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Subbuilding range (no / range); mapped from Intelliworks subDwellingDescription.
+        buildingName:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Building name; mapped from Intelliworks dwellingNumber.
+        buildingNumber:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Building number; mapped from Intelliworks dwellingDescription.
+        street:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        locality:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        town:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        county:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        postcode:
+          type: string
+          maxLength: 8
+          pattern: ^[A-Za-z0-9 ]{1,8}$
+        country:
+          type: string
+          maxLength: 60
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+    price:
+      type: object
+      additionalProperties: false
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0
+        currency:
+          type: string
+          maxLength: 3
+          pattern: ^$|^[A-Z]{3}$
+    feeEarnerDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        feeEarnerName:
+          type: string
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+        supervisorName:
+          type: string
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+    workReferrer:
+      type: object
+      additionalProperties: false
+      properties:
+        sourceOfWork:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        referrer:
+          $ref: '#/components/schemas/organisationParty'
+        referrerWorkSource:
+          $ref: '#/components/schemas/organisationParty'
+        referrerFeePayableTo:
+          $ref: '#/components/schemas/organisationParty'
+        referrerReference:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+        referrerFee:
+          $ref: '#/components/schemas/price'
+    organisationParty:
+      type: object
+      additionalProperties: false
+      properties:
+        partyType:
+          type: string
+          enum:
+          - organisation
+          description: Party type discriminator.
+        name:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        email:
+          type: string
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        email2:
+          type: string
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        officePhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        officeFax:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        website:
+          type: string
+          maxLength: 250
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*;()_+-/,.':]*$
+        dxNumber:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        dxExchange:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        address:
+          $ref: '#/components/schemas/propertyAddress'
+    buyersConveyancer:
+      allOf:
+      - $ref: '#/components/schemas/organisationParty'
+      - type: object
+        additionalProperties: false
+        properties:
+          conveyancerReference:
+            type: string
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+    lenderParty:
+      allOf:
+      - $ref: '#/components/schemas/organisationParty'
+      - type: object
+        additionalProperties: false
+        properties:
+          type:
+            type: string
+            enum:
+            - existing
+            - new
+            description: Indicates whether the lender is the existing mortgage lender or a new lender.
+    personParty:
+      type: object
+      additionalProperties: false
+      properties:
+        partyType:
+          type: string
+          enum:
+          - person
+          description: Party type discriminator.
+        title:
+          type: string
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+.'-]*$
+        firstName:
+          type: string
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+        middleName:
+          type: string
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+        surname:
+          type: string
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+        personalEmail:
+          type: string
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        workEmail:
+          type: string
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        homePhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        workPhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        mobilePhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        address:
+          $ref: '#/components/schemas/propertyAddress'
+    clientParty:
+      oneOf:
+      - $ref: '#/components/schemas/personParty'
+      - $ref: '#/components/schemas/organisationParty'
+    uploadDocumentJsonRequest:
+      type: object
+      additionalProperties: false
+      description: JSON request body for document upload. Use `multipart/form-data` to upload a file directly without encoding.
+      required:
+      - branchId
+      - document
+      anyOf:
+      - required:
+        - caseId
+      - required:
+        - externalCaseId
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Optional parent transaction from create case.
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Optional workflow identifier.
+        caseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference (e.g. `EXP-000762`).
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: External case reference (e.g. `AAR801/1`).
+        taskId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Optional task identifier. When omitted, a new default task is created and the document is stored against it.
+        document:
+          $ref: '#/components/schemas/uploadDocumentJsonDocument'
+    uploadDocumentJsonDocument:
+      type: object
+      additionalProperties: false
+      description: Document metadata and content for JSON upload requests
+      required:
+      - fileName
+      - contentType
+      - extension
+      properties:
+        fileName:
+          type: string
+          maxLength: 255
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,']*$
+        description:
+          type: string
+          maxLength: 500
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,' ]*$
+        contentBase64:
+          type: string
+          minLength: 1
+          description: Optional Base64-encoded document content. Prefer `multipart/form-data` to upload the file directly.
+        contentType:
+          $ref: '#/components/schemas/uploadDocumentAllowedContentType'
+        extension:
+          $ref: '#/components/schemas/uploadDocumentAllowedExtension'
+    uploadDocumentAllowedContentType:
+      type: string
+      enum:
+      - application/pdf
+      - application/msword
+      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - text/plain
+      - image/png
+      - image/jpeg
+    uploadDocumentAllowedExtension:
+      type: string
+      enum:
+      - pdf
+      - doc
+      - docx
+      - txt
+      - png
+      - jpg
+      - jpeg
+    uploadDocumentResponse:
+      type: object
+      additionalProperties: false
+      description: Accepted document upload response
+      required:
+      - transactionRequestId
+      - transactionId
+      - documentId
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+        documentId:
+          $ref: '#/components/schemas/lgsUuid'
+    completedDocumentsResponse:
+      type: object
+      additionalProperties: false
+      title: Completed documents
+      description: Read-only list of completed documents returned by Get Completed Documents.
+      properties:
+        caseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference.
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: External case reference from the originating system.
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 99999
+          description: Intelliworks workflow identifier.
+        documents:
+          type: array
+          description: Completed documents held against the case.
+          items:
+            $ref: '#/components/schemas/completedDocumentItem'
+    completedDocumentItem:
+      type: object
+      additionalProperties: false
+      title: Completed document
+      description: A single completed document held against a case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Document ID. Use this value with `GET /documents/{id}/download` to download the document.
+        description:
+          type: string
+          maxLength: 255
+          description: Document description.
+        fileName:
+          type: string
+          maxLength: 255
+          description: Resolved document file name.
+        extension:
+          type: string
+          maxLength: 25
+          description: File extension.
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Document size in bytes.
+        externalType:
+          type: string
+          maxLength: 50
+          description: Document classification (e.g. CaseDocument, CaseImport).
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp (UTC).
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last updated timestamp (UTC).
+    Error:
+      required:
+      - code
+      - message
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          pattern: ^.*$
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    lgsUprn:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775000
+    lgsAddressPAF:
+      $comment: Based https://www.poweredbypaf.com/wp-content/uploads/2017/07/Latest-Programmers_guide_Edition-7-Version-6.pdf. Addresses defined in PAF are designed to be applicable properties that recieve mail.
+      type: object
+      required:
+      - addressType
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressPAF
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        udprn:
+          type: integer
+          description: Royal Mail’s Unique Delivery Point Reference Number (UDPRN)
+          minimum: 0
+          maximum: 99999999
+        departmentName:
+          type: string
+          description: 'example: Customer Service Department'
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        organisationName:
+          type: string
+          description: 'example: JW Simpsons Ltd'
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        subBuildingName:
+          type: string
+          description: 'example: The Old Mill'
+          maxLength: 30
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        buildingName:
+          type: string
+          description: 'example: The Annexe'
+          maxLength: 50
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        buildingNumber:
+          type: string
+          description: 'example: 7'
+          maxLength: 4
+          pattern: ^[A-Za-z0-9-/\s]*$
+        poBoxNumber:
+          type: string
+          description: 'example: 5422'
+          maxLength: 14
+          pattern: ^[A-Za-z0-9.#\s]*$
+        dependentThoroughfare:
+          type: string
+          description: 'example: Richmond Terrace'
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        thoroughfare:
+          type: string
+          description: 'example: Main Street'
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        doubleDependentLocality:
+          type: string
+          description: 'example: Hook'
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        dependentLocality:
+          type: string
+          description: 'example: Warsash'
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        postTown:
+          type: string
+          description: 'example: Southampton'
+          maxLength: 30
+          pattern: ^[A-Za-zÀ-ž\u2010-\u201F-.'&!\s]*$
+        postcode:
+          type: string
+          description: 'example: SO99 9ZZ'
+          maxLength: 10
+          pattern: ^[A-Za-z0-9\s]*$
+        blpuEasting:
+          type: number
+          description: 'example: 296701'
+        blpuNorthing:
+          type: number
+          description: 'example: 92288'
+    lgsAddressBS7666:
+      $comment: BS7666 no longer includes field lengths, however, field lengths included to conform to Landmark Standard 2.5.1. Addresses defined in BS 7666 are designed to be applicable to land and property, not just properties that recieve mail.
+      type: object
+      required:
+      - addressType
+      - postcodeLocator
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressBS7666
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        organisation:
+          type: string
+          description: 'example: JW Simpson Ltd'
+          maxLength: 60
+          pattern: ^.*$
+        saoText:
+          type: string
+          description: 'example: The Annexe'
+          maxLength: 90
+          pattern: ^.*$
+        saoStartNumber:
+          type: integer
+          description: 'example: 1'
+        saoStartSuffix:
+          type: string
+          description: 'example: A'
+          maxLength: 2
+          pattern: ^.*$
+        saoEndNumber:
+          type: integer
+          description: 'example: 5'
+        saoEndSuffix:
+          type: string
+          description: 'example: C'
+          maxLength: 2
+          pattern: ^.*$
+        paoText:
+          type: string
+          description: 'example: The Old Mill'
+          maxLength: 90
+          pattern: ^.*$
+        paoStartNumber:
+          type: integer
+          description: 'example: 7'
+        paoStartSuffix:
+          type: string
+          description: 'example: A'
+          maxLength: 2
+          pattern: ^.*$
+        paoEndNumber:
+          type: integer
+          description: 'example: 9'
+        paoEndSuffix:
+          type: string
+          description: 'example: C'
+          maxLength: 2
+          pattern: ^.*$
+        streetDescription:
+          type: string
+          description: 'example: Main Street'
+          maxLength: 100
+          pattern: ^.*$
+        locality:
+          type: string
+          description: 'example: Hook'
+          maxLength: 35
+          pattern: ^.*$
+        townName:
+          type: string
+          description: 'example: Warsash'
+          maxLength: 30
+          pattern: ^.*$
+        administrativeArea:
+          type: string
+          description: 'example: Southampton'
+          maxLength: 30
+          pattern: ^.*$
+        postcodeLocator:
+          type: string
+          description: 'example: SO99 9ZZ'
+          maxLength: 10
+          pattern: ^.*$
+        blpuEasting:
+          type: number
+          description: 'example: 296701'
+        blpuNorthing:
+          type: number
+          description: 'example: 92288'
+    lgsAddressSingleLine:
+      $comment: Singleline is suitable for those applications where a structured address is not required.
+      type: object
+      required:
+      - addressType
+      - addressLine
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressSingleLine
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        addressLine:
+          type: string
+          description: 'example: The Old Mill, 7A-9 Main Street, Hook, Warsash, Southampton, SO99 9ZZ'
+          maxLength: 1000
+          pattern: ^.*$
+    lgsAddress9Line:
+      $comment: 9Line is suitable for those applications where a structured address is required but flexibility around the address elements is desired.
+      type: object
+      required:
+      - addressType
+      - addressLine1
+      - addressLine2
+      properties:
+        addressType:
+          type: string
+          enum:
+          - address9Line
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        addressLine1:
+          type: string
+          description: 'example: The Old Mill'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine2:
+          type: string
+          description: 'example: 7-9 Main Street'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine3:
+          type: string
+          description: 'example: Hook'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine4:
+          type: string
+          description: 'example: Warsash'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine5:
+          type: string
+          description: 'example: Southampton'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine6:
+          type: string
+          description: 'example: Hampshire'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine7:
+          type: string
+          description: 'example: England'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine8:
+          type: string
+          description: 'example: United Kingdom'
+          maxLength: 200
+          pattern: ^.*$
+        addressLine9:
+          type: string
+          description: 'example: SO99 9ZZ'
+          maxLength: 200
+          pattern: ^.*$
+    lgsAddressFixedLine:
+      $comment: FixedLine is suitable for those applications where a user friendly, structured address is required.
+      type: object
+      required:
+      - addressType
+      - postcode
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressFixedLine
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        name:
+          type: string
+          maxLength: 200
+          pattern: ^.*$
+        number:
+          type: string
+          maxLength: 200
+          pattern: ^.*$
+        street:
+          type: string
+          description: 'example: 7-9 Main Street'
+          maxLength: 200
+          pattern: ^.*$
+        area:
+          type: string
+          description: 'example: Hook'
+          maxLength: 200
+          pattern: ^.*$
+        town:
+          type: string
+          description: 'example: Warsash'
+          maxLength: 200
+          pattern: ^.*$
+        county:
+          type: string
+          description: 'example: Hampshire'
+          maxLength: 200
+          pattern: ^.*$
+        country:
+          type: string
+          description: 'example: England'
+          maxLength: 200
+          pattern: ^.*$
+        postcode:
+          type: string
+          description: 'example: SO99 9ZZ'
+          maxLength: 10
+          pattern: ^.*$
+    lgsAddressUprnOnly:
+      $comment: UprnOnly is suitable when client or application has a valid uprn. If an address is required an address match will need to be made.
+      type: object
+      required:
+      - addressType
+      - uprn
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressUprnOnly
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+    lgsAddressAddressBaseCore:
+      $comment: Based https://www.ordnancesurvey.co.uk/documents/product-support/tech-spec/addressbasecore-technical-specification.pdf.
+      type: object
+      required:
+      - addressType
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressAddressBaseCore
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        parentUprn:
+          $ref: '#/components/schemas/lgsUprn'
+        udprn:
+          type: integer
+          description: Royal Mail’s Unique Delivery Point Reference Number (UDPRN)
+          minimum: 0
+          maximum: 99999999
+        usrn:
+          type: integer
+          description: Unique Street Reference Number assigned by the Street Name and Numbering Custodian OR Ordnance Survey depending on the address record
+          minimum: 0
+          maximum: 99999999
+        toid:
+          type: string
+          description: The Topographic Identifier taken from OS MasterMap Topography Layer
+          maxLength: 20
+          pattern: ^.*$
+        easting:
+          type: number
+          description: A value in metres defining the x location in accordance with the British National Grid
+        northing:
+          type: number
+          description: A value in metres defining the y location in accordance with the British National Grid
+        latitude:
+          type: number
+          description: A value defining the Latitude location in accordance with the ETRS89 coordinate reference system
+        longitude:
+          type: number
+          description: A value defining the Longitude location in accordance with the ETRS89 coordinate reference system
+        singleLineAddress:
+          type: string
+          description: A single attribute containing text concatenation of the address elements separated by a comma
+          maxLength: 500
+          pattern: ^.*$
+        poBox:
+          type: string
+          description: Text concatenation of PO BOX and the Post Office Box (PO Box) number or ‘BFPO’ and the British Forces Post Office number
+          maxLength: 13
+          pattern: ^.*$
+        organisation:
+          type: string
+          description: 'The organisation name is the business name given, when appropriate, to an address record. '
+          maxLength: 100
+          pattern: ^.*$
+        subBuilding:
+          type: string
+          description: The sub-building name and/or number for the address record
+          maxLength: 110
+          pattern: ^.*$
+        buildingName:
+          type: string
+          description: The building name is a description applied to a single address or a group of addresses
+          maxLength: 110
+          pattern: ^.*$
+        buildingNumber:
+          type: string
+          description: The building number is a number or range of numbers given to a single address or a group of addresses
+          maxLength: 13
+          pattern: ^.*$
+        streetName:
+          type: string
+          description: Street / Road name for the address record
+          maxLength: 100
+          pattern: ^.*$
+        locality:
+          type: string
+          description: A locality defines an area or geographical identifier within a town, village or hamlet. Locality represents the lower level geographical area.
+          maxLength: 35
+          pattern: ^.*$
+        townName:
+          type: string
+          description: Geographical town name assigned by the Local Authority. Please note this can be different from the Post Town value assigned by Royal Mail
+          maxLength: 35
+          pattern: ^.*$
+        postTown:
+          type: string
+          description: The town or city in which the Royal Mail sorting office is located which services this address record
+          maxLength: 30
+          pattern: ^.*$
+        island:
+          type: string
+          description: Third level of geographic area name to record island names where appropriate
+          maxLength: 50
+          pattern: ^.*$
+        postcode:
+          type: string
+          description: A postcode assigned by Royal Mail for the address record
+          maxLength: 8
+          pattern: ^.*$
+    lgsAddress:
+      oneOf:
+      - $ref: '#/components/schemas/lgsAddressPAF'
+      - $ref: '#/components/schemas/lgsAddressBS7666'
+      - $ref: '#/components/schemas/lgsAddressSingleLine'
+      - $ref: '#/components/schemas/lgsAddress9Line'
+      - $ref: '#/components/schemas/lgsAddressFixedLine'
+      - $ref: '#/components/schemas/lgsAddressUprnOnly'
+      - $ref: '#/components/schemas/lgsAddressAddressBaseCore'
+    lgsPerson:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          $comment: Unique person id
+          $ref: '#/components/schemas/lgsUuid'
+        title:
+          type: string
+          maxLength: 20
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+        firstName:
+          type: string
+          maxLength: 100
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        middleName:
+          type: string
+          maxLength: 100
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        lastName:
+          type: string
+          maxLength: 100
+          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        email:
+          $comment: Email format based on https://datatracker.ietf.org/doc/html/rfc3696#section-3
+          type: string
+          format: email
+          maxLength: 320
+        telephoneNumber:
+          $comment: Limits set inline with https://en.wikipedia.org/wiki/E.164
+          type: string
+          minLength: 8
+          maxLength: 15
+        mobileTelephoneNumber:
+          $comment: 'Limits set inline with https://en.wikipedia.org/wiki/E.164, ideally this should be used when it is known that the number relates to a mobile number or when there is already a value in the telephoneNumber  '
+          type: string
+          minLength: 8
+          maxLength: 15
+        address:
+          description: Main residential address
+          $ref: '#/components/schemas/lgsAddress'
+        correspondenceAddress:
+          description: Alternative address for correspondence
+          $ref: '#/components/schemas/lgsAddress'
+      required:
+      - lastName
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    lgsTraceResponse:
+      description: Trace context providing an unique identifier for an individual requests
+      schema:
+        type: string
+        minLength: 39
+        maxLength: 39
+        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
+      examples:
+        Example traceresponse:
+          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
+security:
+- bearerAuth: []

@@ -1,0 +1,473 @@
+aid: landmark-information
+name: Landmark Information Group
+review:
+  question: >-
+    Does Landmark Information Group expose a real, publicly documented API surface, and where does
+    it sit against RESO certification, access gating, and open property data in the United Kingdom?
+  answer: true
+  date: '2026-07-26'
+  reviewer: API Evangelist
+  summary: >-
+    Yes — and it is one of the more honest surfaces in this sector. Landmark runs a genuinely public,
+    login-free API documentation portal at https://www.landmarkcloudservices.com/ that publishes
+    complete OpenAPI 3.x contracts for five APIs, plus a full public HTML technical pack for a sixth
+    (the Barbour ABI-powered Planning API) and a named-standard seventh (an OGC WMTS mapping
+    service with no published endpoint). Reading the contracts requires nothing. Calling any of them
+    requires a commercial account: OAuth 2.0 client credentials issued by Landmark against its Auth0
+    tenant, or a Landmark-issued API key plus login credentials for the Planning API. RESO is
+    entirely absent, which is the correct answer for a UK company.
+
+homeMarket:
+  country: United Kingdom
+  hq: Exeter, Devon, England
+  parent: Daily Mail and General Trust (DMGT)
+  companiesHouseNumber: '02892803'
+  positionInValueChain: >-
+    Transaction-side data and workflow infrastructure, not listings. The UK has no MLS; residential
+    listings are controlled by the Rightmove/Zoopla portal duopoly and reached through agency CRMs
+    (Reapit, Alto, Street, Apex27). Landmark sits underneath that layer, supplying conveyancing
+    search reports, AML/compliance checks, case management software, panel/valuation infrastructure
+    for lenders and surveyors, and licensed geospatial data derived from Ordnance Survey, HM Land
+    Registry and ~400 other suppliers.
+
+resoPosture:
+  short: No RESO reference found — RESO is absent from the UK market and from Landmark's surface
+  certified: false
+  webApiCertification: none found
+  dataDictionaryCertification: none found
+  dataDictionaryVersion: null
+  certificationDirectoryEvidence: >-
+    No listing exists to cite. RESO certification is administered against North American MLS
+    organisations under NAR policy; Landmark Information Group is a UK company with no MLS
+    relationship, no NAR membership path, and no reason to certify. Nothing on landmark.co.uk or
+    landmarkcloudservices.com references RESO, RETS, the RESO Data Dictionary, or the RESO Web API.
+  universalPropertyIdentifier:
+    present: false
+    note: >-
+      No RESO Universal Property Identifier (UPI) anywhere. The UK equivalent Landmark actually uses
+      is the Ordnance Survey Unique Property Reference Number (UPRN), which appears throughout the
+      harvested specs (168 occurrences across the Order/Intelliworks/Document Vault contracts) and
+      is the headline attribute of Landmark's AddressBase addressing product. UPRN is a national
+      government identifier, not an industry-body one — the inverse of the RESO/UPI model.
+  odataAndMetadata:
+    odataService: false
+    metadataDocumentFound: false
+    note: >-
+      The Conveyancing Experience API borrows OData-style query syntax — its list endpoints document
+      `$filter` and `$orderby` parameters (8 occurrences in the harvested spec) — but it is a plain
+      JSON REST API, not an OData service. No `$metadata` document is served. Probed
+      https://api.landmarkcloudservices.com/$metadata (HTTP 403),
+      https://api.landmarkcloudservices.com/connect/$metadata (HTTP 403) and
+      https://www.landmarkcloudservices.com/$metadata (HTTP 404). Do not read the OData query
+      syntax as any kind of RESO alignment; the resemblance is superficial.
+  interpretation: >-
+    Certification is not reachability, and in the UK the question does not even arise. There is no
+    mandated machine-readable listing contract in this market because there is no cooperative to
+    mandate it. What the UK has instead is open government property data (HM Land Registry Price
+    Paid, Ordnance Survey open products) — but that belongs to the public sector, not to Landmark.
+    Landmark is a licensee and reseller of that layer, not a publisher of it.
+
+accessGate:
+  classification: partner-only
+  gated: true
+  whatADeveloperMustSignOrJoin: >-
+    A commercial account with Landmark. There is no self-serve signup anywhere in the surface and no
+    public key issuance. The Conveyancing Experience API documentation states plainly: "When you're
+    onboarded you'll receive a client ID and secret" and "Your Landmark contact will confirm what's
+    available to you and when." The Document Vault API states: "Each conveyancing firm is onboarded
+    individually with Landmark and receives its own client ID, secret, and Account-Id... If you
+    integrate via a case management system, that system typically holds the firm's credentials on
+    its behalf." The Planning API documentation states: "Access to the APIs is a subscription
+    service and the set of accessible projects may be restricted based on the agreed subscription",
+    offered as either an annual subscription or pay-as-you-go metered access, with a two-week trial
+    available via a "Request a trial" form. The WMTS mapping service begins with a
+    register-your-interest form at https://geodata.landmark.co.uk/register-your-interest-in-wmts
+    (HTTP 200) followed by a commercial agreement.
+  isMembershipRequired: false
+  isBrokerOrAgentOnly: false
+  isLicenceAgreement: >-
+    Effectively yes at the data layer — Landmark's mapping, addressing and risk data is derived from
+    Ordnance Survey, HM Land Registry and ~400 suppliers under onward-licence terms — but the gate a
+    developer actually encounters is a commercial contract, not a signed IDX/VOW-style data licence.
+  documentationIsPublic: true
+  documentationGateNote: >-
+    Important distinction: the documentation is completely open (no login, no email wall, no
+    click-through), and the full OpenAPI contracts are embedded in the pages and therefore
+    harvestable. The runtime is closed. This is the reverse of the common US real-estate pattern,
+    where a certified endpoint exists but its contract is behind a member portal.
+
+openData:
+  landmarkPublishesOpenData: false
+  note: >-
+    Landmark publishes no open, unlicensed, publicly callable dataset. Everything it sells is
+    licensed. The genuinely open UK property layer exists — HM Land Registry Price Paid Data and
+    ownership data under the Open Government Licence, and Ordnance Survey open products — but those
+    are separate public-sector publishers and are Landmark's suppliers, not Landmark products.
+    Landmark's free public artefacts are documentation and quarterly residential property trends
+    reports (HTML/PDF), not data APIs.
+
+authModel:
+  primary: OAuth 2.0 client credentials (Auth0), bearer JWT
+  tokenEndpointProduction: https://lmkmaster.eu.auth0.com/oauth/token
+  tokenEndpointUat: https://lmkmaster-uat.eu.auth0.com/oauth/token
+  audienceProduction: https://api.landmarkcloudservices.com
+  audienceUat: https://uat-api.landmarkcloudservices.com
+  additionalHeaders:
+  - name: Account-Id
+    appliesTo: Document Vault API
+    note: Per-firm account identifier sent on every request alongside the bearer token.
+  scopes:
+    declaredInSpecs: false
+    note: >-
+      The Conveyancing API declares an OAuth2 clientCredentials flow with an EMPTY scopes object.
+      Entitlement is enforced server-side per account (a 403 means "your account isn't entitled to
+      that operation"), not via OAuth scopes. No scope strings are published anywhere, so none are
+      recorded — none were invented.
+  openidConfiguration:
+    url: https://lmkmaster.eu.auth0.com/.well-known/openid-configuration
+    httpStatus: 200
+    fetched: '2026-07-26'
+    savedAs: authentication/landmark-information-openid-configuration.json
+    note: >-
+      Fetched anonymously. Standard Auth0 tenant discovery document; issuer
+      https://lmkmaster.eu.auth0.com/, grant_types_supported includes client_credentials, jwks_uri
+      https://lmkmaster.eu.auth0.com/.well-known/jwks.json. The scopes_supported list is Auth0's
+      generic OIDC set (openid, profile, email, ...) and is NOT a Landmark API scope list — it must
+      not be read as one.
+  secondary:
+    name: Planning API (Barbour ABI)
+    scheme: >-
+      Landmark-issued API key in an `x-api-key` header, plus a login exchange — GET
+      https://api.barbour-abi.com/v4/login with `Authorization: Basic <base64(username:sha256(password))>`
+      and the x-api-key header — returning a bearer token in a response header. Token expires after
+      30 days of disuse or on major release. GET /logout invalidates it explicitly. Entirely separate
+      from the Auth0 estate.
+
+developerPortal:
+  url: https://www.landmarkcloudservices.com/
+  httpStatus: 200
+  confirmed: true
+  selfServeKeys: false
+  shape: >-
+    A single-page portal with an API selector that loads a per-API Redoc-rendered page in an iframe
+    (`?api=<slug>` → `<slug>.html`). No login, no registration, no console, no interactive try-it,
+    no API key management. Purely reference documentation.
+  publishedApis:
+  - slug: order-experience-api
+    label: Compliance API
+    httpStatus: 200
+  - slug: conveyances-experience-api
+    label: Conveyancing Experience API
+    httpStatus: 200
+  - slug: intelliworks-experienceapi-CreateCase-api
+    label: Intelliworks APIs
+    httpStatus: 200
+  - slug: document-vault-experience
+    label: Contract Pack Vault
+    httpStatus: 200
+  - slug: milestone-service-api
+    label: Milestone Service
+    httpStatus: 200
+  commentedOutInPortalHtml:
+  - slug: intelliworks-pmsapi-api
+    label: Intelliworks PMS
+    httpStatus: 404
+  - slug: property-risk-v3-api
+    label: Property Risk v3
+    httpStatus: 404
+  - slug: transaction-request-experience-api
+    label: Transaction Request Experience
+    httpStatus: 404
+  commentedOutNote: >-
+    The portal's HTML `<select>` contains three additional options commented out in source — an
+    Intelliworks PMS API, a Property Risk v3 API under a "Property Insights" optgroup, and a
+    Transaction Request Experience API. All three return HTTP 404. They are recorded here as
+    evidence of a wider internal API estate that is not currently published, and are deliberately
+    NOT listed in apis.yml because no contract or documentation exists for them.
+
+harvest:
+  method: >-
+    Each documentation page is a pre-rendered Redoc v2.5.0 bundle. The complete dereferenced OpenAPI
+    document is embedded in the page as the `__redoc_state.spec.data` JSON object. Each was extracted
+    with a JSON raw-decode from that marker, verified to parse, and written to openapi/ as YAML with
+    no content alteration.
+  specs:
+  - file: openapi/landmark-information-order-experience-api-openapi.yml
+    title: Order Experience API
+    specVersion: 3.0.3
+    apiVersion: 1.3.1
+    apiVersionDate: '2026-04-15'
+    paths: 5
+    servers:
+    - https://api.landmarkcloudservices.com/connect
+    - https://uat-api.landmarkcloudservices.com/connect
+    securitySchemes: [bearerAuth (http bearer, JWT)]
+    sourceURL: https://www.landmarkcloudservices.com/order-experience-api.html
+    httpStatus: 200
+    fetched: '2026-07-26'
+    parses: true
+  - file: openapi/landmark-information-conveyancing-experience-api-openapi.yml
+    title: Landmark Conveyancing Experience API
+    specVersion: 3.0.3
+    apiVersion: 0.8.1
+    paths: 20
+    servers:
+    - https://api.landmarkcloudservices.com/conveyances
+    - https://uat-api.landmarkcloudservices.com/conveyances
+    securitySchemes: [BearerAuth (oauth2 clientCredentials, tokenUrl https://lmkmaster.eu.auth0.com/oauth/token, empty scopes)]
+    sourceURL: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+    httpStatus: 200
+    fetched: '2026-07-26'
+    parses: true
+    note: >-
+      Only the UAT base URL is given in the getting-started table; the production server appears in
+      the spec `servers` block. Add Document and Retrieve Document are marked Preview and explicitly
+      not ready to build against.
+  - file: openapi/landmark-information-intelliworks-api-openapi.yml
+    title: Intelliworks APIs
+    specVersion: 3.0.1
+    apiVersion: 2.3.0
+    paths: 8
+    servers:
+    - https://api.landmarkcloudservices.com/
+    - https://uat-api.landmarkcloudservices.com/
+    securitySchemes: [bearerAuth (http bearer, JWT)]
+    sourceURL: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+    httpStatus: 200
+    fetched: '2026-07-26'
+    parses: true
+  - file: openapi/landmark-information-document-vault-api-openapi.yml
+    title: Document Vault API
+    specVersion: 3.0.4
+    apiVersion: 1.0.1
+    paths: 10
+    servers:
+    - https://api.landmarkcloudservices.com/
+    - https://uat-api.landmarkcloudservices.com/
+    securitySchemes: [bearerAuth (http bearer, JWT)]
+    sourceURL: https://www.landmarkcloudservices.com/document-vault-experience.html
+    httpStatus: 200
+    fetched: '2026-07-26'
+    parses: true
+    note: >-
+      The spec `servers` entries are host-root, but the documentation states the real base path is
+      `/document-vaults` (UAT: https://uat-api.landmarkcloudservices.com/document-vaults). apis.yml
+      records https://api.landmarkcloudservices.com/document-vaults as the production baseURL on
+      that documented basis; the spec is stored verbatim and unmodified.
+  - file: openapi/landmark-information-milestone-notification-service-api-openapi.yml
+    title: Milestone Notification Service API
+    specVersion: 3.0.1
+    apiVersion: 1.0.0
+    apiVersionDate: '2024-02-15'
+    paths: 2
+    servers:
+    - https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
+    - https://uat-api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
+    securitySchemes: [bearerAuth (http bearer, JWT)]
+    sourceURL: https://www.landmarkcloudservices.com/milestone-service-api.html
+    httpStatus: 200
+    fetched: '2026-07-26'
+    parses: true
+  specsCount: 5
+  metadataDocumentsHarvested: 0
+
+apiFamilySegmentation:
+  note: Landmark's own product segmentation, reproduced faithfully rather than remapped.
+  listingsOrSearch:
+    present: false
+    note: >-
+      Landmark does not operate a listings API. UK residential listings sit with Rightmove and
+      Zoopla. Landmark's estate-agency products (LandmarkAgent, Metropix) are compliance, material
+      information, floor plans and search packs — inputs to a listing, not the listing feed.
+  propertyRecordsAndRisk:
+    present: true
+    apiExposed: partial
+    note: >-
+      Envirocheck, RiskView, SiteSolutions, flood/coal/chancel/planning reports are ordered as
+      products. A "Property Risk v3" API exists in the portal source but is commented out and 404s.
+  valuationAvm:
+    present: true
+    apiExposed: partial
+    note: >-
+      Valuation Risk Modelling, mortgage valuations, Q-Guard fraud detection and the Secure Panel
+      Network (SPN/SPN+) are real products handling ~1.5m valuation instructions a year, but the
+      only public API surface is the Milestone Notification Service callback registration API.
+  transactionsAndCaseManagement:
+    present: true
+    apiExposed: true
+    apis: [Conveyancing Experience API, Intelliworks APIs]
+  documents:
+    present: true
+    apiExposed: true
+    apis: [Document Vault API]
+  complianceAndIdentity:
+    present: true
+    apiExposed: true
+    apis: [Order Experience API]
+  geospatialAndPlanning:
+    present: true
+    apiExposed: true
+    apis: [Planning API (Barbour ABI), Web Map Tile Service (OGC WMTS)]
+    note: >-
+      AddressBase/UPRN addressing (29m+ addresses), Promap, historical maps, PointX POI and
+      geospatial consulting are delivered as data supply and managed services rather than
+      self-describing APIs.
+  tenancyAndPayments:
+    present: false
+    note: >-
+      No tenancy or rentals API. Payments appear only as LandmarkAgent third-party payments terms;
+      no payment API is documented.
+
+webhooksEventsSdksTooling:
+  webhooks:
+    present: true
+    mechanism: >-
+      The Milestone Notification Service API is a callback-registration surface — POST /callbacks,
+      PUT /callbacks/{callbackId}, DELETE /callbacks/{callbackId} — for valuation transaction
+      milestone notifications. This is a genuine webhook subscription API, unusual for this sector.
+    asyncapiPublished: false
+  events:
+    present: false
+    note: No event streaming, message queue, or pub/sub surface is documented.
+  sdks:
+    present: false
+    note: >-
+      No SDKs or client libraries published. The GitHub organisation
+      https://github.com/Landmark-Information-Group holds only two public repositories — a C# coding
+      test ("playground--interviews--refactor") and an Azure DevOps tooling repo — both last touched
+      in August 2022. Neither is an API artefact.
+  postmanCollections:
+    present: false
+    note: >-
+      No Postman collection is published or linked. https://www.landmarkcloudservices.com/postman.json
+      returned 404. A https://www.postman.com/landmark-information-group request returned the generic
+      Postman SPA shell with no workspace content, which is not evidence of a workspace; recorded as
+      absent.
+  statusPage:
+    present: false
+    note: >-
+      status.landmark.co.uk and status.landmarkcloudservices.com do not resolve (connection failure,
+      curl exit 000). No public uptime or incident page found.
+  changelog:
+    present: true
+    mechanism: >-
+      Versioned change history is embedded in each spec's `info.description` — the Order Experience
+      API carries a dated version log from 0.9.2 through 1.3.1 (2026-04-15). There is no standalone
+      changelog page or feed.
+  rateLimits:
+    documented: true
+    values:
+    - api: Document Vault API
+      limit: 1,000 calls per minute per caller
+    - api: Milestone Notification Service API
+      limit: 250 requests per customer per minute
+    - api: Planning API
+      limit: unspecified; 429 returned on excess, described as "very high"
+  environments:
+    uat: https://uat-api.landmarkcloudservices.com
+    production: https://api.landmarkcloudservices.com
+    note: UAT credentials are issued separately and UAT usage is documented as not charged.
+
+probes:
+- url: https://www.landmark.co.uk/
+  httpStatus: 200
+  note: Corporate site (WordPress). Blocks some non-browser user agents with 403; fetched with a browser UA.
+- url: https://landmark.co.uk/
+  httpStatus: 200
+  note: Redirects to https://www.landmark.co.uk/
+- url: https://developer.landmark.co.uk/
+  httpStatus: 404
+- url: https://developers.landmark.co.uk/
+  httpStatus: 000
+  note: Does not resolve.
+- url: https://api.landmark.co.uk/
+  httpStatus: 404
+- url: https://docs.landmark.co.uk/
+  httpStatus: 000
+  note: Does not resolve.
+- url: https://www.landmarkcloudservices.com/
+  httpStatus: 200
+  note: THE developer portal. Public, no login.
+- url: https://landmarkcloudservices.com/
+  httpStatus: 000
+  note: Apex does not resolve; www only.
+- url: https://developer.landmarkcloudservices.com/
+  httpStatus: 000
+- url: https://www.landmarkcloudservices.com/openapi.json
+  httpStatus: 404
+- url: https://www.landmarkcloudservices.com/swagger.json
+  httpStatus: 404
+- url: https://www.landmarkcloudservices.com/robots.txt
+  httpStatus: 404
+- url: https://www.landmarkcloudservices.com/sitemap.xml
+  httpStatus: 404
+- url: https://api.landmarkcloudservices.com/
+  httpStatus: 403
+  note: Gateway live and rejecting unauthenticated traffic, as expected.
+- url: https://api.barbour-abi.com/v4/
+  httpStatus: 403
+  note: Planning API gateway live, rejects unauthenticated traffic.
+- url: https://lmkmaster.eu.auth0.com/.well-known/openid-configuration
+  httpStatus: 200
+  note: Saved verbatim to authentication/.
+- url: https://www.landmark.co.uk/products/planning-api/planning-api-documentation/
+  httpStatus: 200
+  note: Complete public HTML technical pack — fields, auth, query DSL, worked examples.
+- url: https://www.landmark.co.uk/products/web-map-tile-service-0/
+  httpStatus: 200
+- url: https://geodata.landmark.co.uk/register-your-interest-in-wmts
+  httpStatus: 200
+- url: https://geodata.landmark.co.uk/
+  httpStatus: 404
+- url: https://www.landmark.co.uk/legal-apis/
+  httpStatus: 200
+  note: Page exists in the sitemap but renders the homepage; carries no API content.
+- url: https://www.landmark.co.uk/.well-known/security.txt
+  httpStatus: 404
+- url: https://status.landmark.co.uk/
+  httpStatus: 000
+- url: https://github.com/Landmark-Information-Group
+  httpStatus: 200
+  note: Two public repos, neither an API artefact.
+
+sources:
+- url: https://www.landmarkcloudservices.com/
+  type: Documentation
+  note: Public API documentation portal; source of all five harvested OpenAPI contracts.
+- url: https://www.landmark.co.uk/products/planning-api/planning-api-documentation/
+  type: APIReference
+  note: Full Planning API technical pack including base URL https://api.barbour-abi.com/v4 and auth flow.
+- url: https://www.landmark.co.uk/sitemap.xml
+  type: Sitemap
+  note: Used to enumerate 86 pages and 148 product pages to find every API-bearing surface.
+- url: https://find-and-update.company-information.service.gov.uk/company/02892803
+  type: Registration
+  note: Companies House record for LANDMARK INFORMATION GROUP LIMITED.
+- url: https://www.reso.org/data-dictionary/
+  type: Standard
+  note: Checked as the RESO reference point; no Landmark relationship exists to it.
+
+findings:
+  headline: >-
+    Public contracts, private runtime. Landmark is the mirror image of the US MLS pattern: in the US
+    a RESO-certified endpoint often exists while its contract sits behind a member login; here the
+    contract is fully open and the endpoint is behind a commercial account.
+  reso: >-
+    No RESO reference found. No Web API certification, no Data Dictionary certification, no UPI, no
+    OData $metadata. RESO does not operate in the UK because the UK has no MLS to mandate it. The
+    identifier that actually does the work is the government-issued UPRN.
+  accessGate: partner-only
+  openData: false
+  gated: true
+  specsHarvested: 5
+  apisListed: 7
+  notableAbsences:
+  - No listings or property-search API of any kind.
+  - No SDKs, no Postman collection, no status page, no standalone changelog, no AsyncAPI.
+  - No OAuth scopes published; entitlement is account-level and server-side.
+  - No open data published by Landmark itself.
+  notablePresences:
+  - Five complete, parseable OpenAPI 3.x contracts freely readable without any account.
+  - A real webhook subscription API (Milestone Notification Service) for valuation milestones.
+  - Documented rate limits and a documented UAT environment that is explicitly not charged.
+  - Prose-quality API documentation with worked examples, error shapes, and a `traceresponse` header for support.
