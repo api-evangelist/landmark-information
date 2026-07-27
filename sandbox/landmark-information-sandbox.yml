@@ -1,0 +1,61 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://www.landmarkcloudservices.com/ API documents (Contract Pack Vault, Conveyancing
+  Experience, Milestone Service) - Getting started and Environments sections
+description: >-
+  Landmark ships a full UAT environment rather than a test-mode-inside-production model. UAT is a
+  separate API host backed by Landmark's UAT systems, fronted by a separate Auth0 tenant, reached
+  with separate credentials issued at onboarding. Consumers build and test against UAT and are
+  promoted to production only when the integration is ready. There are no magic test values, no
+  published test identifiers and no self-service sandbox - a UAT credential still requires a
+  commercial onboarding conversation.
+self_service: false
+test_vs_live:
+  model: separate environment
+  separation: separate host, separate identity provider tenant, separate client credentials
+  key_prefixes: none - credentials are opaque Auth0 client ids and secrets
+environments:
+- name: uat
+  purpose: Building and testing an integration. Interfaces with Landmark UAT back ends.
+  billing: not charged (Contract Pack Vault documents UAT as not charged)
+  api_bases:
+  - https://uat-api.landmarkcloudservices.com/connect
+  - https://uat-api.landmarkcloudservices.com/conveyances
+  - https://uat-api.landmarkcloudservices.com/document-vaults
+  - https://uat-api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
+  - https://uat-api.landmarkcloudservices.com/
+  token_url: https://lmkmaster-uat.eu.auth0.com/oauth/token
+  audience: https://uat-api.landmarkcloudservices.com
+  web_app: https://uat-connect.landmark.co.uk/case/{documentVaultId}
+- name: production
+  purpose: >-
+    Live integrations only. Documented warning that any action on production creates and syncs real
+    data that users may see, and that Document Vaults are real and may incur a cost.
+  billing: charged - a Contract Pack Vault charge applies when the first document is added to a vault
+  api_bases:
+  - https://api.landmarkcloudservices.com/connect
+  - https://api.landmarkcloudservices.com/conveyances
+  - https://api.landmarkcloudservices.com/document-vaults
+  - https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
+  - https://api.landmarkcloudservices.com/
+  token_url: https://lmkmaster.eu.auth0.com/oauth/token
+  audience: https://api.landmarkcloudservices.com
+  web_app: https://connect.landmark.co.uk/case/{documentVaultId}
+test_values: []
+test_values_note: >-
+  Landmark publishes no test card numbers, magic identifiers, seeded fixtures or simulator values.
+  Test data in UAT is whatever the onboarded firm creates, and branch identifiers for Intelliworks
+  must be requested from Ochresoft.
+time_simulation:
+  supported: false
+fixtures_and_triggers:
+  supported: false
+  note: >-
+    Milestone notifications cannot be triggered synthetically from a public tool - a consumer
+    registers a callback URL in UAT and exercises the underlying valuation workflow to receive them.
+console:
+  interactive_try_it: false
+  note: >-
+    The documentation portal is Redoc reference rendering only. There is no in-browser request
+    console, so no call can be made from the documentation.

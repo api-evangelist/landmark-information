@@ -1,0 +1,149 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://www.landmarkcloudservices.com/ documentation portal (Redoc-rendered OpenAPI descriptions
+  for the Compliance/Order, Conveyancing, Intelliworks, Contract Pack Vault and Milestone Service
+  APIs) plus derivation from the five harvested OpenAPI documents in openapi/
+description: >-
+  Cross-cutting request and response semantics shared across the Landmark Cloud Services APIs.
+  Landmark runs its five public APIs on one gateway with a common error envelope, a common trace
+  header, a common HTTP status vocabulary and a shared 5-digit error-code registry, but each API
+  keeps its own version number and its own pagination style.
+transport:
+  protocol: HTTPS only (port 443)
+  request_format: application/json
+  response_format: application/json
+  file_upload: multipart/form-data
+  file_download: binary response body (PDF and document downloads return the file itself)
+authentication:
+  style: OAuth 2.0 client credentials (Auth0), bearer JWT on every request
+  header: 'Authorization: Bearer <access_token>'
+  account_header: 'Account-Id: <account id> (Document Vault API)'
+  token_caching: >-
+    Documented guidance is to cache and reuse the access token until close to expiry rather than
+    requesting a new token per call.
+  detail: authentication/landmark-information-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    No idempotency key header, no request-replay contract and no Idempotency-Key parameter appears
+    in any of the five OpenAPI documents or in the published documentation. Uniqueness is enforced
+    at the resource level instead - a Document Vault reference must be unique within an account,
+    and a duplicate callback registration returns 409/40900 - but there is no client-supplied
+    idempotency token.
+pagination:
+  style: OData-style top/skip (Conveyancing Experience API only)
+  parameters:
+  - name: $top
+    description: Maximum number of records to return
+  - name: $skip
+    description: Number of records to skip
+  - name: $filter
+    description: OData-style filter expression
+  - name: $orderby
+    description: OData-style sort expression
+  note: >-
+    The Conveyancing Experience API borrows OData query syntax on its list operations (quotes,
+    cases, and the case sub-collections) but it is not an OData service - there is no $metadata
+    document and no OData service root. The other four APIs expose no paged collections.
+  operations:
+  - conveyances-experience-quote-list
+  - conveyances-experience-case-list
+  - conveyances-experience-case-activity-list
+field_expansion:
+  supported: false
+sparse_fields:
+  supported: false
+metadata:
+  supported: false
+  note: >-
+    No free-form metadata bag. Consumers correlate to their own systems through named reference
+    fields instead - externalCaseId on Intelliworks cases, reference on Document Vaults, and
+    reference on compliance orders.
+request_tracing:
+  request_header: traceparent
+  standard: W3C Trace Context
+  response_header: traceresponse
+  response_header_alias: lgsTraceResponse
+  description: >-
+    Every response carries a trace response header that uniquely identifies the request; Landmark
+    asks callers to quote it when raising support. Supplying a malformed traceparent request header
+    is itself an error - 400 with code 40002, "Invalid traceparent http header".
+  support_instruction: Quote the traceresponse / lgsTraceResponse value when contacting support.
+versioning:
+  scheme: semantic version per API, declared in the OpenAPI info.version
+  in_url: false
+  in_header: false
+  note: >-
+    Versions are not carried in the URL or a header. Each API document states its own semantic
+    version and keeps a dated version history in its description; breaking changes have not yet
+    been exercised on any of the five public APIs.
+  detail: changelog/landmark-information-changelog.yml
+error_envelope:
+  media_type: application/problem+json
+  standard_alignment: >-
+    RFC 9457 media type with a Landmark-specific member set - status, code, title, messages[] -
+    rather than the RFC's type/title/status/detail/instance members.
+  fields:
+  - name: status
+    type: string
+    description: 3-digit HTTP status as a string
+  - name: code
+    type: string
+    description: 5-digit Landmark error code
+  - name: title
+    type: string
+    description: Short human-readable summary
+  - name: messages
+    type: array
+    description: Optional per-property validation messages (property + message)
+  example:
+    status: '400'
+    code: '40001'
+    title: Validation error
+    messages:
+    - property: propertyAddress.postcode
+      message: Postcode is required
+  detail: errors/landmark-information-problem-types.yml
+status_codes:
+  '400': Validation or request-shape error
+  '401': Missing or invalid token
+  '403': Account not entitled to the operation
+  '404': Entity not found
+  '406': Not acceptable (Intelliworks)
+  '409': Conflict - resource state or duplicate
+  '410': Gone - document expired (Compliance/Order document download)
+  '413': Payload too large
+  '415': Unsupported media type (Intelliworks)
+  '429': Rate limit exceeded
+  '500': Internal server error
+rate_limit_signaling:
+  response_code: 429
+  error_code: '42900'
+  headers: none documented
+  note: >-
+    Limits are published per API in the documentation text rather than signalled by RateLimit or
+    Retry-After response headers.
+  detail: rate-limits/landmark-information-rate-limits.yml
+asynchrony:
+  pattern: >-
+    Write operations are frequently accepted asynchronously. Compliance orders and Intelliworks
+    case writes return 202 Accepted with a transaction id; Document Vault uploads return the
+    document in Pending status while it is virus-scanned and analysed, moving to Available or
+    Quarantined. Progress is read back by polling or by registering a callback.
+  poll_operations:
+  - order-experience-get-order-status
+  - getTransactionRequestStatus
+  - document-vault-vaults-read
+  callback_surface: asyncapi/landmark-information-webhooks.yml
+environments:
+  pattern: UAT and production are separate hosts, separate Auth0 tenants and separate credentials
+  detail: sandbox/landmark-information-sandbox.yml
+support:
+  contacts:
+  - email: support@ochresoft.com
+    phone: +44 (0)3300 366 700
+    covers: Intelliworks, Contract Pack Vault
+  - email: lvsinfo@landmark.co.uk
+    phone: +44 (0)3300 366 110
+    covers: Milestone Notification Service (Secure Panel Network)

@@ -1,0 +1,73 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://www.landmarkcloudservices.com/ API documents (Compliance/Order, Conveyancing,
+  Intelliworks, Contract Pack Vault, Milestone Service) plus derivation from the harvested OpenAPI
+  documents in openapi/
+versioning:
+  scheme: semantic-version-per-api
+  in_url: false
+  in_header: false
+  current:
+    landmark-order-experience-api: 1.3.1
+    landmark-conveyancing-experience-api: 0.8.1
+    landmark-intelliworks-api: 2.3.0
+    landmark-document-vault-api: 1.0.1
+    landmark-milestone-notification-service-api: 1.0.0
+  docs: https://www.landmarkcloudservices.com/
+  note: >-
+    The Milestone Service document states explicitly that the API uses semantic versioning. Version
+    numbers appear only in the OpenAPI info block and the documentation - not in the path, not in a
+    header, and not in a media type - so there is no addressable way for a consumer to pin a
+    version at call time.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    Landmark publishes no deprecation or sunset policy, and no RFC 8594 Sunset or Deprecation
+    header support is documented. No operation in any of the five specs is marked deprecated. The
+    closest published lifecycle signal is the reverse of deprecation: the Conveyancing Experience
+    API marks not-yet-stable endpoints Preview and tells consumers not to build against them.
+maturity_signals:
+- api: Landmark Conveyancing Experience API
+  stage: preview endpoints present
+  detail: >-
+    Add Document and Retrieve Document are marked Preview - published so consumers can see the
+    direction of travel, explicitly not safe to build against. The Quotes and Cases schemas are
+    described as settled.
+  operations:
+  - conveyances-experience-case-document-create
+  - conveyances-experience-case-document-read
+- api: Landmark Cloud Services documentation portal
+  stage: unreleased APIs staged
+  detail: >-
+    Three further APIs - Intelliworks PMS, Property Risk v3 and Transaction Request Experience -
+    are present but commented out in the portal navigation, and their documentation pages return
+    404. They are staged for release rather than available.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page: null
+status_page_note: >-
+  No public status page. status.landmark.co.uk and status.landmarkcloudservices.com do not resolve,
+  and neither the corporate site nor the documentation portal links to an incident or uptime page.
+  Operational incidents are handled through the named support desks.
+environments:
+- name: uat
+  purpose: build and test; interfaces with Landmark UAT back ends; not charged
+  base: https://uat-api.landmarkcloudservices.com
+- name: production
+  purpose: live integrations only; actions create real data and may incur cost
+  base: https://api.landmarkcloudservices.com
+support:
+- email: support@ochresoft.com
+  phone: +44 (0)3300 366 700
+  covers: Intelliworks, Contract Pack Vault
+- email: lvsinfo@landmark.co.uk
+  phone: +44 (0)3300 366 110
+  covers: Milestone Notification Service (Secure Panel Network)
+changelog: changelog/landmark-information-changelog.yml

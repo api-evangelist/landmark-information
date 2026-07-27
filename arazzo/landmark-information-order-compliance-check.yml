@@ -1,0 +1,68 @@
+arazzo: 1.0.1
+info:
+  title: Order a Landmark compliance check and collect the result
+  version: 1.0.0
+  summary: Place a compliance product order, poll it to completion, read the result and download the result
+    document.
+sourceDescriptions:
+- name: orderExperience
+  url: ../openapi/landmark-information-order-experience-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: order-compliance-check
+  summary: Create a compliance order, wait for it to complete, then retrieve the result and its document.
+  inputs:
+    type: object
+    required:
+    - orderRequest
+    properties:
+      orderRequest:
+        type: object
+        description: Product-specific create order request body.
+  steps:
+  - stepId: createOrder
+    operationId: order-experience-create-order
+    requestBody:
+      contentType: application/json
+      payload: $inputs.orderRequest
+    successCriteria:
+    - condition: $statusCode == 202
+    outputs:
+      orderId: $response.body#/orderId
+  - stepId: pollStatus
+    operationId: order-experience-get-order-status
+    parameters:
+    - name: orderId
+      in: path
+      value: $steps.createOrder.outputs.orderId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: readOrder
+    operationId: order-experience-get-order
+    parameters:
+    - name: orderId
+      in: path
+      value: $steps.createOrder.outputs.orderId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      order: $response.body
+      documentId: $response.body#/documents/0/documentId
+  - stepId: downloadDocument
+    operationId: order-experience-download-order-documents
+    description: Fetch and store the result document immediately - this operation returns 410 Gone once
+      the document expires.
+    parameters:
+    - name: orderId
+      in: path
+      value: $steps.createOrder.outputs.orderId
+    - name: documentId
+      in: path
+      value: $steps.readOrder.outputs.documentId
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    orderId: $steps.createOrder.outputs.orderId
+    status: $steps.pollStatus.outputs.status

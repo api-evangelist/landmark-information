@@ -1,0 +1,399 @@
+generated: '2026-07-26'
+method: derived
+source: >-
+  openapi/landmark-information-order-experience-api-openapi.yml,
+  openapi/landmark-information-conveyancing-experience-api-openapi.yml,
+  openapi/landmark-information-intelliworks-api-openapi.yml,
+  openapi/landmark-information-document-vault-api-openapi.yml,
+  openapi/landmark-information-milestone-notification-service-api-openapi.yml
+description: >-
+  Entity-relationship graph derived from path nesting, path parameters and request/response schema
+  $refs across the five public Landmark Cloud Services OpenAPI documents. Landmark does not publish
+  a single object reference or a unified domain model - each API carries its own schema namespace -
+  so the graph below is grouped by API, with the cross-API joins that the specs actually evidence
+  called out separately. Identifiers are UUIDs throughout (lgsUuid); there are no typed id prefixes.
+identifier_convention:
+  format: uuid
+  shared_type: lgsUuid
+  prefixes: none
+entities:
+- name: Order
+  api: Landmark Order Experience API
+  id: orderId
+  schemas:
+  - createOrderRequest
+  - createOrderResponse
+  - getOrderResponse
+  description: >-
+    A compliance product order - AML individual or company, UK or international AML with facial
+    recognition, Persons with Significant Control, Landmark Ownership Check, Scottish Title Check,
+    Source of Funds Check, Identity Verification Check.
+  operations:
+  - order-experience-create-order
+  - order-experience-get-order
+  - order-experience-get-order-status
+  relationships:
+  - type: has_many
+    target: OrderDocument
+    via: documents
+  - type: has_one
+    target: OrderStatus
+    via: status
+  - type: has_many
+    target: Person
+    via: persons on the product request
+- name: OrderDocument
+  api: Landmark Order Experience API
+  id: documentId
+  parent: Order
+  description: Result document produced by a completed order; carries filename and createdDate.
+  operations:
+  - order-experience-download-order-documents
+  note: Download can return 410 Gone once the document is no longer retrievable.
+- name: OrderStatus
+  api: Landmark Order Experience API
+  schemas:
+  - orderStatusResponse
+  description: >-
+    Order lifecycle state plus statusDescription; also the payload of the orderStatus callback.
+  relationships:
+  - type: belongs_to
+    target: Order
+    via: orderId
+- name: AmlResultSection
+  api: Landmark Order Experience API
+  parent: Order
+  schemas:
+  - overrideAmlResultSectionRequest
+  description: A section of an AML result that an entitled operator can override.
+  operations:
+  - order-experience-override-order-result-aml-section
+- name: Quote
+  api: Landmark Conveyancing Experience API
+  id: quoteId
+  schemas:
+  - CreateQuoteRequest
+  - CreateQuoteResponse
+  - RetrieveQuoteResponse
+  - QuoteListResponse
+  description: A conveyancing quote raised by an introducer, which becomes a Case once instructed.
+  operations:
+  - conveyances-experience-quote-create
+  - conveyances-experience-quote-list
+  - conveyances-experience-quote-read
+  - conveyances-experience-quote-pdf-download
+  relationships:
+  - type: has_many
+    target: Person
+    via: persons
+  - type: has_one
+    target: PropertyAddress
+    via: propertyAddress
+  - type: has_one
+    target: QuoteProductDetails
+    via: productDetails
+  - type: becomes
+    target: Case
+    via: conveyances-experience-quote-instruct
+- name: Person
+  api: Landmark Conveyancing Experience API
+  id: personReference
+  parent: Quote
+  schemas:
+  - Person
+  - UpdateQuotePersonRequest
+  operations:
+  - conveyances-experience-quote-person-create
+  - conveyances-experience-quote-person-update
+  - conveyances-experience-quote-person-delete
+- name: PropertyAddress
+  api: Landmark Conveyancing Experience API
+  schemas:
+  - PropertyAddress
+  description: >-
+    The transaction property. The same concept recurs across every Landmark API - as the
+    lgsAddressPAFPlus address on a Document Vault and as the property block on an Intelliworks case
+    - which makes the property the de facto join key of Landmark's domain even though no shared
+    identifier is published.
+- name: Case
+  api: Landmark Conveyancing Experience API
+  id: caseId
+  schemas:
+  - RetrieveCaseResponse
+  - CaseListResponse
+  description: >-
+    One shared case record visible to both the introducer and the conveyancer, created by
+    instructing a quote.
+  operations:
+  - conveyances-experience-case-list
+  - conveyances-experience-case-read
+  - conveyances-experience-case-accept
+  - conveyances-experience-case-reject
+  - conveyances-experience-case-status-update
+  relationships:
+  - type: belongs_to
+    target: Quote
+    via: instruct
+  - type: has_one
+    target: CaseHandler
+    via: handler
+  - type: has_many
+    target: CaseActivity
+    via: activities
+  - type: has_many
+    target: CaseTask
+    via: tasks
+  - type: has_many
+    target: CaseNote
+    via: notes
+  - type: has_many
+    target: CaseDocument
+    via: documents
+- name: CaseHandler
+  api: Landmark Conveyancing Experience API
+  parent: Case
+  schemas:
+  - AddCaseHandlerRequest
+  operations:
+  - conveyances-experience-case-handler-add
+- name: CaseActivity
+  api: Landmark Conveyancing Experience API
+  parent: Case
+  schemas:
+  - CaseActivityListResponse
+  operations:
+  - conveyances-experience-case-activity-list
+- name: CaseTask
+  api: Landmark Conveyancing Experience API
+  id: taskId
+  parent: Case
+  schemas:
+  - CaseTaskListResponse
+  operations:
+  - conveyances-experience-case-task-list
+  - conveyances-experience-case-task-complete
+- name: CaseNote
+  api: Landmark Conveyancing Experience API
+  parent: Case
+  schemas:
+  - CreateCaseNoteRequest
+  - CaseNoteListResponse
+  operations:
+  - conveyances-experience-case-note-list
+  - conveyances-experience-case-note-create
+- name: CaseDocument
+  api: Landmark Conveyancing Experience API
+  id: documentId
+  parent: Case
+  schemas:
+  - DocumentUpload
+  operations:
+  - conveyances-experience-case-document-create
+  - conveyances-experience-case-document-read
+  status: preview - not safe to build against
+- name: IntelliworksCase
+  api: Landmark Intelliworks APIs
+  id: caseId
+  alternate_id: externalCaseId
+  schemas:
+  - createCaseRequestIw
+  - createCaseRequestIwPrivateClient
+  - createCaseResponse
+  - getCaseIwResponse
+  description: >-
+    A case in the Intelliworks legal case management system, always created inside a Branch and
+    against a Workflow.
+  operations:
+  - createCase
+  - updateIwCase
+  - getCaseIw
+  relationships:
+  - type: belongs_to
+    target: Branch
+    via: branchId
+  - type: belongs_to
+    target: Workflow
+    via: workflowId
+  - type: has_many
+    target: IntelliworksMilestone
+    via: milestones
+  - type: has_many
+    target: IntelliworksTask
+    via: upsertTask
+  - type: has_many
+    target: IntelliworksDocument
+    via: documents
+  - type: has_many
+    target: TransactionRequest
+    via: transactionId
+- name: Branch
+  api: Landmark Intelliworks APIs
+  id: branchId
+  description: >-
+    An office or site of the customer firm. Branch ids are issued by Ochresoft and must be
+    requested - they are not discoverable through the API.
+- name: Workflow
+  api: Landmark Intelliworks APIs
+  id: workflowId
+  description: >-
+    The case type template. Documented values include 220-Sale, 210-Purchase, 216-New Build
+    Purchase, 10200-General Property, 300-Remortgage, 360-Equity Release, 700-Transfer of Equity,
+    415-Wills, 500-Lasting Power of Attorney and 601-Probate.
+  relationships:
+  - type: has_many
+    target: IntelliworksMilestone
+    via: milestoneId
+- name: IntelliworksMilestone
+  api: Landmark Intelliworks APIs
+  id: milestoneId
+  schemas:
+  - milestoneQueryResponse
+  - upsertMilestoneRequest
+  description: >-
+    A dated workflow checkpoint. Valid milestone ids are enumerated per workflow in the published
+    documentation.
+  operations:
+  - getMilestone
+  - upsertMilestone
+- name: IntelliworksTask
+  api: Landmark Intelliworks APIs
+  schemas:
+  - upsertTaskRequest
+  operations:
+  - upsertTask
+- name: TransactionRequest
+  api: Landmark Intelliworks APIs
+  id: transactionRequestId
+  schemas:
+  - transactionRequestStatusResponse
+  description: >-
+    The asynchronous unit of work returned by every 202-Accepted write, polled for completion.
+  operations:
+  - getTransactionRequestStatus
+- name: IntelliworksDocument
+  api: Landmark Intelliworks APIs
+  id: id
+  schemas:
+  - uploadDocumentJsonRequest
+  - completedDocumentsResponse
+  operations:
+  - uploadDocument
+  - getCompletedDocuments
+  - downloadDocument
+- name: DocumentVault
+  api: Landmark Document Vault API
+  id: documentVaultId
+  schemas:
+  - createDocumentVaultRequest
+  - createDocumentVaultResponse
+  - getDocumentVaultResponse
+  description: >-
+    A secure shareable container of transaction documents. Billed on first document added. Carries
+    a customer reference that must be unique within the account.
+  operations:
+  - document-vault-vaults-create
+  - document-vault-vaults-read
+  - document-vault-reference-update
+  - document-vault-property-update
+  relationships:
+  - type: has_many
+    target: VaultDocument
+    via: documents
+  - type: has_one
+    target: RecipientOrganisation
+    via: recipient-organisation
+  - type: has_many
+    target: VaultActivity
+    via: activities
+  - type: has_one
+    target: PropertyAddress
+    via: lgsAddressPAFPlus
+- name: VaultDocument
+  api: Landmark Document Vault API
+  id: documentId
+  parent: DocumentVault
+  description: >-
+    One file per call, max 25 MB, PDF/DOC/DOCX/JPEG/PNG, up to 60 per vault. Status transitions
+    Pending to Available or Quarantined after virus scanning and analysis.
+  operations:
+  - document-vault-documents-create
+  - document-vault-documents-delete
+- name: RecipientOrganisation
+  api: Landmark Document Vault API
+  parent: DocumentVault
+  description: The other side of the transaction - typically the buyer's conveyancer.
+  operations:
+  - document-vault-recipient-organisation-update
+  relationships:
+  - type: has_many
+    target: Recipient
+    via: recipients
+- name: Recipient
+  api: Landmark Document Vault API
+  id: recipientId
+  parent: RecipientOrganisation
+  schemas:
+  - individualRecipient
+  - teamRecipient
+  operations:
+  - document-vault-recipients-create
+  - document-vault-recipients-delete
+- name: VaultActivity
+  api: Landmark Document Vault API
+  parent: DocumentVault
+  schemas:
+  - getActivitiesResponse
+  description: Audit trail of everything that happened to the vault.
+  operations:
+  - document-vault-activities-list
+- name: MilestoneCallback
+  api: Landmark Milestone Notification Service API
+  id: callbackId
+  schemas:
+  - lgsCallback
+  - RegisterMilestoneCallbackResponse
+  description: >-
+    A registered consumer endpoint plus its outbound authentication configuration (Basic,
+    ClientIdSecret or OAuth2).
+  operations:
+  - spn-milestone-register-callback
+  - spn-milestone-update-callback
+  - spn-milestone-delete-callback
+  relationships:
+  - type: emits
+    target: TransactionRequestMilestone
+    via: transaction-milestone-notifications callback
+- name: TransactionRequestMilestone
+  api: Landmark Milestone Notification Service API
+  id: transactionRequestMilestoneId
+  schemas:
+  - lgsTransactionRequestMilestoneSPN
+  description: >-
+    A valuation milestone event delivered to a registered callback. Nine typed variants, ids 1-9.
+  relationships:
+  - type: belongs_to
+    target: TransactionRequest
+    via: transactionRequestId
+cross_api_joins:
+- from: TransactionRequestMilestone.transactionRequestType
+  to: Order | Inspection | PanelConveyancing | InspectionRequest
+  evidence: >-
+    The lgsTransactionRequestType enum in the Milestone Notification Service names the same
+    transaction families the other APIs create, which is the only place Landmark's separate API
+    namespaces are explicitly tied together.
+  confidence: medium
+- from: TransactionRequest.transactionId (Intelliworks)
+  to: TransactionRequestMilestone.transactionId
+  evidence: >-
+    Both use the shared lgs transaction identifier vocabulary; the specs do not state the join
+    explicitly.
+  confidence: low
+shared_vocabulary:
+- lgsUuid
+- lgsUrl
+- lgsAddressPAFPlus
+- lgsErrorResponse
+- lgsTraceResponse
+- lgsMilestone
+- lgsTransactionRequestType
+render: null

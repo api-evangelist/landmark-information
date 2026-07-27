@@ -1,0 +1,90 @@
+generated: '2026-07-26'
+method: searched
+source: openapi/landmark-information-conveyancing-experience-api-openapi.yml, openapi/landmark-information-document-vault-api-openapi.yml,
+  openapi/landmark-information-intelliworks-api-openapi.yml, openapi/landmark-information-milestone-notification-service-api-openapi.yml,
+  openapi/landmark-information-order-experience-api-openapi.yml
+docs: https://www.landmarkcloudservices.com/?api=document-vault-experience
+discovery: authentication/landmark-information-openid-configuration.json
+summary:
+  types:
+  - http
+  - oauth2
+  - apiKey
+  oauth2_flows:
+  - clientCredentials
+  api_key_in:
+  - header
+  model: >-
+    Every API on the Landmark Cloud Services platform is OAuth 2.0 client credentials against
+    Landmark's Auth0 tenant. Client ID and secret are issued only after commercial onboarding, and
+    separately per environment - UAT and production are different credentials against different
+    Auth0 tenants. The access token is a JWT sent as Authorization: Bearer on every call, and the
+    audience parameter is fixed per environment and must be supplied on the token request. Some
+    APIs additionally require an Account-Id header identifying the onboarded firm. The Planning API
+    is the exception: it sits on a different host (api.barbour-abi.com) and uses a Landmark-issued
+    x-api-key plus a Basic-auth login exchange rather than OAuth.
+  identity_provider: Auth0 (lmkmaster.eu.auth0.com / lmkmaster-uat.eu.auth0.com)
+  onboarding: partner-only; credentials issued by a Landmark commercial contact
+environments:
+- name: production
+  token_url: https://lmkmaster.eu.auth0.com/oauth/token
+  audience: https://api.landmarkcloudservices.com
+  api_base: https://api.landmarkcloudservices.com
+- name: uat
+  token_url: https://lmkmaster-uat.eu.auth0.com/oauth/token
+  audience: https://uat-api.landmarkcloudservices.com
+  api_base: https://uat-api.landmarkcloudservices.com
+schemes:
+- name: BearerAuth
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://lmkmaster.eu.auth0.com/oauth/token
+    scopes: 0
+    note: the spec declares an empty scopes map; Landmark documents no scope surface
+  description: |-
+    OAuth 2.0 client credentials. Request an access token from the token endpoint for your
+    environment, then send it as a bearer token on every request. See **Authentication** for details.
+  sources:
+  - openapi/landmark-information-conveyancing-experience-api-openapi.yml
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  note: >-
+    Declared as plain HTTP bearer in four of the five specs, but the documented way to obtain the
+    token is the same Auth0 client-credentials exchange as BearerAuth above.
+  sources:
+  - openapi/landmark-information-document-vault-api-openapi.yml
+  - openapi/landmark-information-intelliworks-api-openapi.yml
+  - openapi/landmark-information-milestone-notification-service-api-openapi.yml
+  - openapi/landmark-information-order-experience-api-openapi.yml
+- name: x-api-key
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  note: >-
+    Planning API (powered by Barbour ABI) only. Documented in public HTML, not in an OpenAPI. A
+    Landmark-issued API key is sent alongside a Basic-auth login call (base64 of username and a
+    SHA256-hashed password) that returns a bearer token valid until 30 days of disuse.
+  sources:
+  - https://www.landmark.co.uk/products/planning-api/planning-api-documentation/
+additional_headers:
+- name: Account-Id
+  required_by:
+  - Document Vault API
+  description: The onboarded account identifier issued with the credentials; sent on every request.
+- name: Authorization
+  required_by:
+  - all Landmark Cloud Services APIs
+  description: Bearer <access_token>
+callback_authentication:
+  description: >-
+    Landmark calls consumer-hosted callback URLs for milestone notifications, and authenticates
+    outbound to them using one of three mechanisms configured at registration time.
+  mechanisms:
+  - Basic
+  - ClientIdSecret
+  - OAuth2 client credentials against a consumer-supplied token_generation_url, with optional
+    audience and scope
+  source: openapi/landmark-information-milestone-notification-service-api-openapi.yml

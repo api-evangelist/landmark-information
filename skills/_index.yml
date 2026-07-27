@@ -1,0 +1,69 @@
+generated: '2026-07-26'
+method: generated
+source: Generated from the five published Landmark Cloud Services OpenAPI documents in openapi/, plus
+  conventions/, errors/, rate-limits/ and sandbox/. Landmark publishes no agent skills, AGENTS.md or agent
+  guidance of its own.
+skills:
+- file: landmark-information-order-compliance-check.md
+  name: Order a Landmark compliance check and collect the result
+  api: openapi/landmark-information-order-experience-api-openapi.yml
+  operations:
+  - order-experience-create-order
+  - order-experience-get-order-status
+  - order-experience-get-order
+  - order-experience-download-order-documents
+  - order-experience-override-order-result-aml-section
+- file: landmark-information-quote-and-instruct-conveyancing.md
+  name: Quote and instruct panel conveyancing
+  api: openapi/landmark-information-conveyancing-experience-api-openapi.yml
+  operations:
+  - conveyances-experience-quote-create
+  - conveyances-experience-quote-person-create
+  - conveyances-experience-quote-address-update
+  - conveyances-experience-quote-product-details-update
+  - conveyances-experience-quote-pdf-download
+  - conveyances-experience-quote-instruct
+  - conveyances-experience-case-list
+  - conveyances-experience-case-read
+  - conveyances-experience-case-accept
+  - conveyances-experience-case-reject
+  - conveyances-experience-case-status-update
+  - conveyances-experience-case-handler-add
+  - conveyances-experience-case-task-list
+  - conveyances-experience-case-task-complete
+  - conveyances-experience-case-note-create
+- file: landmark-information-build-contract-pack-vault.md
+  name: Build and share a Contract Pack Vault
+  api: openapi/landmark-information-document-vault-api-openapi.yml
+  operations:
+  - document-vault-vaults-create
+  - document-vault-documents-create
+  - document-vault-vaults-read
+  - document-vault-reference-update
+  - document-vault-property-update
+  - document-vault-recipient-organisation-update
+  - document-vault-recipients-create
+  - document-vault-recipients-delete
+  - document-vault-documents-delete
+  - document-vault-activities-list
+- file: landmark-information-create-intelliworks-case.md
+  name: Create and progress an Intelliworks case from another system
+  api: openapi/landmark-information-intelliworks-api-openapi.yml
+  operations:
+  - createCase
+  - updateIwCase
+  - getCaseIw
+  - getTransactionRequestStatus
+  - upsertTask
+  - getMilestone
+  - upsertMilestone
+  - uploadDocument
+  - getCompletedDocuments
+  - downloadDocument
+- file: landmark-information-subscribe-valuation-milestones.md
+  name: Subscribe to Landmark valuation milestone notifications
+  api: openapi/landmark-information-milestone-notification-service-api-openapi.yml
+  operations:
+  - spn-milestone-register-callback
+  - spn-milestone-update-callback
+  - spn-milestone-delete-callback

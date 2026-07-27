@@ -1,0 +1,111 @@
+arazzo: 1.0.1
+info:
+  title: Assemble a Contract Pack Vault
+  version: 1.0.0
+  summary: Create a Document Vault, add a document, set the recipient organisation and a recipient, and
+    read back the vault and its activity trail.
+sourceDescriptions:
+- name: documentVault
+  url: ../openapi/landmark-information-document-vault-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: assemble-contract-pack
+  summary: Build the pack from a case management system. Sharing is not an API operation - it happens
+    in the Contract Pack Vault web app.
+  inputs:
+    type: object
+    required:
+    - accountId
+    - vaultRequest
+    - recipientOrganisation
+    - recipient
+    properties:
+      accountId:
+        type: string
+        description: Account-Id header value issued with your credentials.
+      vaultRequest:
+        type: object
+      recipientOrganisation:
+        type: object
+      recipient:
+        type: object
+  steps:
+  - stepId: createVault
+    operationId: document-vault-vaults-create
+    parameters:
+    - name: Account-Id
+      in: header
+      value: $inputs.accountId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.vaultRequest
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      documentVaultId: $response.body#/id
+  - stepId: addDocument
+    operationId: document-vault-documents-create
+    description: One file per call, 25 MB max, PDF/DOC/DOCX/JPEG/PNG. Billing starts here. The document
+      returns Pending until virus scanning and analysis complete.
+    parameters:
+    - name: Account-Id
+      in: header
+      value: $inputs.accountId
+    - name: documentVaultId
+      in: path
+      value: $steps.createVault.outputs.documentVaultId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: setRecipientOrganisation
+    operationId: document-vault-recipient-organisation-update
+    parameters:
+    - name: Account-Id
+      in: header
+      value: $inputs.accountId
+    - name: documentVaultId
+      in: path
+      value: $steps.createVault.outputs.documentVaultId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.recipientOrganisation
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: addRecipient
+    operationId: document-vault-recipients-create
+    description: Adding a recipient is not sharing - the vault is shared from the web app.
+    parameters:
+    - name: Account-Id
+      in: header
+      value: $inputs.accountId
+    - name: documentVaultId
+      in: path
+      value: $steps.createVault.outputs.documentVaultId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.recipient
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: readVault
+    operationId: document-vault-vaults-read
+    parameters:
+    - name: Account-Id
+      in: header
+      value: $inputs.accountId
+    - name: documentVaultId
+      in: path
+      value: $steps.createVault.outputs.documentVaultId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: readActivities
+    operationId: document-vault-activities-list
+    parameters:
+    - name: Account-Id
+      in: header
+      value: $inputs.accountId
+    - name: documentVaultId
+      in: path
+      value: $steps.createVault.outputs.documentVaultId
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    documentVaultId: $steps.createVault.outputs.documentVaultId

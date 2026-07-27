@@ -1,0 +1,129 @@
+generated: '2026-07-26'
+method: derived
+source: >-
+  openapi/landmark-information-order-experience-api-openapi.yml,
+  openapi/landmark-information-conveyancing-experience-api-openapi.yml,
+  openapi/landmark-information-intelliworks-api-openapi.yml,
+  openapi/landmark-information-document-vault-api-openapi.yml,
+  openapi/landmark-information-milestone-notification-service-api-openapi.yml
+format: rfc9457
+media_type: application/problem+json
+description: >-
+  Landmark publishes one shared error contract across all five Cloud Services APIs. Error bodies
+  are served as application/problem+json but use a Landmark member set (status, code, title,
+  messages[]) rather than the RFC 9457 type/detail/instance members, and there is no dereferenceable
+  problem type URI. The 5-digit code is the stable identifier: the first three digits repeat the
+  HTTP status and the last two disambiguate the cause. The catalogue below is derived from the
+  named response examples carried in every spec's components.responses, which are identical across
+  the five APIs apart from a handful of API-specific additions.
+envelope:
+  fields:
+    status: 3-digit HTTP status, as a string
+    code: 5-digit Landmark error code
+    title: short human-readable summary
+    messages: optional array of {property, message} validation details
+  trace_header: traceresponse (aliased lgsTraceResponse in some specs)
+code_scheme: >-
+  HTTP status (3 digits) followed by a 2-digit discriminator; 40001 is the validation error under
+  400, 40300 through 40306 are the entitlement failures under 403.
+problems:
+- status: 400
+  code: '40000'
+  title: Invalid content type supplied
+  remediation: Send the media type the operation declares - application/json, or multipart/form-data for uploads.
+- status: 400
+  code: '40001'
+  title: Validation error
+  remediation: >-
+    Read messages[] - each entry names the offending property and what is wrong with it. This is
+    the only code that routinely populates messages[].
+- status: 400
+  code: '40002'
+  title: Invalid trace header
+  detail: Invalid traceparent http header
+  remediation: Send a W3C Trace Context compliant traceparent header, or omit it.
+- status: 400
+  code: '40003'
+  title: No matching data found
+- status: 400
+  code: '40004'
+  title: Invalid header
+- status: 400
+  code: '40005'
+  title: Third party error
+  remediation: >-
+    An upstream data supplier rejected the request. Retry, then quote the traceresponse value to
+    support if it persists.
+- status: 401
+  code: '40100'
+  title: Invalid identity
+  remediation: >-
+    The bearer token is missing, expired or was issued for the wrong audience. Re-request a token
+    from the Auth0 token endpoint for the environment you are calling.
+- status: 403
+  code: '40300'
+  title: Invalid Entitlement
+- status: 403
+  code: '40301'
+  title: No Entitlement
+  remediation: >-
+    The onboarded account is not entitled to this operation or product. Entitlements are commercial,
+    not scope-based - contact your Landmark contact rather than changing the token request.
+- status: 403
+  code: '40302'
+  title: No permission to entity
+  remediation: The account is not a party to the case, quote, order or vault being addressed.
+- status: 403
+  code: '40303'
+  title: User not registered
+- status: 403
+  code: '40304'
+  title: Usage limit reached
+- status: 403
+  code: '40305'
+  title: Email account not verified
+- status: 403
+  code: '40306'
+  title: Token expiry too long
+- status: 404
+  code: '40400'
+  title: Entity not found
+  note: Used by the Document Vault API.
+- status: 404
+  code: '40401'
+  title: Entity not found
+  note: Used by the Compliance/Order, Conveyancing, Intelliworks and Milestone Service APIs.
+- status: 409
+  code: '40900'
+  title: Conflict
+  variants:
+  - Case not in valid status
+  - Invalid Entitlement
+  remediation: >-
+    The resource is not in a state that permits the operation - for example a case handler add
+    against a case in the wrong status, a duplicate Document Vault reference, or re-registering an
+    existing milestone callback.
+- status: 410
+  code: '41000'
+  title: Gone Error
+  note: >-
+    Compliance/Order API only, on order document download - the document is no longer retrievable.
+  source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-download-order-documents
+- status: 429
+  code: '42900'
+  title: Rate limit exceeded
+  remediation: >-
+    Back off and retry. Limits are published per API - see rate-limits/landmark-information-rate-limits.yml.
+- status: 500
+  code: '50000'
+  title: Internal server error
+  remediation: Retry, then quote the traceresponse value to support if it persists.
+undocumented_statuses:
+- status: 406
+  note: Declared on Intelliworks operations without a coded example.
+- status: 413
+  note: >-
+    Declared on Document Vault document upload (25 MB per file) and on Milestone Service callback
+    registration, without a coded example.
+- status: 415
+  note: Declared on Intelliworks operations without a coded example.

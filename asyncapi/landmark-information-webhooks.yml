@@ -1,0 +1,120 @@
+generated: '2026-07-26'
+method: derived
+source: >-
+  openapi/landmark-information-milestone-notification-service-api-openapi.yml (OpenAPI callbacks
+  object and notification schemas), openapi/landmark-information-order-experience-api-openapi.yml
+  (orderStatus callback)
+spec_type: none
+asyncapi_published: false
+description: >-
+  Landmark publishes no AsyncAPI document, but it does have a real, contract-bearing event surface:
+  two of its five OpenAPI documents declare OpenAPI callbacks objects with typed payload schemas.
+  The Milestone Notification Service is a dedicated webhook-subscription API - consumers register,
+  update and delete callback URLs and Landmark POSTs valuation transaction milestones to them - and
+  the Compliance/Order API POSTs order status changes to a callback URL supplied on the order
+  itself. This file catalogues that surface as derived from the specs; it is not a fabricated
+  AsyncAPI.
+subscription:
+  model: >-
+    Two different subscription models. Milestone notifications are subscribed by registering a
+    callback configuration through the Milestone Notification Service API; order status callbacks
+    are subscribed per order, by including a callback object in the create-order request body.
+  management_api: openapi/landmark-information-milestone-notification-service-api-openapi.yml
+  operations:
+  - spn-milestone-register-callback
+  - spn-milestone-update-callback
+  - spn-milestone-delete-callback
+  outbound_authentication:
+    mechanisms:
+    - type: Basic
+    - type: ClientIdSecret
+    - type: OAuth2
+      detail: >-
+        Landmark obtains a bearer token from a consumer-supplied token_generation_url using a
+        client_id and client_secret, with optional audience and scope, and presents it in the
+        Authorization header of the callback request.
+  expected_response: 204 No Content acknowledges receipt; 400/401/403/429/500 are recognised failures.
+channels:
+- name: transaction-milestone-notifications
+  api: Landmark Milestone Notification Service API
+  transport: HTTPS POST to the consumer-registered callback URL
+  payload_schema: lgsTransactionRequestMilestoneSPN
+  envelope:
+    transactionId: uuid
+    transactionRequestId: uuid
+    transactionRequestMilestoneId: uuid
+    transactionRequestType: Order | Inspection | PanelConveyancing | InspectionRequest
+    datePredicted: date-time
+    dateAchieved: date-time
+    additionalInformation: string (max 250)
+  events:
+  - id: '1'
+    name: Valuation Instructed
+    schema: lgsValuationInstructedNotification
+    fields:
+    - surveyorBranchId
+  - id: '2'
+    name: Instruction Panelled
+    schema: lgsInstructionPanelledNotification
+    fields:
+    - surveyorBranchId
+    - reason
+  - id: '3'
+    name: Valuation Held
+    schema: lgsValuationHeldNotification
+    fields:
+    - reason
+  - id: '4'
+    name: Contact Tried
+    schema: lgsContactTriedNotification
+    fields:
+    - reason
+  - id: '5'
+    name: Valuation Cancelled
+    schema: lgsValuationCancelledNotification
+    fields:
+    - reason
+  - id: '6'
+    name: Valuation Booked
+    schema: lgsValuationBookedNotification
+    fields:
+    - appointmentDate
+    - timeWindowStart
+    - timeWindowEnd
+  - id: '7'
+    name: Valuation Complete
+    schema: lgsValuationCompleteNotification
+    fields: []
+  - id: '8'
+    name: Document Available
+    schema: lgsDocumentAvailableNotification
+    fields:
+    - documentId
+    - tags
+  - id: '9'
+    name: Valuation Rejected
+    schema: lgsValuationRejectedNotification
+    fields:
+    - surveyorBranchId
+    - reason
+- name: orderStatus
+  api: Landmark Order Experience API
+  transport: HTTPS POST to the callback URL supplied in the create-order request body
+  callback_expression: '{$request.body#/callback/url}'
+  payload_schema: orderStatusResponse
+  envelope:
+    orderId: uuid
+    reference: order reference
+    status: orderStatus enum
+    statusDescription: string (max 1000)
+  example:
+    orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
+    reference: 513ba615-1e78-4751-968b-2402a49e5594
+    status: Completed
+    statusDescription: AML order is Completed.
+  expected_response: 200
+polling_alternative:
+  note: >-
+    Both event surfaces have a polling equivalent for consumers that cannot host a callback -
+    order-experience-get-order-status for compliance orders, and getTransactionRequestStatus /
+    getMilestone on the Intelliworks API for case milestones.

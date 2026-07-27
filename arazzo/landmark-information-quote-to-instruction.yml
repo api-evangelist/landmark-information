@@ -1,0 +1,98 @@
+arazzo: 1.0.1
+info:
+  title: Quote to conveyancing instruction
+  version: 1.0.0
+  summary: Create a conveyancing quote, complete it with a person, property address and product details,
+    produce the quote PDF and instruct a panel conveyancer.
+sourceDescriptions:
+- name: conveyancing
+  url: ../openapi/landmark-information-conveyancing-experience-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: quote-to-instruction
+  summary: 'Introducer flow: quote, complete, PDF, instruct. The instruct step engages a conveyancer on
+    the client behalf - gate it behind explicit human confirmation.'
+  inputs:
+    type: object
+    required:
+    - quoteRequest
+    - person
+    - propertyAddress
+    - productDetails
+    - instructRequest
+    properties:
+      quoteRequest:
+        type: object
+      person:
+        type: object
+      propertyAddress:
+        type: object
+      productDetails:
+        type: object
+      instructRequest:
+        type: object
+  steps:
+  - stepId: createQuote
+    operationId: conveyances-experience-quote-create
+    requestBody:
+      contentType: application/json
+      payload: $inputs.quoteRequest
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      quoteId: $response.body#/quoteId
+  - stepId: addPerson
+    operationId: conveyances-experience-quote-person-create
+    parameters:
+    - name: quoteId
+      in: path
+      value: $steps.createQuote.outputs.quoteId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.person
+    successCriteria:
+    - condition: $statusCode == 201
+  - stepId: setPropertyAddress
+    operationId: conveyances-experience-quote-address-update
+    parameters:
+    - name: quoteId
+      in: path
+      value: $steps.createQuote.outputs.quoteId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.propertyAddress
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: setProductDetails
+    operationId: conveyances-experience-quote-product-details-update
+    parameters:
+    - name: quoteId
+      in: path
+      value: $steps.createQuote.outputs.quoteId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.productDetails
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: downloadQuotePdf
+    operationId: conveyances-experience-quote-pdf-download
+    parameters:
+    - name: quoteId
+      in: path
+      value: $steps.createQuote.outputs.quoteId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: instructQuote
+    operationId: conveyances-experience-quote-instruct
+    description: Point of no return - the quote becomes a live case and a conveyancer is engaged.
+    parameters:
+    - name: quoteId
+      in: path
+      value: $steps.createQuote.outputs.quoteId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.instructRequest
+    successCriteria:
+    - condition: $statusCode == 201
+  outputs:
+    quoteId: $steps.createQuote.outputs.quoteId

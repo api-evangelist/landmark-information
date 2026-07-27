@@ -1,0 +1,21 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/landmark-information-conveyancing-experience-api-openapi.yml
+schemes:
+- name: BearerAuth
+  source: openapi/landmark-information-conveyancing-experience-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://lmkmaster.eu.auth0.com/oauth/token
+  description: |-
+    OAuth 2.0 client credentials. Request an access token from the token endpoint for your
+    environment, then send it as a bearer token on every request. See **Authentication** for details.
+scopes: []
+notes: >-
+  Landmark declares an OAuth 2.0 client-credentials scheme in the Conveyancing Experience API but
+  publishes an empty scopes map, and no scope or permission reference page exists on the public
+  documentation portal. Authorisation is carried by entitlements attached to the onboarded account
+  and audience rather than by OAuth scopes - a 403 with code 40300/40301 ("Invalid Entitlement" /
+  "No Entitlement") is how the platform signals an unauthorised operation. See
+  authentication/landmark-information-authentication.yml for the working model.
+

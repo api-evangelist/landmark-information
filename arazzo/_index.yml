@@ -1,0 +1,25 @@
+generated: '2026-07-26'
+method: generated
+source: Authored from the operationIds published in the five Landmark Cloud Services OpenAPI documents
+  in openapi/.
+workflows:
+- file: landmark-information-order-compliance-check.yml
+  workflowId: order-compliance-check
+  title: Order a Landmark compliance check and collect the result
+  summary: Place a compliance product order, poll it to completion, read the result and download the result
+    document.
+- file: landmark-information-quote-to-instruction.yml
+  workflowId: quote-to-instruction
+  title: Quote to conveyancing instruction
+  summary: Create a conveyancing quote, complete it with a person, property address and product details,
+    produce the quote PDF and instruct a panel conveyancer.
+- file: landmark-information-assemble-contract-pack.yml
+  workflowId: assemble-contract-pack
+  title: Assemble a Contract Pack Vault
+  summary: Create a Document Vault, add a document, set the recipient organisation and a recipient, and
+    read back the vault and its activity trail.
+- file: landmark-information-subscribe-valuation-milestones.yml
+  workflowId: subscribe-valuation-milestones
+  title: Subscribe to valuation milestone notifications
+  summary: Register a callback endpoint for Secure Panel Network valuation milestones, update its configuration,
+    then remove it.

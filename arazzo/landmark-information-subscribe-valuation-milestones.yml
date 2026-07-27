@@ -1,0 +1,55 @@
+arazzo: 1.0.1
+info:
+  title: Subscribe to valuation milestone notifications
+  version: 1.0.0
+  summary: Register a callback endpoint for Secure Panel Network valuation milestones, update its configuration,
+    then remove it.
+sourceDescriptions:
+- name: milestoneService
+  url: ../openapi/landmark-information-milestone-notification-service-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: subscribe-valuation-milestones
+  summary: Callback lifecycle. Landmark authenticates outbound to your endpoint using Basic, ClientIdSecret
+    or OAuth2 as configured here.
+  inputs:
+    type: object
+    required:
+    - callbackConfiguration
+    - updatedCallbackConfiguration
+    properties:
+      callbackConfiguration:
+        type: object
+      updatedCallbackConfiguration:
+        type: object
+  steps:
+  - stepId: registerCallback
+    operationId: spn-milestone-register-callback
+    requestBody:
+      contentType: application/json
+      payload: $inputs.callbackConfiguration
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      callbackId: $response.body#/callbackId
+  - stepId: updateCallback
+    operationId: spn-milestone-update-callback
+    parameters:
+    - name: callbackId
+      in: path
+      value: $steps.registerCallback.outputs.callbackId
+    requestBody:
+      contentType: application/json
+      payload: $inputs.updatedCallbackConfiguration
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: deleteCallback
+    operationId: spn-milestone-delete-callback
+    parameters:
+    - name: callbackId
+      in: path
+      value: $steps.registerCallback.outputs.callbackId
+    successCriteria:
+    - condition: $statusCode == 204
+  outputs:
+    callbackId: $steps.registerCallback.outputs.callbackId

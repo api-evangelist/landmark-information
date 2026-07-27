@@ -1,0 +1,62 @@
+generated: '2026-07-26'
+method: searched
+source: live probes of Landmark API, documentation and Auth0 identity hosts
+description: >-
+  Landmark serves no /.well-known/ discovery surface from its own hosts. Every path probed on
+  api.landmarkcloudservices.com returns 403 from the edge (the API host rejects unauthenticated
+  requests outright rather than serving discovery documents), and the documentation host
+  www.landmarkcloudservices.com and the corporate site www.landmark.co.uk return 404. The only
+  real discovery documents in Landmark's surface belong to its Auth0 tenants, which are the
+  authorization servers named in every published OpenAPI: lmkmaster.eu.auth0.com (production) and
+  lmkmaster-uat.eu.auth0.com (UAT). Those are captured here.
+hosts:
+- host: https://lmkmaster.eu.auth0.com
+  role: production authorization server (OAuth 2.0 client credentials)
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: ../authentication/landmark-information-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: landmark-information-oauth-authorization-server.json
+  - path: /.well-known/jwks.json
+    status: 200
+    file: null
+    note: JSON Web Key Set; not mirrored here, rotate-sensitive
+- host: https://lmkmaster-uat.eu.auth0.com
+  role: UAT authorization server
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    note: identical Auth0 discovery shape for the UAT tenant
+- host: https://api.landmarkcloudservices.com
+  role: production API gateway
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+- host: https://www.landmarkcloudservices.com
+  role: public API documentation portal
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://www.landmark.co.uk
+  role: corporate website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /llms.txt
+    status: 404
+security_txt: null
+api_catalog: null
+ai_plugin: null

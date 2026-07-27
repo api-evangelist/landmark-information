@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Milestone Notification Service API
+  version: 1.0.0
+extends: openapi/landmark-information-milestone-notification-service-api-openapi.yml
+x-generated: '2026-07-26'
+x-method: generated
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: landmark-information
+    x-apievangelist-harvested-from: https://www.landmarkcloudservices.com/
+    x-apievangelist-access-model: paid; partner-only onboarding; public documentation
+    x-apievangelist-authentication: authentication/landmark-information-authentication.yml
+    x-apievangelist-conventions: conventions/landmark-information-conventions.yml
+    x-apievangelist-errors: errors/landmark-information-problem-types.yml
+    x-apievangelist-rate-limits: rate-limits/landmark-information-rate-limits.yml
+    x-apievangelist-lifecycle: lifecycle/landmark-information-lifecycle.yml
+    x-apievangelist-sandbox: sandbox/landmark-information-sandbox.yml
+- target: $.components.securitySchemes.*
+  update:
+    x-apievangelist-token-url: https://lmkmaster.eu.auth0.com/oauth/token
+    x-apievangelist-uat-token-url: https://lmkmaster-uat.eu.auth0.com/oauth/token
+    x-apievangelist-audience: https://api.landmarkcloudservices.com
+    x-apievangelist-onboarding: partner-only
+- target: $.paths.*.*.responses.429
+  update:
+    x-apievangelist-rate-limit: See rate-limits/landmark-information-rate-limits.yml; error code 42900;
+      no RateLimit or Retry-After headers are documented.

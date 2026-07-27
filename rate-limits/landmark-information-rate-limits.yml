@@ -1,0 +1,61 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+provider: Landmark Information Group
+providerId: landmark-information
+generated: '2026-07-26'
+method: searched
+created: '2026-07-26'
+modified: '2026-07-26'
+tags:
+- Rate Limiting
+- Property Data
+- Conveyancing
+description: >-
+  Landmark publishes explicit per-caller rate limits in the documentation text of two of its five
+  public APIs - 1,000 calls per minute per caller on the Document Vault API and 250 requests per
+  customer per minute on the Milestone Notification Service. The Compliance/Order, Conveyancing and
+  Intelliworks APIs declare a 429 response and the 42900 error code but do not publish a numeric
+  limit. No RateLimit or Retry-After response headers are documented on any API.
+sources:
+- https://www.landmarkcloudservices.com/?api=document-vault-experience
+- https://www.landmarkcloudservices.com/?api=milestone-service-api
+- openapi/landmark-information-document-vault-api-openapi.yml
+- openapi/landmark-information-milestone-notification-service-api-openapi.yml
+headers:
+  requestId: traceresponse
+  rateLimit: null
+  retryAfter: null
+responseCodes:
+  throttled: 429
+  throttledErrorCode: '42900'
+limits:
+- name: Document Vault API calls
+  api: Landmark Document Vault API
+  scope: caller
+  metric: requests_per_minute
+  limit: 1000
+  timeFrame: minute
+  source: https://www.landmarkcloudservices.com/?api=document-vault-experience
+- name: Milestone Notification Service requests
+  api: Landmark Milestone Notification Service API
+  scope: customer
+  metric: requests_per_minute
+  limit: 250
+  timeFrame: minute
+  source: https://www.landmarkcloudservices.com/?api=milestone-service-api
+unpublished:
+- api: Landmark Order Experience API
+  note: 429 and error code 42900 declared, numeric limit not published.
+- api: Landmark Conveyancing Experience API
+  note: 429 and error code 42900 declared, numeric limit not published.
+- api: Landmark Intelliworks APIs
+  note: 429 and error code 42900 declared, numeric limit not published.
+payload_limits:
+- api: Landmark Document Vault API
+  rule: One document per upload call
+- api: Landmark Document Vault API
+  rule: Up to 60 documents per vault
+- api: Landmark Document Vault API
+  rule: 25 MB maximum per file
+- api: Landmark Document Vault API
+  rule: 'Accepted file types: PDF, DOC, DOCX, JPEG, PNG'

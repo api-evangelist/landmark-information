@@ -1,0 +1,136 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  Version history sections published inside the Landmark Cloud Services API documents at
+  https://www.landmarkcloudservices.com/ (Compliance/Order, Contract Pack Vault and Milestone
+  Service). Landmark runs no single platform changelog page - each API carries its own dated
+  history in its documentation, and two of the five carry none at all.
+scheme: semantic versioning, per API
+platform_changelog_url: null
+apis:
+- api: Landmark Order Experience API (Compliance API)
+  current_version: 1.3.1
+  docs: https://www.landmarkcloudservices.com/?api=order-experience-api
+  entries:
+  - version: 1.3.1
+    date: '2026-04-15'
+    breaking: false
+    additions:
+    - Added Identity Verification Check product.
+  - version: 1.3.0
+    date: '2026-02-03'
+    breaking: false
+    additions:
+    - Added Source of Funds Check product.
+  - version: 1.2.4
+    date: '2025-07-14'
+    breaking: false
+    additions:
+    - Added drivingLicenceNumber option for AML - Individual.
+  - version: 1.2.3
+    date: '2024-06-14'
+    breaking: false
+    additions:
+    - Added title property to the Scottish Title Check results.
+  - version: 1.2.2
+    date: '2024-05-17'
+    breaking: false
+    additions:
+    - Added useExactNameMatching option to Landmark Ownership Check.
+  - version: 1.2.1
+    date: '2024-04-23'
+    breaking: false
+    additions:
+    - Added check information to International AML with Facial Recognition pepsAndSanctions results.
+  - version: 1.2.0
+    date: '2024-04-05'
+    breaking: false
+    highlights:
+    - transactionAddress is no longer required for all products.
+    - Added oldestAccount and dataSources to the addressAndMortality section for AML products.
+    - Added ID document details to the results schema for AML with Facial Recognition products.
+    - Added personReference to the Clients array in Ownership Check results.
+  - version: 1.1.1
+    date: '2024-03-04'
+    breaking: false
+    highlights:
+    - Corrected idVerification and supportingDocuments sections in the AML results schema.
+  - version: 1.1.0
+    date: '2024-02-16'
+    breaking: false
+    additions:
+    - Added overallStatus to AML Individual, AML UK with Facial Recognition and International AML
+      with Facial Recognition results.
+    - Added filename and createdDate to documents on retrieved orders.
+  - version: 1.0.0
+    date: '2024-01-29'
+    breaking: false
+    additions:
+    - Added Persons with Significant Control product for company information.
+  - version: 0.9.2
+    date: '2024-01-02'
+    breaking: false
+    additions:
+    - Added fullName to AML product responses and dateOfBirth to person objects.
+    - Added Cancelled value to the orderStatus enum.
+  - version: 0.9.1
+    date: '2023-11-17'
+    breaking: true
+    highlights:
+    - Removed enableOngoingMonitoring from AML products - ongoing monitoring is now always enabled.
+    - AML UK with Facial Recognition now requires a telephone or mobile number and no longer
+      requires email.
+  - version: 0.9.0
+    date: '2023-11-09'
+    breaking: false
+    additions:
+    - Added the Override AML Result Section endpoint.
+    - Added companyName and companyRegistrationNumber to additionalProprietors in Ownership Check
+      results.
+  - version: 0.8.0
+    date: '2023-11-01'
+    breaking: false
+    highlights:
+    - First issued.
+- api: Landmark Document Vault API (Contract Pack Vault)
+  current_version: 1.0.1
+  docs: https://www.landmarkcloudservices.com/?api=document-vault-experience
+  entries:
+  - version: 1.0.1
+    date: '2026-07-16'
+    breaking: false
+    additions:
+    - Added filename property to the Add Document request body to show file name restrictions.
+    - Added minLength values to various schemas for clarity.
+  - version: 1.0.0
+    date: '2026-07-08'
+    breaking: false
+    highlights:
+    - Initial release.
+- api: Landmark Milestone Notification Service API
+  current_version: 1.0.0
+  docs: https://www.landmarkcloudservices.com/?api=milestone-service-api
+  entries:
+  - version: 1.0.0
+    date: '2024-02-15'
+    breaking: false
+    additions:
+    - Added valuation callback milestone notification definitions.
+  - version: 0.9.0
+    date: '2024-02-14'
+    breaking: false
+    highlights:
+    - First issued.
+- api: Landmark Conveyancing Experience API
+  current_version: 0.8.1
+  docs: https://www.landmarkcloudservices.com/?api=conveyances-experience-api
+  entries: []
+  note: >-
+    No version history is published. The document instead carries an Availability section stating
+    that functionality lands in UAT progressively and that endpoints still in design - currently
+    Add Document and Retrieve Document - are marked Preview and should not be built against.
+- api: Landmark Intelliworks APIs
+  current_version: 2.3.0
+  docs: https://www.landmarkcloudservices.com/?api=intelliworks-experienceapi-CreateCase-api
+  entries: []
+  note: No version history is published for this API.

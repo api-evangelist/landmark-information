@@ -1,0 +1,462 @@
+generated: '2026-07-26'
+method: derived
+status: candidate
+source: openapi/ (five published Landmark Cloud Services OpenAPI documents)
+description: Landmark publishes no MCP server. No hosted or remote MCP endpoint appears in the documentation
+  portal, the corporate site, the GitHub organisation or the public MCP registries, and no agent-facing
+  surface of any kind is advertised. The tool list below is a CANDIDATE derived one-to-one from the operations
+  in the five published OpenAPI documents - it describes what an MCP server over Landmark's public contracts
+  would expose, not something Landmark ships. Every tool inherits its real input schema from the backing
+  operation's parameters and requestBody in the referenced spec.
+server:
+  name: landmark-information
+  transport: http
+  url: null
+  authentication: OAuth 2.0 client credentials against the Landmark Auth0 tenant; a client id and secret
+    issued after commercial onboarding would be required for every tool call.
+caveats:
+- Every operation is gated behind commercial onboarding - an agent cannot self-serve credentials.
+- Two Conveyancing operations (document create and read) are marked Preview by Landmark and should be
+  excluded from any real server.
+- 'Write tools have real-world consequence: instructing a conveyancer, placing a billable compliance order,
+  and adding a document to a Contract Pack Vault all incur charges or create legally significant records.'
+tool_count: 51
+tools:
+- name: conveyances_experience_quote_create
+  description: Create New Quote
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /quotes
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-create
+  parameters: null
+- name: conveyances_experience_quote_list
+  description: List Quotes
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /quotes
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-list
+  parameters:
+  - $filter
+  - $orderby
+  - $top
+  - $skip
+  - $count
+  - countOnly
+- name: conveyances_experience_quote_read
+  description: Retrieve Quote Details
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /quotes/{quoteId}
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-read
+  parameters:
+  - quoteId
+- name: conveyances_experience_quote_pdf_download
+  description: Download Quote PDF
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /quotes/{quoteId}/pdf
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-pdf-download
+  parameters:
+  - quoteId
+- name: conveyances_experience_quote_instruct
+  description: Instruct Quote
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /quotes/{quoteId}/instruct
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-instruct
+  parameters:
+  - quoteId
+- name: conveyances_experience_quote_address_update
+  description: Update Property Address
+  api: Landmark Conveyancing Experience API
+  method: PUT
+  path: /quotes/{quoteId}/property-address
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-address-update
+  parameters:
+  - quoteId
+- name: conveyances_experience_quote_product_details_update
+  description: Update Quote Product Details
+  api: Landmark Conveyancing Experience API
+  method: PUT
+  path: /quotes/{quoteId}/product-details
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-product-details-update
+  parameters:
+  - quoteId
+- name: conveyances_experience_quote_person_create
+  description: Add Person to Quote
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /quotes/{quoteId}/persons
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-person-create
+  parameters:
+  - quoteId
+- name: conveyances_experience_quote_person_update
+  description: Update Person on Quote
+  api: Landmark Conveyancing Experience API
+  method: PUT
+  path: /quotes/{quoteId}/persons/{personReference}
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-person-update
+  parameters:
+  - quoteId
+  - personReference
+- name: conveyances_experience_quote_person_delete
+  description: Remove Person from Quote
+  api: Landmark Conveyancing Experience API
+  method: DELETE
+  path: /quotes/{quoteId}/persons/{personReference}
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-quote-person-delete
+  parameters:
+  - quoteId
+  - personReference
+- name: conveyances_experience_case_list
+  description: List Cases
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /cases
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-list
+  parameters:
+  - $filter
+  - $orderby
+  - $top
+  - $skip
+  - $count
+  - countOnly
+- name: conveyances_experience_case_read
+  description: Retrieve Case Details
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /cases/{caseId}
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-read
+  parameters:
+  - caseId
+- name: conveyances_experience_case_accept
+  description: Accept Case
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /cases/{caseId}/accept
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-accept
+  parameters:
+  - caseId
+- name: conveyances_experience_case_reject
+  description: Reject Case
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /cases/{caseId}/reject
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-reject
+  parameters:
+  - caseId
+- name: conveyances_experience_case_status_update
+  description: Change Case Status
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /cases/{caseId}/status
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-status-update
+  parameters:
+  - caseId
+- name: conveyances_experience_case_handler_add
+  description: Add Case Handler
+  api: Landmark Conveyancing Experience API
+  method: PUT
+  path: /cases/{caseId}/handler
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-handler-add
+  parameters:
+  - caseId
+- name: conveyances_experience_case_activity_list
+  description: List Case Activities
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /cases/{caseId}/activities
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-activity-list
+  parameters:
+  - caseId
+  - $filter
+  - $top
+  - $skip
+- name: conveyances_experience_case_task_list
+  description: List Case Tasks
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /cases/{caseId}/tasks
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-task-list
+  parameters:
+  - caseId
+- name: conveyances_experience_case_task_complete
+  description: Complete Case Task
+  api: Landmark Conveyancing Experience API
+  method: PUT
+  path: /cases/{caseId}/tasks/{taskId}/complete
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-task-complete
+  parameters:
+  - caseId
+  - taskId
+- name: conveyances_experience_case_note_list
+  description: List Case Notes
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /cases/{caseId}/notes
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-note-list
+  parameters:
+  - caseId
+- name: conveyances_experience_case_note_create
+  description: Add Note to Case
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /cases/{caseId}/notes
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-note-create
+  parameters:
+  - caseId
+- name: conveyances_experience_case_document_create
+  description: Add Document to Case
+  api: Landmark Conveyancing Experience API
+  method: POST
+  path: /cases/{caseId}/documents
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-document-create
+  parameters:
+  - caseId
+- name: conveyances_experience_case_document_read
+  description: Retrieve Document
+  api: Landmark Conveyancing Experience API
+  method: GET
+  path: /cases/{caseId}/documents/{documentId}
+  source_operation: openapi/landmark-information-conveyancing-experience-api-openapi.yml#conveyances-experience-case-document-read
+  parameters:
+  - caseId
+  - documentId
+- name: document_vault_vaults_create
+  description: Create Document Vault
+  api: Document Vault API
+  method: POST
+  path: /
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-vaults-create
+  parameters:
+  - Account-Id
+- name: document_vault_vaults_read
+  description: Get Document Vault
+  api: Document Vault API
+  method: GET
+  path: /{documentVaultId}
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-vaults-read
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_documents_create
+  description: Add Document
+  api: Document Vault API
+  method: POST
+  path: /{documentVaultId}/documents
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-documents-create
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_documents_delete
+  description: Delete Document
+  api: Document Vault API
+  method: DELETE
+  path: /{documentVaultId}/documents/{documentId}
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-documents-delete
+  parameters:
+  - Account-Id
+  - documentVaultId
+  - documentId
+- name: document_vault_activities_list
+  description: Get Activities
+  api: Document Vault API
+  method: GET
+  path: /{documentVaultId}/activities
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-activities-list
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_reference_update
+  description: Update Reference
+  api: Document Vault API
+  method: PUT
+  path: /{documentVaultId}/reference
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-reference-update
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_property_update
+  description: Update Property
+  api: Document Vault API
+  method: PATCH
+  path: /{documentVaultId}/property
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-property-update
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_recipient_organisation_update
+  description: Update Recipient Organisation
+  api: Document Vault API
+  method: PATCH
+  path: /{documentVaultId}/recipient-organisation
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-recipient-organisation-update
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_recipients_create
+  description: Add Recipient
+  api: Document Vault API
+  method: POST
+  path: /{documentVaultId}/recipient-organisation/recipients
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-recipients-create
+  parameters:
+  - Account-Id
+  - documentVaultId
+- name: document_vault_recipients_delete
+  description: Delete Recipient
+  api: Document Vault API
+  method: DELETE
+  path: /{documentVaultId}/recipient-organisation/recipients/{recipientId}
+  source_operation: openapi/landmark-information-document-vault-api-openapi.yml#document-vault-recipients-delete
+  parameters:
+  - Account-Id
+  - documentVaultId
+  - recipientId
+- name: createcase
+  description: Create case
+  api: Intelliworks APIs
+  method: POST
+  path: /case
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#createCase
+  parameters: null
+- name: updateiwcase
+  description: Update case
+  api: Intelliworks APIs
+  method: POST
+  path: /updateCase
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#updateIwCase
+  parameters: null
+- name: getcaseiw
+  description: Get case summary
+  api: Intelliworks APIs
+  method: GET
+  path: /cases
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#getCaseIw
+  parameters:
+  - branchId
+  - caseId
+  - externalCaseId
+- name: upserttask
+  description: Create or update task
+  api: Intelliworks APIs
+  method: POST
+  path: /upsertTask
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#upsertTask
+  parameters: null
+- name: getmilestone
+  description: Get milestone
+  api: Intelliworks APIs
+  method: GET
+  path: /milestones
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#getMilestone
+  parameters:
+  - branchId
+  - caseId
+  - externalCaseId
+  - milestoneId
+  - workflowId
+- name: upsertmilestone
+  description: Create or update milestone dates
+  api: Intelliworks APIs
+  method: POST
+  path: /milestones
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#upsertMilestone
+  parameters: null
+- name: gettransactionrequeststatus
+  description: Get transaction request status
+  api: Intelliworks APIs
+  method: GET
+  path: /transaction-requests/{transactionRequestId}
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#getTransactionRequestStatus
+  parameters:
+  - transactionRequestId
+- name: uploaddocument
+  description: Upload Document
+  api: Intelliworks APIs
+  method: POST
+  path: /documents
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#uploadDocument
+  parameters: null
+- name: getcompleteddocuments
+  description: List case documents
+  api: Intelliworks APIs
+  method: GET
+  path: /documents
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#getCompletedDocuments
+  parameters:
+  - branchId
+  - caseId
+  - externalCaseId
+  - workflowId
+- name: downloaddocument
+  description: Download document
+  api: Intelliworks APIs
+  method: GET
+  path: /documents/{id}/download
+  source_operation: openapi/landmark-information-intelliworks-api-openapi.yml#downloadDocument
+  parameters:
+  - id
+- name: spn_milestone_register_callback
+  description: Register new milestone callback
+  api: Milestone Notification Service API
+  method: POST
+  path: /callbacks
+  source_operation: openapi/landmark-information-milestone-notification-service-api-openapi.yml#spn-milestone-register-callback
+  parameters: null
+- name: spn_milestone_update_callback
+  description: Update milestone callback
+  api: Milestone Notification Service API
+  method: PUT
+  path: /callbacks/{callbackId}
+  source_operation: openapi/landmark-information-milestone-notification-service-api-openapi.yml#spn-milestone-update-callback
+  parameters:
+  - callbackId
+- name: spn_milestone_delete_callback
+  description: Delete milestone callback
+  api: Milestone Notification Service API
+  method: DELETE
+  path: /callbacks/{callbackId}
+  source_operation: openapi/landmark-information-milestone-notification-service-api-openapi.yml#spn-milestone-delete-callback
+  parameters:
+  - callbackId
+- name: order_experience_create_order
+  description: Create Orders
+  api: Order Experience API
+  method: POST
+  path: /orders
+  source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-create-order
+  parameters: null
+- name: order_experience_get_order
+  description: Get Order
+  api: Order Experience API
+  method: GET
+  path: /orders/{orderId}
+  source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-get-order
+  parameters:
+  - orderId
+- name: order_experience_get_order_status
+  description: Get Order Status
+  api: Order Experience API
+  method: GET
+  path: /orders/{orderId}/status
+  source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-get-order-status
+  parameters:
+  - orderId
+- name: order_experience_download_order_documents
+  description: Download Document
+  api: Order Experience API
+  method: GET
+  path: /orders/{orderId}/documents/{documentId}
+  source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-download-order-documents
+  parameters:
+  - orderId
+  - documentId
+- name: order_experience_override_order_result_aml_section
+  description: Override AML Result Section
+  api: Order Experience API
+  method: PUT
+  path: /orders/{orderId}/results/override-aml-section
+  source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-override-order-result-aml-section
+  parameters:
+  - orderId

@@ -77,6 +77,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/landmark-information-order-experience-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Overlay
+    url: overlays/landmark-information-order-experience-api-overlay.yaml
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: AgentSkill
+    url: skills/landmark-information-order-compliance-check.md
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
   - type: Documentation
     url: https://www.landmarkcloudservices.com/order-experience-api.html
   - type: Authentication
@@ -102,6 +112,14 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/landmark-information-conveyancing-experience-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Overlay
+    url: overlays/landmark-information-conveyancing-experience-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/landmark-information-quote-and-instruct-conveyancing.md
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
   - type: Documentation
     url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
   - type: Documentation
@@ -127,6 +145,12 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/landmark-information-intelliworks-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Overlay
+    url: overlays/landmark-information-intelliworks-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/landmark-information-create-intelliworks-case.md
   - type: Documentation
     url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
   - type: Documentation
@@ -151,6 +175,14 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/landmark-information-document-vault-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Overlay
+    url: overlays/landmark-information-document-vault-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/landmark-information-build-contract-pack-vault.md
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
   - type: Documentation
     url: https://www.landmarkcloudservices.com/document-vault-experience.html
   - type: Documentation
@@ -175,6 +207,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/landmark-information-milestone-notification-service-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Overlay
+    url: overlays/landmark-information-milestone-notification-service-api-overlay.yaml
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: AgentSkill
+    url: skills/landmark-information-subscribe-valuation-milestones.md
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
   - type: Documentation
     url: https://www.landmarkcloudservices.com/milestone-service-api.html
   - type: Documentation
@@ -227,6 +269,50 @@ apis:
   - type: SignUp
     url: https://geodata.landmark.co.uk/register-your-interest-in-wmts
 common:
+- type: DeveloperPortal
+  url: https://www.landmarkcloudservices.com/
+- type: APIReference
+  url: https://www.landmarkcloudservices.com/
+- type: GettingStarted
+  url: https://www.landmarkcloudservices.com/conveyances-experience-api.html#section/Getting-started
+- type: Support
+  url: https://www.landmark.co.uk/our-group/contact/
+- type: Conventions
+  url: conventions/landmark-information-conventions.yml
+- type: ErrorCatalog
+  url: errors/landmark-information-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/landmark-information-lifecycle.yml
+- type: ChangeLog
+  url: changelog/landmark-information-changelog.yml
+- type: Sandbox
+  url: sandbox/landmark-information-sandbox.yml
+- type: RateLimits
+  url: rate-limits/landmark-information-rate-limits.yml
+- type: Conformance
+  url: conformance/landmark-information-conformance.yml
+- type: DataModel
+  url: data-model/landmark-information-data-model.yml
+- type: WellKnown
+  url: well-known/landmark-information-well-known.yml
+- type: Webhooks
+  url: asyncapi/landmark-information-webhooks.yml
+- type: MCPServer
+  url: mcp/landmark-information-mcp.yml
+- type: LLMsTxt
+  url: llms/landmark-information-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/landmark-information-agentic-access.yml
+- type: Arazzo
+  url: arazzo/_index.yml
+- type: DomainSecurity
+  url: security/landmark-information-domain-security.yml
+- type: OAuthScopes
+  url: scopes/landmark-information-scopes.yml
+- type: Authentication
+  url: authentication/landmark-information-authentication.yml
 - type: Website
   url: https://www.landmark.co.uk/
 - type: Documentation
