@@ -460,3 +460,9 @@ tools:
   source_operation: openapi/landmark-information-order-experience-api-openapi.yml#order-experience-override-order-result-aml-section
   parameters:
   - orderId
+deployment:
+  mode: none
+  verified: derived
+  tools: 51
+  checked: '2026-08-12'
+  source: catalog MCP census

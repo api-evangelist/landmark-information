@@ -1,0 +1,329 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Document Vault API",
+    "version": "1.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Document Vaults",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Document Vault",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Document Vault and returns its `id`. The more detail you provide upfront (property details, tenure, registered status, selling capacity, and the buyer's conveyancer's organisation and recipients), the more the vault will reflect the case from the start. Everything can be added or updated later."
+        },
+        {
+          "info": {
+            "name": "Get Document Vault",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ]
+          },
+          "docs": "Returns a vault's current details, including each document and its `status`."
+        },
+        {
+          "info": {
+            "name": "Update Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/reference",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates your reference for the vault."
+        },
+        {
+          "info": {
+            "name": "Update Property",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/property",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates fields associated with the Property.\n\nAt least one top-level field (address, tenure, registered or sellingCapacity) must be supplied.\n\nOmitted top-level fields are left unchanged.\n\nOmitted nested fields (the fields within address) will have their existing values removed.\n"
+        },
+        {
+          "info": {
+            "name": "Update Recipient Organisation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/recipient-organisation",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates fields associated with the Recipient Organisation. At least one of name or reference must be supplied. Omitted fields are left unchanged."
+        },
+        {
+          "info": {
+            "name": "Add Recipient",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/recipient-organisation/recipients",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a person or team to the buyer's-side recipient organisation. This sets up who can receive the vault; sharing itself is done from the web app.\n\nA maximum of 4 recipients can be added to a Document Vault.\n"
+        },
+        {
+          "info": {
+            "name": "Delete Recipient",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/recipient-organisation/recipients/:recipientId",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              },
+              {
+                "name": "recipientId",
+                "value": "",
+                "type": "path",
+                "description": "The Recipient ID"
+              }
+            ]
+          },
+          "docs": "Removes a recipient from the vault."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add Document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/documents",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "filename",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Adds one document to the vault. Supported file types are PDF, DOC, DOCX, JPEG and PNG; maximum 25 MB per file and 60 documents per vault. Returns a document `id`."
+        },
+        {
+          "info": {
+            "name": "Delete Document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/documents/:documentId",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The Document ID"
+              }
+            ]
+          },
+          "docs": "Permanently removes a document from the vault."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Activities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/:documentVaultId/activities",
+            "headers": [
+              {
+                "name": "Account-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentVaultId",
+                "value": "",
+                "type": "path",
+                "description": "The Document Vault ID"
+              }
+            ]
+          },
+          "docs": "Returns all audit events for a vault, the same history shown in the web app activity log."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

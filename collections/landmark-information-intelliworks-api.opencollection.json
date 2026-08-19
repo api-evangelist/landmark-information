@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Intelliworks APIs",
+    "version": "2.3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/case",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create case"
+        },
+        {
+          "info": {
+            "name": "Update case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/updateCase",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update case"
+        },
+        {
+          "info": {
+            "name": "Get case summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/cases",
+            "params": [
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "Branch identifier (UUID) used to resolve Intelliworks company and site identifiers."
+              },
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "query",
+                "description": "Intelliworks case reference (forwarded as `caseReference` to Intelliworks)."
+              },
+              {
+                "name": "externalCaseId",
+                "value": "",
+                "type": "query",
+                "description": "External case reference (forwarded as `externalCaseReference` to Intelliworks)."
+              }
+            ]
+          },
+          "docs": "Returns a read-only case summary for the specified branch. Supply at least one of `caseId` (Intelliworks case reference, e.g. `GPR-000856`) and/or `externalCaseId` (reference from the external system). Both are forwarded to Intelliworks when provided.\n"
+        },
+        {
+          "info": {
+            "name": "Create or update task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/upsertTask",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update an unscheduled task on an existing case. At least one of `caseId` or `externalCaseId` must be supplied.\nOnly supported combinations of `processReference`, `taskReference`, and `taskType` may be used - see [Supported unscheduled task mappings](#supported-unscheduled-task-mappings).\n"
+        },
+        {
+          "info": {
+            "name": "Get milestone",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/milestones",
+            "params": [
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "externalCaseId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "milestoneId",
+                "value": "",
+                "type": "query",
+                "description": "Milestone identifier. See [Supported milestone IDs by workflow](#supported-milestone-ids) for valid values per workflow."
+              },
+              {
+                "name": "workflowId",
+                "value": "",
+                "type": "query",
+                "description": "Optional workflow identifier. Include when required to resolve the milestone for the target workflow."
+              }
+            ]
+          },
+          "docs": "Returns the actual completion date of a milestone for a case. Supply at least one of `caseId` or `externalCaseId`.\nValid `milestoneId` values are listed in [Supported milestone IDs by workflow](#supported-milestone-ids).\n"
+        },
+        {
+          "info": {
+            "name": "Create or update milestone dates",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/milestones",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set or update milestone actual and/or forecast dates for a case. The request is accepted for asynchronous processing.\n"
+        },
+        {
+          "info": {
+            "name": "Upload Document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/documents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploads a document for the specified case against a task or default. At least one of `caseId` or `externalCaseId` is required.\n`taskId` is optional; when omitted the document is stored against a new default task rather than an existing task.\nUpload the file directly using `multipart/form-data`, or optionally use `application/json` with document metadata.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Transaction Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get transaction request status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/transaction-requests/:transactionRequestId",
+            "params": [
+              {
+                "name": "transactionRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Experience API transaction request identifier returned by asynchronous endpoints"
+              }
+            ]
+          },
+          "docs": "Returns the latest processing status for an asynchronous Experience API request identified by\n`transactionRequestId`. Supports create/update case, upsert task, upsert milestone, document upload, and future\nasynchronous endpoints. Use this endpoint to poll for completion when a webhook callback is not used or not received.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List case documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/documents",
+            "params": [
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "Branch identifier (UUID) used to resolve Intelliworks company and site identifiers."
+              },
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "query",
+                "description": "Intelliworks case reference (e.g. `EXP-000762`)."
+              },
+              {
+                "name": "externalCaseId",
+                "value": "",
+                "type": "query",
+                "description": "External case reference (e.g. `AAR801/1`)."
+              },
+              {
+                "name": "workflowId",
+                "value": "",
+                "type": "query",
+                "description": "Intelliworks workflow identifier."
+              }
+            ]
+          },
+          "docs": "Returns the list of completed documents held against a case in Intelliworks for the specified branch.\nSupply at least one of `caseId` (Intelliworks case reference, e.g. `EXP-000762`) and/or `externalCaseId` (e.g. `AAR801/1`).\nBoth are forwarded to Intelliworks when provided.\nEach document in the response can be downloaded using `GET /documents/{id}/download`.\n"
+        },
+        {
+          "info": {
+            "name": "Download document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/documents/:id/download",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Document ID."
+              }
+            ]
+          },
+          "docs": "Downloads a document by document ID (as returned in the List case documents response). Auth0Id is extracted from the authenticated user context and forwarded to Intelliworks Web API."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

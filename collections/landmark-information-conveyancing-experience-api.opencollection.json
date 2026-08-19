@@ -1,0 +1,612 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Landmark Conveyancing Experience API",
+    "version": "0.8.1"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://lmkmaster.eu.auth0.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes",
+            "params": [
+              {
+                "name": "$filter",
+                "value": "",
+                "type": "query",
+                "description": "OData $filter syntax i.e. $filter=status eq 'Completed' <br/><br/> Supported $filter values are: 'status', 'createdDate', 'updatedDate', 'productId'"
+              },
+              {
+                "name": "$orderby",
+                "value": "",
+                "type": "query",
+                "description": "OData $orderby syntax i.e. $orderby=updatedDate desc <br/><br/> Supported $orderby values are: 'createdDate', 'updatedDate', 'productName', 'status'"
+              },
+              {
+                "name": "$top",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to return"
+              },
+              {
+                "name": "$skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to skip"
+              },
+              {
+                "name": "$count",
+                "value": "",
+                "type": "query",
+                "description": "Whether or not to return a count of items"
+              },
+              {
+                "name": "countOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return only the count of items"
+              }
+            ]
+          },
+          "docs": "Retrieve your quotes, most recently updated first.\n\nFilter, sort, and page the results with the OData-style query parameters below.\n"
+        },
+        {
+          "info": {
+            "name": "Create New Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a quote for your client's transaction. Provide the property address, the applicants, the account roles, and the product details, and you'll get back the panel conveyancers available to you with their pricing.\n\n**Standalone quote**: provide a single quote request in the `quotes` array.\n\n**Combined sale and purchase**: provide two quote requests in the `quotes` array, one Sale and one Purchase. Each is independent, with its own `productId`, applicants, and product details.\n\n**Accounts**: ea"
+        },
+        {
+          "info": {
+            "name": "Retrieve Quote Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              }
+            ]
+          },
+          "docs": "Retrieve the full details of one of your quotes: the property, applicants, product details, the available conveyancers, and the pricing breakdown.\n"
+        },
+        {
+          "info": {
+            "name": "Download Quote PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/pdf",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              }
+            ]
+          },
+          "docs": "Download a PDF copy of the quote, for example to share with your client.\n"
+        },
+        {
+          "info": {
+            "name": "Instruct Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/instruct",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Instruct a quote to turn it into a live case. Supply the `conveyancerId` of the conveyancer you're choosing in the request body: it must be one of the conveyancers returned for this quote (see `GET /quotes/{quoteId}` or the create-quote response). Instructing creates the case and makes the details available to that conveyancer.\n"
+        },
+        {
+          "info": {
+            "name": "Update Property Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/property-address",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the property address on a quote. The values you provide replace the current address.\n"
+        },
+        {
+          "info": {
+            "name": "Update Quote Product Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/product-details",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the product details on a quote. The values you provide replace the current product details.\n\nThe request body must match the `productDetails` object for the quote's product, as defined in [Product Schemas](#tag/Product-Schemas). You can't change the quote's `productId` or `propertyLocation` here.\n"
+        },
+        {
+          "info": {
+            "name": "Add Person to Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/persons",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a person (applicant) to a quote. A quote can have up to 8 applicants.\n"
+        },
+        {
+          "info": {
+            "name": "Update Person on Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/persons/:personReference",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              },
+              {
+                "name": "personReference",
+                "value": "bf13cb52-6676-4f3d-a27a-b6cafaf52f19",
+                "type": "path",
+                "description": "Unique identifier for the person on the quote"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a person on a quote. The values you provide replace that person's details.\n"
+        },
+        {
+          "info": {
+            "name": "Remove Person from Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.landmarkcloudservices.com/conveyances/quotes/:quoteId/persons/:personReference",
+            "params": [
+              {
+                "name": "quoteId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Unique identifier for the quote"
+              },
+              {
+                "name": "personReference",
+                "value": "bf13cb52-6676-4f3d-a27a-b6cafaf52f19",
+                "type": "path",
+                "description": "Unique identifier for the person on the quote"
+              }
+            ]
+          },
+          "docs": "Remove a person from a quote.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases",
+            "params": [
+              {
+                "name": "$filter",
+                "value": "",
+                "type": "query",
+                "description": "OData $filter syntax i.e. $filter=status eq 'Completed' <br/><br/> Supported $filter values are: 'status', 'createdDate', 'updatedDate', 'productId'"
+              },
+              {
+                "name": "$orderby",
+                "value": "",
+                "type": "query",
+                "description": "OData $orderby syntax i.e. $orderby=updatedDate desc <br/><br/> Supported $orderby values are: 'createdDate', 'updatedDate', 'productName', 'status'"
+              },
+              {
+                "name": "$top",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to return"
+              },
+              {
+                "name": "$skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to skip"
+              },
+              {
+                "name": "$count",
+                "value": "",
+                "type": "query",
+                "description": "Whether or not to return a count of items"
+              },
+              {
+                "name": "countOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return only the count of items"
+              }
+            ]
+          },
+          "docs": "Retrieve your cases, most recently updated first. As a conveyancer these are the cases assigned to you; as an introducer these are the cases you've instructed.\n\nFilter, sort, and page the results with the OData-style query parameters below.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Case Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ]
+          },
+          "docs": "Retrieve the full detail of one of your cases, including its current status, activities, and documents.\n"
+        },
+        {
+          "info": {
+            "name": "Accept Case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/accept",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ]
+          },
+          "docs": "Accept a case that has been instructed to you.\n"
+        },
+        {
+          "info": {
+            "name": "Reject Case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/reject",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reject a case that has been instructed to you. A reason must be provided.\n"
+        },
+        {
+          "info": {
+            "name": "Change Case Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/status",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the status of a case — place on hold, cancel, or resume from hold back to in progress. A reason must be provided for the change.\n"
+        },
+        {
+          "info": {
+            "name": "Add Case Handler",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/handler",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a specific conveyancer to a case, making the responsible contact visible to all parties and tracked in the case history.\n"
+        },
+        {
+          "info": {
+            "name": "List Case Activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/activities",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              },
+              {
+                "name": "$filter",
+                "value": "",
+                "type": "query",
+                "description": "OData $filter syntax i.e. $filter=type eq 'Note' <br/><br/> The only supported $filter value is 'type' (activity type)."
+              },
+              {
+                "name": "$top",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to return"
+              },
+              {
+                "name": "$skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to skip"
+              }
+            ]
+          },
+          "docs": "Retrieve the activity history on a case — milestones, notes, task updates, and contact logs. This is how you follow a case's progress.\n\nFilter and page the results with the OData-style query parameters below.\n"
+        },
+        {
+          "info": {
+            "name": "List Case Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/tasks",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ]
+          },
+          "docs": "Retrieve the task hierarchy for a case. Tasks mark key events in the conveyancing lifecycle and are visible to connected parties so they can see progress.\n\nThe set is tailored to the case (for example by jurisdiction) and is generated when the case is first created.\n\nTasks are organised as parents and children. Completing a parent completes all uncompleted children; completing the last uncompleted child completes the parent.\n\nEach task has a `reference` that is consistent across cases where that"
+        },
+        {
+          "info": {
+            "name": "Complete Case Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/tasks/:taskId/complete",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "The `taskId` of the task to complete (from `TaskItem.taskId`)"
+              }
+            ]
+          },
+          "docs": "Mark a task on a case as complete. Completing a parent completes all uncompleted children; completing the last uncompleted child completes the parent.\n"
+        },
+        {
+          "info": {
+            "name": "List Case Notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/notes",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ]
+          },
+          "docs": "Retrieve all notes recorded on a case. Notes are visible to all parties on the case.\n"
+        },
+        {
+          "info": {
+            "name": "Add Note to Case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/notes",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a note to a case. Notes are recorded in the case activity history and are visible to all parties on the case.\n"
+        },
+        {
+          "info": {
+            "name": "Add Document to Case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/documents",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Add a document to a case.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.landmarkcloudservices.com/conveyances/cases/:caseId/documents/:documentId",
+            "params": [
+              {
+                "name": "caseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the case"
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Landmark ID for the document"
+              }
+            ]
+          },
+          "docs": "Download a document from a case.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

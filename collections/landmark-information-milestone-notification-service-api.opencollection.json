@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Milestone Notification Service API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "milestones",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Register new milestone callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks/callbacks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requests the registration of a new milestone callback configuration. The API will accept 3 types of authentication; Basic, Client ID & Secret, OAuth2."
+        },
+        {
+          "info": {
+            "name": "Update milestone callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks/callbacks/:callbackId",
+            "params": [
+              {
+                "name": "callbackId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requests the update to an existing milestone callback configuration. The API will accept 3 types of authentication; Basic, Client ID & Secret, OAuth2."
+        },
+        {
+          "info": {
+            "name": "Delete milestone callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks/callbacks/:callbackId",
+            "params": [
+              {
+                "name": "callbackId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requests the deletion of a milestone callback configuration"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
