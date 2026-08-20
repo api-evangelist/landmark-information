@@ -43,6 +43,18 @@ accessModel:
   method: observed
 image: https://www.landmarkcloudservices.com/assets/favicon.png
 tags:
+- Real-Estate
+- United Kingdom
+- PropTech
+- Property Data
+- Conveyancing
+- Land Registry
+- Geospatial
+- Valuation
+- Anti-Money Laundering
+- Planning Data
+- Mortgage
+tags_raw:
 - Real Estate
 - United Kingdom
 - PropTech
@@ -70,6 +82,11 @@ apis:
   humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
   baseURL: https://api.landmarkcloudservices.com/connect
   tags:
+  - Compliance
+  - Anti-Money Laundering
+  - Identity Verification
+  - Order
+  tags_raw:
   - Compliance
   - Anti-Money Laundering
   - Identity Verification
@@ -200,6 +217,11 @@ apis:
   humanURL: https://www.landmarkcloudservices.com/?api=milestone-service-api
   baseURL: https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
   tags:
+  - Webhook
+  - Valuation
+  - Milestones
+  - Lending
+  tags_raw:
   - Webhooks
   - Valuation
   - Milestones
