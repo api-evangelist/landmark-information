@@ -70,193 +70,17 @@ created: '2026-07-26'
 modified: '2026-07-26'
 specificationVersion: '0.23'
 apis:
-- aid: landmark-information:landmark-order-experience-api
-  name: Landmark Order Experience API
-  description: >-
-    Compliance ordering API used to place and retrieve Landmark compliance product orders — AML
-    individual and company checks, UK and international AML with facial recognition, Persons with
-    Significant Control, Landmark Ownership Check, Scottish Title Check, Source of Funds Check and
-    Identity Verification Check. Five operations covering order creation, order retrieval, order
-    status, document download, and an AML section override. Version 1.3.1 (2026-04-15), OpenAPI
-    3.0.3, harvested from the public Landmark Cloud Services documentation portal.
-  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
-  baseURL: https://api.landmarkcloudservices.com/connect
-  tags:
-  - Compliance
-  - Anti-Money Laundering
-  - Identity Verification
-  - Order
-  tags_raw:
-  - Compliance
-  - Anti-Money Laundering
-  - Identity Verification
-  - Orders
-  properties:
-  - type: OpenAPI
-    url: openapi/landmark-information-order-experience-api-openapi.yml
-  - type: APIReference
-    url: https://www.landmarkcloudservices.com/order-experience-api.html
-  - type: Overlay
-    url: overlays/landmark-information-order-experience-api-overlay.yaml
-  - type: Webhooks
-    url: asyncapi/landmark-information-webhooks.yml
-  - type: AgentSkill
-    url: skills/landmark-information-order-compliance-check.md
-  - type: Arazzo
-    url: arazzo/landmark-information-order-compliance-check.yml
-  - type: Documentation
-    url: https://www.landmarkcloudservices.com/order-experience-api.html
-  - type: Authentication
-    url: authentication/landmark-information-openid-configuration.json
-- aid: landmark-information:landmark-conveyancing-experience-api
-  name: Landmark Conveyancing Experience API
-  description: >-
-    Panel conveyancing API for quoting, instructing and managing conveyancing work through Landmark
-    Optimus. Introducers create quotes, choose a conveyancer and instruct on a client's behalf;
-    conveyancers accept or reject assigned cases and progress them against one shared case record.
-    Twenty paths across Quotes and Cases including quote PDF generation, persons, instruct,
-    accept/reject, status, handler, activities, tasks, notes and documents. Version 0.8.1, OpenAPI
-    3.0.3, with several endpoints explicitly marked Preview and not yet safe to build against.
-    Uses OData-style $filter and $orderby query parameters, but is not an OData service and
-    publishes no $metadata document.
-  humanURL: https://www.landmarkcloudservices.com/?api=conveyances-experience-api
-  baseURL: https://api.landmarkcloudservices.com/conveyances
-  tags:
-  - Conveyancing
-  - Quotes
-  - Cases
-  - Panel Management
-  properties:
-  - type: OpenAPI
-    url: openapi/landmark-information-conveyancing-experience-api-openapi.yml
-  - type: APIReference
-    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
-  - type: Overlay
-    url: overlays/landmark-information-conveyancing-experience-api-overlay.yaml
-  - type: AgentSkill
-    url: skills/landmark-information-quote-and-instruct-conveyancing.md
-  - type: Arazzo
-    url: arazzo/landmark-information-quote-to-instruction.yml
-  - type: Documentation
-    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
-  - type: Documentation
-    url: https://www.landmark.co.uk/products/optimus/
-  - type: Authentication
-    url: authentication/landmark-information-openid-configuration.json
-- aid: landmark-information:landmark-intelliworks-api
-  name: Landmark Intelliworks APIs
-  description: >-
-    Case creation and management API for the Intelliworks legal case management system, letting
-    third-party systems create and update cases outside the Intelliworks UI for Sale, Purchase, New
-    Build Purchase, General Property, Remortgage, Equity Release, Transfer of Equity, Wills, Lasting
-    Power of Attorney and Probate workflows. Eight paths covering case create/update/list, task
-    upsert, milestones, transaction requests, and document upload/list/download. Version 2.3.0,
-    OpenAPI 3.0.1.
-  humanURL: https://www.landmarkcloudservices.com/?api=intelliworks-experienceapi-CreateCase-api
-  baseURL: https://api.landmarkcloudservices.com/
-  tags:
-  - Case Management
-  - Conveyancing
-  - Documents
-  - Legal
-  properties:
-  - type: OpenAPI
-    url: openapi/landmark-information-intelliworks-api-openapi.yml
-  - type: APIReference
-    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
-  - type: Overlay
-    url: overlays/landmark-information-intelliworks-api-overlay.yaml
-  - type: AgentSkill
-    url: skills/landmark-information-create-intelliworks-case.md
-  - type: Documentation
-    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
-  - type: Documentation
-    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
-  - type: Authentication
-    url: authentication/landmark-information-openid-configuration.json
-- aid: landmark-information:landmark-document-vault-api
-  name: Landmark Document Vault API
-  description: >-
-    API behind Contract Pack Vault — creates a secure, shareable container of transaction documents,
-    adds and removes files (virus-scanned and analysed asynchronously, status Pending then Available
-    or Quarantined), maintains property and reference details, manages the recipient organisation
-    and its recipients, and reads the vault activity audit trail. Ten paths, version 1.0.1, OpenAPI
-    3.0.4. Sharing itself happens in the Contract Pack Vault web app, not the API. Billed per vault
-    on first document added; documented rate limit 1,000 calls per minute per caller.
-  humanURL: https://www.landmarkcloudservices.com/?api=document-vault-experience
-  baseURL: https://api.landmarkcloudservices.com/document-vaults
-  tags:
-  - Documents
-  - Conveyancing
-  - Contract Pack
-  properties:
-  - type: OpenAPI
-    url: openapi/landmark-information-document-vault-api-openapi.yml
-  - type: APIReference
-    url: https://www.landmarkcloudservices.com/document-vault-experience.html
-  - type: Overlay
-    url: overlays/landmark-information-document-vault-api-overlay.yaml
-  - type: AgentSkill
-    url: skills/landmark-information-build-contract-pack-vault.md
-  - type: Arazzo
-    url: arazzo/landmark-information-assemble-contract-pack.yml
-  - type: Documentation
-    url: https://www.landmarkcloudservices.com/document-vault-experience.html
-  - type: Documentation
-    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
-  - type: Authentication
-    url: authentication/landmark-information-openid-configuration.json
-- aid: landmark-information:landmark-milestone-notification-service-api
-  name: Landmark Milestone Notification Service API
-  description: >-
-    Callback registration API for valuation transaction milestone notifications on the Landmark
-    Secure Panel Network (SPN). Consumers register, update and delete callback URLs that Landmark
-    then calls as valuation milestones occur, making this Landmark's webhook subscription surface.
-    Two paths, version 1.0.0, OpenAPI 3.0.1. Documented rate limit 250 requests per customer per
-    minute.
-  humanURL: https://www.landmarkcloudservices.com/?api=milestone-service-api
-  baseURL: https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
-  tags:
-  - Webhook
-  - Valuation
-  - Milestones
-  - Lending
-  tags_raw:
-  - Webhooks
-  - Valuation
-  - Milestones
-  - Lending
-  properties:
-  - type: OpenAPI
-    url: openapi/landmark-information-milestone-notification-service-api-openapi.yml
-  - type: APIReference
-    url: https://www.landmarkcloudservices.com/milestone-service-api.html
-  - type: Overlay
-    url: overlays/landmark-information-milestone-notification-service-api-overlay.yaml
-  - type: Webhooks
-    url: asyncapi/landmark-information-webhooks.yml
-  - type: AgentSkill
-    url: skills/landmark-information-subscribe-valuation-milestones.md
-  - type: Arazzo
-    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
-  - type: Documentation
-    url: https://www.landmarkcloudservices.com/milestone-service-api.html
-  - type: Documentation
-    url: https://www.landmark.co.uk/products/spn/
-  - type: Authentication
-    url: authentication/landmark-information-openid-configuration.json
 - aid: landmark-information:landmark-planning-api
   name: Landmark Planning API (powered by Barbour ABI)
   description: >-
-    RESTful planning-application data API combining Barbour ABI project information with Landmark
-    geospatial data, covering UK and Republic of Ireland planning applications from 1 January 2017
-    (with historical project data back to 1997) across 19 documented attributes including UPRN,
-    easting/northing, latitude/longitude and GeoJSON/WKT site boundaries. Documented operations are
-    GET login, GET logout, GET customers, GET lookups, GET locations (preview search with a JSON
-    query DSL and point-radius distance filtering) and GET locations/{project_id} (full details,
-    which consumes a credit under pay-as-you-go). Documented in public HTML only — no OpenAPI,
-    Postman collection, or other machine-readable contract is published. Authentication is a
-    Landmark-issued x-api-key plus a Basic-auth login (base64 of username and SHA256-hashed
+    RESTful planning-application data API combining Barbour ABI project information with Landmark geospatial
+    data, covering UK and Republic of Ireland planning applications from 1 January 2017 (with historical
+    project data back to 1997) across 19 documented attributes including UPRN, easting/northing, latitude/longitude
+    and GeoJSON/WKT site boundaries. Documented operations are GET login, GET logout, GET customers, GET
+    lookups, GET locations (preview search with a JSON query DSL and point-radius distance filtering)
+    and GET locations/{project_id} (full details, which consumes a credit under pay-as-you-go). Documented
+    in public HTML only — no OpenAPI, Postman collection, or other machine-readable contract is published.
+    Authentication is a Landmark-issued x-api-key plus a Basic-auth login (base64 of username and SHA256-hashed
     password) that returns a bearer token valid until 30 days of disuse.
   humanURL: https://www.landmark.co.uk/products/planning-api/planning-api-documentation/
   baseURL: https://api.barbour-abi.com/v4
@@ -273,12 +97,12 @@ apis:
 - aid: landmark-information:landmark-geodata-web-map-tile-service
   name: Landmark Geodata Web Map Tile Service (WMTS)
   description: >-
-    On-demand raster mapping tile service delivered against the Open Geospatial Consortium Web Map
-    Tile Service (OGC WMTS) standard, with 20 zoom levels spanning Ordnance Survey MasterMap through
-    national-scale mapping, for use inside GIS platforms and web applications. Landmark documents
-    the product and names the standard publicly but publishes no endpoint URL and no
-    GetCapabilities document; access begins with a register-your-interest form at
-    geodata.landmark.co.uk and a commercial agreement, so no baseURL is recorded here.
+    On-demand raster mapping tile service delivered against the Open Geospatial Consortium Web Map Tile
+    Service (OGC WMTS) standard, with 20 zoom levels spanning Ordnance Survey MasterMap through national-scale
+    mapping, for use inside GIS platforms and web applications. Landmark documents the product and names
+    the standard publicly but publishes no endpoint URL and no GetCapabilities document; access begins
+    with a register-your-interest form at geodata.landmark.co.uk and a commercial agreement, so no baseURL
+    is recorded here.
   humanURL: https://www.landmark.co.uk/products/web-map-tile-service-0/
   tags:
   - Geospatial
@@ -290,7 +114,447 @@ apis:
     url: https://www.landmark.co.uk/products/web-map-tile-service-0/
   - type: SignUp
     url: https://geodata.landmark.co.uk/register-your-interest-in-wmts
+- aid: landmark-information:landmark-information-activities-api
+  name: Landmark Information Group Activities API
+  description: Read a vault's audit history.
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Activities
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-activities-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-cases-api
+  name: Landmark Information Group Cases API
+  description: >-
+    Once you instruct a quote it becomes a case. If you're the conveyancer, these are the cases assigned
+    to you: you work them through to completion and post updates as you go. If you're the introducer,
+    this is how you follow the work you've referred and see how it's progressing. Either way, you only
+    see the cases your account is party to.
+
+
+    From here you can retrieve your cases, read the full detail of one, update its status and handler,
+    work the task hierarchy, follow the activity history, and add notes. Document exchange is marked Preview.
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Cases
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-cases-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-document-vaults-api
+  name: Landmark Information Group Document Vaults API
+  description: Create a vault and manage its details and recipients.
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Document Vaults
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-document-vaults-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-documents-api
+  name: Landmark Information Group Documents API
+  description: Add and remove the files held in a vault.
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-documents-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-milestones-api
+  name: Landmark Information Group Milestones API
+  description: Operations to manage callback configurations for transaction milestone notifications
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - milestones
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-milestones-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-order-experience-api-api
+  name: Landmark Information Group Order Experience API
+  description: Operations to create and receive order results.
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Order Experience API
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-order-experience-api-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-quotes-api
+  name: Landmark Information Group Quotes API
+  description: >-
+    Quotes are where a job begins. You build a quote for your client's transaction, get back the panel
+    conveyancers available to you with their pricing, and instruct one of them to turn the quote into
+    a live case.
+
+
+    A single request can cover a standalone transaction (one quote) or a combined sale and purchase (two
+    quotes, one for each side). You choose what you're quoting for with a product schema, which sets the
+    questions that apply. See [Product Schemas](#tag/Product-Schemas).
+
+
+    To instruct, pass the `conveyancerId` of one of the conveyancers returned for the quote. That creates
+    the case and makes the details available to the conveyancer you've chosen.
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Quotes
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-quotes-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
+- aid: landmark-information:landmark-information-transaction-requests-api
+  name: Landmark Information Group Transaction Requests API
+  description: APIs for tracking asynchronous request status
+  humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
+  baseURL: https://api.landmarkcloudservices.com/connect
+  tags:
+  - Transaction Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/landmark-information-transaction-requests-api-openapi.yml
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Webhooks
+    url: asyncapi/landmark-information-webhooks.yml
+  - type: Arazzo
+    url: arazzo/landmark-information-order-compliance-check.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/order-experience-api.html
+  - type: Authentication
+    url: authentication/landmark-information-openid-configuration.json
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-quote-to-instruction.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/conveyances-experience-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/optimus/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/intelliworks-experienceapi-CreateCase-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/case-management/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Arazzo
+    url: arazzo/landmark-information-assemble-contract-pack.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/document-vault-experience.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/legal-conveyancing/contract-pack-vault/
+  - type: APIReference
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Arazzo
+    url: arazzo/landmark-information-subscribe-valuation-milestones.yml
+  - type: Documentation
+    url: https://www.landmarkcloudservices.com/milestone-service-api.html
+  - type: Documentation
+    url: https://www.landmark.co.uk/products/spn/
 common:
+- type: Overlay
+  url: overlays/landmark-information-order-experience-api-overlay.yaml
+- type: AgentSkill
+  url: skills/landmark-information-order-compliance-check.md
+- type: Overlay
+  url: overlays/landmark-information-conveyancing-experience-api-overlay.yaml
+- type: AgentSkill
+  url: skills/landmark-information-quote-and-instruct-conveyancing.md
+- type: Overlay
+  url: overlays/landmark-information-intelliworks-api-overlay.yaml
+- type: AgentSkill
+  url: skills/landmark-information-create-intelliworks-case.md
+- type: Overlay
+  url: overlays/landmark-information-document-vault-api-overlay.yaml
+- type: AgentSkill
+  url: skills/landmark-information-build-contract-pack-vault.md
+- type: Overlay
+  url: overlays/landmark-information-milestone-notification-service-api-overlay.yaml
+- type: AgentSkill
+  url: skills/landmark-information-subscribe-valuation-milestones.md
 - type: DeveloperPortal
   url: https://www.landmarkcloudservices.com/
 - type: APIReference
