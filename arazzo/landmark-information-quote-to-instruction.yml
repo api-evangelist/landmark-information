@@ -2,16 +2,14 @@ arazzo: 1.0.1
 info:
   title: Quote to conveyancing instruction
   version: 1.0.0
-  summary: Create a conveyancing quote, complete it with a person, property address and product details,
-    produce the quote PDF and instruct a panel conveyancer.
+  summary: Create a conveyancing quote, complete it with a person, property address and product details, produce the quote PDF and instruct a panel conveyancer.
 sourceDescriptions:
-- name: conveyancing
-  url: ../openapi/landmark-information-conveyancing-experience-api-openapi.yml
+- name: quotesApi
+  url: ../openapi/landmark-information-quotes-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: quote-to-instruction
-  summary: 'Introducer flow: quote, complete, PDF, instruct. The instruct step engages a conveyancer on
-    the client behalf - gate it behind explicit human confirmation.'
+  summary: 'Introducer flow: quote, complete, PDF, instruct. The instruct step engages a conveyancer on the client behalf - gate it behind explicit human confirmation.'
   inputs:
     type: object
     required:

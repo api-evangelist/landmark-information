@@ -2,16 +2,14 @@ arazzo: 1.0.1
 info:
   title: Subscribe to valuation milestone notifications
   version: 1.0.0
-  summary: Register a callback endpoint for Secure Panel Network valuation milestones, update its configuration,
-    then remove it.
+  summary: Register a callback endpoint for Secure Panel Network valuation milestones, update its configuration, then remove it.
 sourceDescriptions:
-- name: milestoneService
-  url: ../openapi/landmark-information-milestone-notification-service-api-openapi.yml
+- name: milestonesApi
+  url: ../openapi/landmark-information-milestones-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: subscribe-valuation-milestones
-  summary: Callback lifecycle. Landmark authenticates outbound to your endpoint using Basic, ClientIdSecret
-    or OAuth2 as configured here.
+  summary: Callback lifecycle. Landmark authenticates outbound to your endpoint using Basic, ClientIdSecret or OAuth2 as configured here.
   inputs:
     type: object
     required:

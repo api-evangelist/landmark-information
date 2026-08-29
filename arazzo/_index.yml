@@ -1,6 +1,6 @@
-generated: '2026-07-26'
-method: generated
-source: Authored from the operationIds published in the five Landmark Cloud Services OpenAPI documents
+x-generated: '2026-07-26'
+x-method: generated
+x-source: Authored from the operationIds published in the five Landmark Cloud Services OpenAPI documents
   in openapi/.
 workflows:
 - file: landmark-information-order-compliance-check.yml

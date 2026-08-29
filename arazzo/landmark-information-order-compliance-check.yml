@@ -2,11 +2,10 @@ arazzo: 1.0.1
 info:
   title: Order a Landmark compliance check and collect the result
   version: 1.0.0
-  summary: Place a compliance product order, poll it to completion, read the result and download the result
-    document.
+  summary: Place a compliance product order, poll it to completion, read the result and download the result document.
 sourceDescriptions:
-- name: orderExperience
-  url: ../openapi/landmark-information-order-experience-api-openapi.yml
+- name: orderExperienceApiApi
+  url: ../openapi/landmark-information-order-experience-api-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: order-compliance-check
@@ -52,8 +51,7 @@ workflows:
       documentId: $response.body#/documents/0/documentId
   - stepId: downloadDocument
     operationId: order-experience-download-order-documents
-    description: Fetch and store the result document immediately - this operation returns 410 Gone once
-      the document expires.
+    description: Fetch and store the result document immediately - this operation returns 410 Gone once the document expires.
     parameters:
     - name: orderId
       in: path
