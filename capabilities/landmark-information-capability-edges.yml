@@ -1,0 +1,28 @@
+slug: landmark-information
+provider: Landmark Information Group
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Real Estate
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Order Experience API
+  spec_file: landmark-information-order-experience-api-api-openapi.yml
+  capability_id: BC-4990.30
+  capability_id_l1: BC-4990
+  capability_name: Real Estate AML & Sanctions Compliance
+  confidence: 0.7
+  evidence: PUT /orders/{orderId}/results/override-aml-section  order-experience-override-order-result-aml-section  Override
+    AML Result Section; "Added `Source of Funds Check` product", "International AML with Facial Recognition
+    product results `pepsAndSanctions` sections"
+  reason: Although modelled as a generic order surface, the products ordered and returned are property-transaction
+    AML, PEPs/sanctions, source-of-funds, identity verification and ownership/title checks against a transactionAddress/UPRN
+    — i.e. real-estate AML and sanctions compliance checking. Order/status/download plumbing dilutes the
+    evidence slightly.

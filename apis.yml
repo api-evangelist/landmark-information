@@ -547,6 +547,9 @@ apis:
   - type: Documentation
     url: https://www.landmark.co.uk/products/spn/
 common:
+- type: CapabilityMap
+  url: capabilities/landmark-information-capability-edges.yml
+  name: Landmark Information Group Business Capability Map
 - type: Overlay
   url: overlays/landmark-information-order-experience-api-overlay.yaml
 - type: AgentSkill
