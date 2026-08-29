@@ -28,6 +28,18 @@ description: >-
   surface — RESO is a North American MLS construct and is simply absent from the UK market.
   Landmark publishes no open data of its own; the open UK property layer belongs to HM Land Registry
   and Ordnance Survey, both of which are Landmark suppliers rather than Landmark products.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: partner-only
