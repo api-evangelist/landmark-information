@@ -340,6 +340,8 @@ apis:
   humanURL: https://www.landmarkcloudservices.com/?api=order-experience-api
   baseURL: https://api.landmarkcloudservices.com/connect
   tags:
+  - Milestones
+  tags_raw:
   - milestones
   properties:
   - type: OpenAPI
