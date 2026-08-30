@@ -1,0 +1,983 @@
+openapi: 3.2.0
+info:
+  version: 1.0.1
+  title: Document Vaults API
+  description: "The Document Vault API lets you create a secure, shareable container of documents — a **Document Vault** — and manage its contents programmatically. It lets you exchange the right paperwork with the other side of the transaction without rekeying or trading email attachments.\n\nUsed with **Contract Pack Vault** for conveyancing firms (see [Contract Pack Vault](#section/Contract-Pack-Vault)).\n\n# Overview\n\nUse this API from your case management system to assemble a contract pack, then open **Contract Pack Vault** to check it and share it with the buyer's conveyancer. The API builds and maintains the vault; reviewing and sharing happen in the web app.\n\n1. **Create a Document Vault** — supply the property address and as much detail as you have. You get back a vault `id`; use it in every follow-up call and to open the vault in the web app. Optionally set a `reference` (your case reference), which must be unique within your account.\n2. **Add documents**, one per call. Each file is virus-scanned and analysed in the background. Its `status` is `Pending` while that runs, then `Available` or `Quarantined` if it failed the virus scan.\n3. **Keep details current** — update the reference, property, or recipient organisation, and add or remove recipients. Setting up recipients is not the same as sharing; you share the vault from the web app.\n4. **Check progress** with `Get Document Vault` or `Get Activities` for the audit history.\n5. **Open the web app** to review the analysis and share the vault. See [Contract Pack Vault](#section/Contract-Pack-Vault).\n\n# Getting started\n\nREST API over HTTPS with JSON responses; file uploads use `multipart/form-data`.\n\n**UAT** (building and testing): `https://uat-api.landmarkcloudservices.com/document-vaults`\n\n**Auth:** `https://lmkmaster-uat.eu.auth0.com/oauth/token`\n\n**Production** (live integration only; vaults are real and may incur a cost): `https://api.landmarkcloudservices.com/document-vaults`\n\n**Auth:** `https://lmkmaster.eu.auth0.com/oauth/token`\n\n## Authentication\n\nOAuth 2.0 client credentials. Each conveyancing firm is onboarded individually with Landmark and receives its own client ID, secret, and `Account-Id` (sent as a header on every request). Credentials are issued separately for **UAT** (building and testing; not charged) and **Production** (live integration only). If you integrate via a case management system, that system typically holds the firm's credentials on its behalf.\n\nAudience is fixed per environment:\n\n- UAT: `https://uat-api.landmarkcloudservices.com`\n- Production: `https://api.landmarkcloudservices.com`\n\n**1. Get an access token** by POSTing to the auth endpoint for your environment:\n\n```json\n{\n  \"client_id\": \"your-client-id\",\n  \"client_secret\": \"your-client-secret\",\n  \"audience\": \"https://uat-api.landmarkcloudservices.com\",\n  \"grant_type\": \"client_credentials\"\n}\n```\n\nUse the Production audience when calling the Production auth endpoint.\n\nThe response contains an `access_token` (a JWT) and an `expires_in` value. Cache and reuse the token until it is close to expiry.\n\n**2. Send on every API request:**\n- `Authorization: Bearer <access_token>`\n- `Account-Id: <your account id>`\n\nA `403` means your credentials are not entitled to that operation; contact support.\n\n## Billing\n\nA charge applies per vault when the first document is added to it.\n\n## Limits, errors and support\n\nOne document per upload; up to 60 per vault; PDF, DOC, DOCX, JPEG, PNG; 25 MB per file. API rate limits: up to 1,000 calls per minute per caller.\n\nStandard HTTP status codes apply (`400` validation, `401`/`403` authentication, `404` not found, `409` conflict, `413` too large, `429` rate limited, `5xx` server error). Error bodies use `problem+json`. Include the `lgsTraceResponse` header value when contacting support.\n\n**Support:** support@ochresoft.com | +44 (0)3300 366 700\n\n# Contract Pack Vault\n\n**Contract Pack Vault** is a conveyancing product on LandmarkConnect. You assemble a contract pack from your CMS and share it securely with the buyer's conveyancer. The API handles the building; the web app is where you review the pack and share it.\n\n## AI-assisted checking\n\nAs each document is added, it is automatically analysed so you can spot problems before the pack goes out. The checks include:\n\n- identifying and tagging each document by type,\n- flagging missing pages,\n- checking signatures are present where expected,\n- cross-checking addresses, names, dates and title/reference numbers against the case.\n\nThe results appear as a checklist in the web app for you to review and act on. They are not currently returned by the API.\n\n## Reviewing and sharing\n\nIn the web app you can review the checklist and analysis, preview, download or remove documents, update vault details, and share the vault with the buyer's conveyancer. The buyer's conveyancer receives secure access through a link once they have verified their email address.\n\n## Opening a vault from your CMS\n\nLink straight to a vault from your CMS using the vault `id` from `Create Document Vault`, so your team does not have to search for it in the web app. Open the relevant URL in a browser, replacing `{documentVaultId}`:\n\n- UAT: `https://uat-connect.landmark.co.uk/case/{documentVaultId}`\n- PRD: `https://connect.landmark.co.uk/case/{documentVaultId}`\n\n## API Specification Versions\n- **1.0.1** (16/07/2026)\n  - Added `filename` property to `Add Document` endpoint body to show file name restrictions\n  - Added `minLength` values to various schemas for clarity\n- **1.0.0** (08/07/2026)\n  - Initial release\n"
+  contact:
+    name: API Support
+    email: support@ochresoft.com
+    x-phone-number: +44 (0)3300 366 700
+servers:
+- url: https://api.landmarkcloudservices.com/
+  description: Production API
+- url: https://uat-api.landmarkcloudservices.com/
+  description: UAT API
+security:
+- bearerAuth: []
+tags:
+- name: Document Vaults
+  description: Create a vault and manage its details and recipients.
+paths:
+  /:
+    post:
+      tags:
+      - Document Vaults
+      summary: Create Document Vault
+      description: Creates a new Document Vault and returns its `id`. The more detail you provide upfront (property details, tenure, registered status, selling capacity, and the buyer's conveyancer's organisation and recipients), the more the vault will reflect the case from the start. Everything can be added or updated later.
+      operationId: document-vault-vaults-create
+      x-external-entitlement: external:document-vault:vaults:create
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createDocumentVaultRequest'
+        required: true
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createDocumentVaultResponse'
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '413':
+          $ref: '#/components/responses/413PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /{documentVaultId}:
+    get:
+      tags:
+      - Document Vaults
+      summary: Get Document Vault
+      description: Returns a vault's current details, including each document and its `status`.
+      operationId: document-vault-vaults-read
+      x-external-entitlement: external:document-vault:vaults:read
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getDocumentVaultResponse'
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /{documentVaultId}/reference:
+    put:
+      tags:
+      - Document Vaults
+      summary: Update Reference
+      description: Updates your reference for the vault.
+      operationId: document-vault-reference-update
+      x-external-entitlement: external:document-vault:reference:update
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - reference
+              properties:
+                reference:
+                  $ref: '#/components/schemas/documentVaultReference'
+      responses:
+        '200':
+          description: Reference updated
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /{documentVaultId}/property:
+    patch:
+      tags:
+      - Document Vaults
+      summary: Update Property
+      description: 'Updates fields associated with the Property.
+
+
+        At least one top-level field (address, tenure, registered or sellingCapacity) must be supplied.
+
+
+        Omitted top-level fields are left unchanged.
+
+
+        Omitted nested fields (the fields within address) will have their existing values removed.
+
+        '
+      operationId: document-vault-property-update
+      x-external-entitlement: external:document-vault:property:update
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                address:
+                  $ref: '#/components/schemas/lgsAddressPAFPlus'
+                tenure:
+                  $ref: '#/components/schemas/tenure'
+                registered:
+                  $ref: '#/components/schemas/registered'
+                sellingCapacity:
+                  $ref: '#/components/schemas/sellingCapacity'
+      responses:
+        '200':
+          description: Supplied fields updated
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /{documentVaultId}/recipient-organisation:
+    patch:
+      tags:
+      - Document Vaults
+      summary: Update Recipient Organisation
+      description: Updates fields associated with the Recipient Organisation. At least one of name or reference must be supplied. Omitted fields are left unchanged.
+      operationId: document-vault-recipient-organisation-update
+      x-external-entitlement: external:document-vault:recipient-organisation:update
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                name:
+                  $ref: '#/components/schemas/organisationName'
+                reference:
+                  $ref: '#/components/schemas/buyerConveyancerReference'
+      responses:
+        '200':
+          description: Supplied fields updated
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /{documentVaultId}/recipient-organisation/recipients:
+    post:
+      tags:
+      - Document Vaults
+      summary: Add Recipient
+      description: 'Adds a person or team to the buyer''s-side recipient organisation. This sets up who can receive the vault; sharing itself is done from the web app.
+
+
+        A maximum of 4 recipients can be added to a Document Vault.
+
+        '
+      operationId: document-vault-recipients-create
+      x-external-entitlement: external:document-vault:recipients:create
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/individualRecipient'
+              - $ref: '#/components/schemas/teamRecipient'
+      responses:
+        '200':
+          description: Recipient added
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - id
+                properties:
+                  id:
+                    description: An ID representing the added recipient
+                    allOf:
+                    - $ref: '#/components/schemas/lgsUuid'
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /{documentVaultId}/recipient-organisation/recipients/{recipientId}:
+    delete:
+      tags:
+      - Document Vaults
+      summary: Delete Recipient
+      description: Removes a recipient from the vault.
+      operationId: document-vault-recipients-delete
+      x-external-entitlement: external:document-vault:recipients:delete
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      - name: recipientId
+        in: path
+        description: The Recipient ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      responses:
+        '200':
+          description: Recipient deleted
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+components:
+  schemas:
+    tenure:
+      type: string
+      enum:
+      - Freehold
+      - Leasehold
+      - Commonhold
+    email:
+      type: string
+      format: email
+      maxLength: 320
+    teamRecipientResponse:
+      allOf:
+      - $ref: '#/components/schemas/teamRecipient'
+      - type: object
+        required:
+        - id
+        properties:
+          id:
+            $ref: '#/components/schemas/lgsUuid'
+    getDocumentVaultResponse:
+      description: The details stored about the Document Vault
+      type: object
+      required:
+      - id
+      - createdDate
+      - createdBy
+      - updatedDate
+      - property
+      - documents
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+        reference:
+          $ref: '#/components/schemas/documentVaultReference'
+        createdDate:
+          type: string
+          format: date-time
+          maxLength: 38
+        createdBy:
+          $ref: '#/components/schemas/lgsUuid'
+        updatedDate:
+          type: string
+          format: date-time
+          maxLength: 38
+        property:
+          $ref: '#/components/schemas/propertyDetails'
+        recipientOrganisation:
+          $ref: '#/components/schemas/recipientOrganisationResponse'
+        documents:
+          type: array
+          maxItems: 60
+          items:
+            $ref: '#/components/schemas/document'
+    document:
+      description: An object containing data relating to a document
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+        status:
+          type: string
+          enum:
+          - Available
+          - Deleted
+          - Pending
+          - Quarantined
+        createdDate:
+          type: string
+          format: date-time
+          maxLength: 38
+    accountId:
+      description: Your Landmark account ID - this will be provided to you during onboarding
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    documentVaultReference:
+      description: Your reference that uniquely identifies the Document Vault
+      type: string
+      minLength: 1
+      maxLength: 50
+      pattern: ^[\w\-\/\.\|]+$
+      example: UT/PL34JT/04-2025
+    title:
+      type: string
+      maxLength: 20
+      pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+      example: Mr
+    organisationName:
+      description: Organisation name
+      type: string
+      minLength: 1
+      maxLength: 128
+      example: Landmark Example Conveyancing
+    recipientsResponse:
+      description: An array of objects containing details of recipients to give access to the Document Vault
+      type: array
+      maxItems: 4
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/individualRecipientResponse'
+        - $ref: '#/components/schemas/teamRecipientResponse'
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    individualRecipientResponse:
+      allOf:
+      - $ref: '#/components/schemas/individualRecipient'
+      - type: object
+        required:
+        - id
+        properties:
+          id:
+            $ref: '#/components/schemas/lgsUuid'
+    teamRecipient:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - name
+      - email
+      properties:
+        type:
+          type: string
+          enum:
+          - Team
+        name:
+          $ref: '#/components/schemas/teamName'
+        email:
+          $ref: '#/components/schemas/email'
+    createDocumentVaultResponse:
+      description: Reference data that can be used to retrieve a Document
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+    individualRecipient:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - firstName
+      - lastName
+      - email
+      properties:
+        type:
+          type: string
+          enum:
+          - Individual
+        title:
+          $ref: '#/components/schemas/title'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        email:
+          $ref: '#/components/schemas/email'
+    teamName:
+      type: string
+      maxLength: 40
+      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž0-9\u2010-\u2015‘’‛.' -]*$
+      example: Conveyancing Team 1
+    createDocumentVaultRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - property
+      properties:
+        reference:
+          $ref: '#/components/schemas/documentVaultReference'
+        property:
+          $ref: '#/components/schemas/propertyDetails'
+        recipientOrganisation:
+          $ref: '#/components/schemas/recipientOrganisation'
+    registered:
+      description: Whether the property is registered or not
+      type: boolean
+    lgsUprn:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775000
+    recipients:
+      description: An array of objects containing details of recipients to give access to the Document Vault
+      type: array
+      minItems: 1
+      maxItems: 4
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/individualRecipient'
+        - $ref: '#/components/schemas/teamRecipient'
+    middleName:
+      type: string
+      maxLength: 40
+      pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+      example: Michael
+    sellingCapacity:
+      type: string
+      enum:
+      - LegalAndBeneficialOwner
+      - Attorney
+      - PersonalRepresentative
+      - Trustee
+    lastName:
+      type: string
+      maxLength: 40
+      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+      example: Smith
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    buyerConveyancerReference:
+      description: The buyer's conveyancer's reference that uniquely identifies the Document Vault
+      type: string
+      minLength: 1
+      maxLength: 40
+      pattern: ^[\w\-\/\.\|]+$
+      example: UT/PL34JT/04-2025
+    recipientOrganisation:
+      description: The organisation acting for vault recipients
+      additionalProperties: false
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/organisationName'
+        reference:
+          $ref: '#/components/schemas/buyerConveyancerReference'
+        recipients:
+          $ref: '#/components/schemas/recipients'
+    firstName:
+      type: string
+      maxLength: 40
+      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+      example: John
+    recipientOrganisationResponse:
+      description: The organisation acting for vault recipients
+      additionalProperties: false
+      type: object
+      required:
+      - recipients
+      properties:
+        name:
+          $ref: '#/components/schemas/organisationName'
+        reference:
+          $ref: '#/components/schemas/buyerConveyancerReference'
+        recipients:
+          $ref: '#/components/schemas/recipientsResponse'
+    propertyDetails:
+      description: The property associated with the vault
+      additionalProperties: false
+      type: object
+      required:
+      - address
+      properties:
+        address:
+          $ref: '#/components/schemas/lgsAddressPAFPlus'
+        tenure:
+          $ref: '#/components/schemas/tenure'
+        registered:
+          $ref: '#/components/schemas/registered'
+        sellingCapacity:
+          $ref: '#/components/schemas/sellingCapacity'
+    lgsAddressPAFPlus:
+      description: Either `buildingNumber` or `buildingName` must be provided (both may be present).
+      type: object
+      required:
+      - thoroughfare
+      - postTown
+      - country
+      - postcode
+      additionalProperties: false
+      properties:
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        udprn:
+          type: integer
+          description: Royal Mail's Unique Delivery Point Reference Number (UDPRN)
+          minimum: 0
+          maximum: 99999999
+        departmentName:
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+          example: Customer Service Department
+        organisationName:
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+          example: JW Simpsons Ltd
+        subBuildingName:
+          type: string
+          minLength: 1
+          maxLength: 30
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+          example: The Old Mill
+        buildingName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+          example: The Annexe
+        buildingNumber:
+          type: string
+          minLength: 1
+          maxLength: 4
+          pattern: ^[A-Za-z0-9-/\s]*$
+          example: '7'
+        poBoxNumber:
+          type: string
+          example: '5422'
+          minLength: 1
+          maxLength: 14
+          pattern: ^[A-Za-z0-9.#\s]*$
+        dependentThoroughfare:
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+          example: Richmond Terrace
+        thoroughfare:
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+          example: Main Street
+        doubleDependentLocality:
+          type: string
+          minLength: 1
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+          example: Hook
+        dependentLocality:
+          type: string
+          minLength: 1
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+          example: Warsash
+        postTown:
+          type: string
+          minLength: 1
+          maxLength: 30
+          pattern: ^[A-Za-zÀ-ž\u2010-\u201F-.'&!\s]*$
+          example: Southampton
+        country:
+          type: string
+          minLength: 1
+          maxLength: 200
+          pattern: ^.*$
+          example: England
+        postcode:
+          type: string
+          maxLength: 10
+          pattern: ^[A-Za-z0-9\s]+$
+          example: SO99 9ZZ
+        blpuEasting:
+          type: number
+          minimum: 0
+          maximum: 700000
+          example: 296701
+        blpuNorthing:
+          type: number
+          minimum: 0
+          maximum: 1300000
+          example: 92288
+  responses:
+    409Conflict:
+      description: Conflict
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Conflict:
+              value:
+                status: '409'
+                code: '40900'
+                title: Entity in wrong state
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40400'
+                title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
+    413PayloadTooLarge:
+      description: Payload Too Large
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+    403Forbidden:
+      description: Forbidden
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '403'
+                code: '40300'
+                title: Invalid Entitlement
+            No Entitlement:
+              value:
+                status: '403'
+                code: '40301'
+                title: No Entitlement
+            No permission to entity:
+              value:
+                status: '403'
+                code: '40302'
+                title: No permission to entity
+            User not registered:
+              value:
+                status: '403'
+                code: '40303'
+                title: User not registered
+            Usage limit reached:
+              value:
+                status: '403'
+                code: '40304'
+                title: Usage limit reached
+            Email account not verified:
+              value:
+                status: '403'
+                code: '40305'
+                title: Email account not verified
+            Token expiry too long:
+              value:
+                status: '403'
+                code: '40306'
+                title: Token expiry too long
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+  headers:
+    lgsTraceResponse:
+      description: Trace context providing an unique identifier for an individual requests
+      schema:
+        type: string
+        minLength: 39
+        maxLength: 39
+        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
+      examples:
+        Example traceresponse:
+          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Document Vault API
+  tags:
+  - Document Vaults
+  - Documents
+  - Activities

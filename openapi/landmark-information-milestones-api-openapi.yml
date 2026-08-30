@@ -1,0 +1,745 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Milestone Notification Service Milestones API
+  description: "Manage the callback configuration for transaction milestone notifications.\nThis is primarily a technical pack intended for developers. It will provide an explanation of the service, the calls involved and some sample requests.   \n\n# Getting Started\nThe Landmark API is a RESTful API based on HTTPS requests and JSON responses.\n\n# Endpoints\nThe API is accessed by making HTTPS requests to an endpoint URL.\nEach endpoint will use one of the methods; GET, POST, PUT, PATCH, and DELETE to dictate how you interact with the information available.\nEvery endpoint is accessed only via the SSL-enabled HTTPS (port 443) protocol.\nThe API uses semantic versioning, and the current release is v1.0.0\n\n# Environments\nThe API is available in two environments, both are identical in that they have the same specification infrastructure and functionality.\n\nThe 2 environments are:\n* User Acceptance Testing (UAT)\n* Production (PRD)\n\n## UAT\nThe UAT environment should be used during development, and interfaces with the Landmark UAT environments.\nYou should use this whilst implementing and testing your integration.\n\nThe URLs for the UAT APIs are:\n* Base URL: https://uat-api.landmarkcloudservices.com/valuation-spn/milestones/callbacks\n* Auth: https://lmkmaster-uat.eu.auth0.com/oauth/token\n\n## PRD\nThe PRD environment is a live instance, and this talks to the live Landmark environments.\nThis should only be used once the integration is considered production ready and all testing has been completed on the UAT environment.\nAny actions performed on PRD will result in the creation and syncing of real data that may be seen by users.\n\nThe URLs for the production APIs are:\n* Base URL: https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks\n* Auth: https://lmkmaster.eu.auth0.com/oauth/token\n\n# Requests & Authentication\nRequests must be sent over HTTPS with any payload formatted in JSON. To authenticate against the API a Bearer Token Header must be provided.\n\n# Rate limiting\nThe API allows a maximum of 250 requests per customer per minute.\n\n# Versions\n- **1.0.0** (2024-02-15)\n  - Added valuation callback milestone notification definitions.\n- **0.9.0** (2024-02-14)\n  - First issued.\n"
+  contact:
+    name: API Support
+    email: lvsinfo@landmark.co.uk
+    x-phone-number: +44 (0)3300 366 110
+  x-logo:
+    url: https://www.landmark.co.uk/wp-content/themes/landmark/images/landmark-logo-black.svg
+    altText: Landmark Information Group Logo
+servers:
+- url: https://api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
+  description: Production API
+- url: https://uat-api.landmarkcloudservices.com/valuation-spn/milestones/callbacks
+  description: UAT API
+security:
+- bearerAuth: []
+tags:
+- name: milestones
+  description: Operations to manage callback configurations for transaction milestone notifications
+paths:
+  /callbacks:
+    post:
+      tags:
+      - milestones
+      summary: Register new milestone callback
+      description: Requests the registration of a new milestone callback configuration. The API will accept 3 types of authentication; Basic, Client ID & Secret, OAuth2.
+      operationId: spn-milestone-register-callback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lgsCallback'
+      responses:
+        '201':
+          description: Callback registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterMilestoneCallbackResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '413':
+          $ref: '#/components/responses/413PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+      callbacks:
+        transaction-milestone-notifications:
+          request.body.url:
+            post:
+              requestBody:
+                description: Transaction milestone notification
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/lgsTransactionRequestMilestoneSPN'
+              responses:
+                '204':
+                  description: No Content - The notification was received OK
+                '400':
+                  description: Bad Request
+                '401':
+                  description: Unauthorized
+                '403':
+                  description: Forbidden
+                '429':
+                  description: Too Many Requests
+                '500':
+                  description: Internal Server Error
+  /callbacks/{callbackId}:
+    put:
+      tags:
+      - milestones
+      summary: Update milestone callback
+      description: Requests the update to an existing milestone callback configuration. The API will accept 3 types of authentication; Basic, Client ID & Secret, OAuth2.
+      operationId: spn-milestone-update-callback
+      parameters:
+      - name: callbackId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lgsCallback'
+      responses:
+        '204':
+          description: The callback configuration was successfully updated
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '413':
+          $ref: '#/components/responses/413PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+      callbacks:
+        transaction-milestone-notifications:
+          request.body.url:
+            post:
+              requestBody:
+                description: Transaction milestone notification
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/lgsTransactionRequestMilestoneSPN'
+              responses:
+                '204':
+                  description: No Content - The notification was received OK
+                '400':
+                  description: Bad Request
+                '401':
+                  description: Unauthorized
+                '403':
+                  description: Forbidden
+                '429':
+                  description: Too Many Requests
+                '500':
+                  description: Internal Server Error
+    delete:
+      tags:
+      - milestones
+      summary: Delete milestone callback
+      description: Requests the deletion of a milestone callback configuration
+      operationId: spn-milestone-delete-callback
+      parameters:
+      - name: callbackId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      responses:
+        '204':
+          description: The callback configuration was successfully deleted
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '413':
+          $ref: '#/components/responses/413PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+components:
+  schemas:
+    lgsCallbackOAuth2:
+      description: Configure the OAuth2 client credentials flow using a shared secret as the callback authentication mechanism. In the callback request, a Bearer access token will be provided in the Authorization header which will have been obtained from the specified Identity Provider using a client_id and client_secret.
+      type: object
+      required:
+      - type
+      - client_id
+      - client_secret
+      - token_generation_url
+      - url
+      properties:
+        type:
+          type: string
+          enum:
+          - OAuth2
+        client_id:
+          description: The client id to use when requesting an access token.
+          type: string
+          maxLength: 256
+        client_secret:
+          description: The client secret to use when requesting an access token.
+          type: string
+          minLength: 14
+          maxLength: 256
+        audience:
+          description: The audience to include when requesting an access token.
+          type: string
+          maxLength: 256
+        scope:
+          description: The scope string to include when requesting an access token.
+          type: string
+          maxLength: 256
+        token_generation_url:
+          description: The endpoint to use to generate an access token.
+          $ref: '#/components/schemas/lgsUrl'
+        url:
+          description: The url to send callback requests to.
+          $ref: '#/components/schemas/lgsUrl'
+    lgsCallbackBasic:
+      description: Configure specific headers to be included within a callback request.
+      type: object
+      required:
+      - type
+      - url
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+        headers:
+          description: The headers to be included within the callback request.
+          type: array
+          maxItems: 20
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - key
+            - value
+            properties:
+              key:
+                description: The header name.
+                type: string
+                maxLength: 200
+              value:
+                description: The header value.
+                type: string
+                maxLength: 8192
+        url:
+          description: The url to send callback requests to.
+          $ref: '#/components/schemas/lgsUrl'
+    lgsCallback:
+      oneOf:
+      - $ref: '#/components/schemas/lgsCallbackBasic'
+      - $ref: '#/components/schemas/lgsCallbackClientIdSecret'
+      - $ref: '#/components/schemas/lgsCallbackOAuth2'
+    lgsTransactionRequestMilestoneSPN:
+      allOf:
+      - $ref: '#/components/schemas/lgsTransactionRequestMilestone'
+      - type: object
+        additionalProperties: true
+        properties:
+          additionalInformation:
+            type: string
+            maxLength: 250
+            pattern: ^.*$
+      oneOf:
+      - $ref: '#/components/schemas/lgsValuationInstructedNotification'
+      - $ref: '#/components/schemas/lgsInstructionPanelledNotification'
+      - $ref: '#/components/schemas/lgsValuationHeldNotification'
+      - $ref: '#/components/schemas/lgsContactTriedNotification'
+      - $ref: '#/components/schemas/lgsValuationCancelledNotification'
+      - $ref: '#/components/schemas/lgsValuationRejectedNotification'
+      - $ref: '#/components/schemas/lgsValuationBookedNotification'
+      - $ref: '#/components/schemas/lgsValuationCompleteNotification'
+      - $ref: '#/components/schemas/lgsDocumentAvailableNotification'
+    lgsValuationInstructedNotification:
+      $comment: LGS valuation instructed milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^1$
+        milestoneName:
+          type: string
+          pattern: ^Valuation Instructed$
+        surveyorBranchId:
+          $ref: '#/components/schemas/lgsUuid'
+    RegisterMilestoneCallbackResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - callbackId
+      properties:
+        callbackId:
+          $ref: '#/components/schemas/lgsUuid'
+    lgsValuationRejectedNotification:
+      $comment: LGS valuation rejected milestone notification object, indicating that the surveyor has rejected the valuation.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - surveyorBranchId
+      - reason
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^9$
+        milestoneName:
+          type: string
+          pattern: ^Valuation Rejected$
+        surveyorBranchId:
+          $ref: '#/components/schemas/lgsUuid'
+        reason:
+          $ref: '#/components/schemas/changeReason'
+    changeReason:
+      type: string
+      maxLength: 100
+      pattern: ^.*$
+    lgsTransactionRequestType:
+      $comment: A definition with which to reference a enumeration of different transaction request types. When adding a new request to the LGS, this definition should be extended with the new type.
+      type: string
+      description: The type of transaction request.
+      pattern: ^(Order|Inspection|PanelConveyancing|InspectionRequest)$
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    lgsTransactionRequestMilestone:
+      allOf:
+      - $ref: '#/components/schemas/lgsMilestone'
+      - type: object
+        additionalProperties: true
+        required:
+        - transactionRequestMilestoneId
+        - transactionRequestId
+        - transactionRequestType
+        properties:
+          transactionRequestMilestoneId:
+            $ref: '#/components/schemas/lgsUuid'
+          transactionRequestId:
+            $ref: '#/components/schemas/lgsUuid'
+          transactionRequestType:
+            $ref: '#/components/schemas/lgsTransactionRequestType'
+    lgsInstructionPanelledNotification:
+      $comment: LGS instruction panelled notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - surveyorBranchId
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^2$
+        milestoneName:
+          type: string
+          pattern: ^Instruction Panelled$
+        surveyorBranchId:
+          $ref: '#/components/schemas/lgsUuid'
+        reason:
+          $ref: '#/components/schemas/changeReason'
+    lgsContactTriedNotification:
+      $comment: LGS contact tried milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - reason
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^4$
+        milestoneName:
+          type: string
+          pattern: ^Contact Tried$
+        reason:
+          $ref: '#/components/schemas/changeReason'
+    lgsValuationHeldNotification:
+      $comment: LGS valuation held milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - reason
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^3$
+        milestoneName:
+          type: string
+          pattern: ^Valuation Held$
+        reason:
+          $ref: '#/components/schemas/changeReason'
+    lgsUrl:
+      type: string
+      maxLength: 2048
+      pattern: ^([hH][tT][tT][pP][sS]:\/\/)([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})([\/\w \.-]*)*\/?
+    lgsMilestone:
+      type: object
+      additionalProperties: true
+      required:
+      - transactionId
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+        datePredicted:
+          type: string
+          format: date-time
+          description: Date that this milestone is predicted to be achieved, this is not the SLA date associated with a particular application.
+        dateAchieved:
+          type: string
+          format: date-time
+          description: Date that this milestone was achieved.
+    lgsValuationCompleteNotification:
+      $comment: LGS valuation complete milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^7$
+        milestoneName:
+          type: string
+          pattern: ^Valuation Complete$
+    lgsTime:
+      type: string
+      pattern: ^(?:[0-1][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9])(?:\.[0-9]{1,7})?(?:[Zz]|[\+\-](?:[0-1][0-9]|2[0-3]):[0-5][0-9])$
+      description: 'example: 08:30:06Z; 08:30:06-08:00'
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    lgsValuationBookedNotification:
+      $comment: LGS valuation booked milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - appointmentDate
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^6$
+        milestoneName:
+          type: string
+          pattern: ^Valuation Booked$
+        appointmentDate:
+          type: string
+          format: date
+          description: Date ISO8601 format, YYYY-MM-DD
+        timeWindowStart:
+          $ref: '#/components/schemas/lgsTime'
+        timeWindowEnd:
+          $ref: '#/components/schemas/lgsTime'
+    lgsDocumentAvailableNotification:
+      $comment: LGS document available milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - documentId
+      - tags
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^8$
+        milestoneName:
+          type: string
+          pattern: ^Document Available$
+        documentId:
+          $ref: '#/components/schemas/lgsUuid'
+        tags:
+          type: array
+          maxItems: 250
+          items:
+            type: string
+            minLength: 3
+            maxLength: 250
+            pattern: ^[^\d\W]+$
+    lgsCallbackClientIdSecret:
+      description: 'Configure client secret basic as the callback authentication mechanism. In the callback request, the client_id and client_secret will be provided in the Authorization header as a basic auth Base64 encoded string conforming to the following format {client_id}:{client_secret}. E.g Authorization: Basic [Base64({client_id}:{client_secret})]. Note: The client_id cannot contain a colon character.'
+      type: object
+      required:
+      - type
+      - client_id
+      - client_secret
+      - url
+      properties:
+        type:
+          type: string
+          enum:
+          - clientIdSecret
+        client_id:
+          description: The client id to include in the authorization header.
+          type: string
+          maxLength: 256
+          pattern: ^[^:]*$
+        client_secret:
+          description: The client secret to include in the authorization header.
+          type: string
+          minLength: 14
+          maxLength: 256
+        url:
+          description: The url to send callback requests to.
+          $ref: '#/components/schemas/lgsUrl'
+    lgsValuationCancelledNotification:
+      $comment: LGS valuation cancelled milestone notification object.
+      type: object
+      required:
+      - milestoneId
+      - milestoneName
+      - reason
+      properties:
+        milestoneId:
+          type: string
+          pattern: ^5$
+        milestoneName:
+          type: string
+          pattern: ^Valuation Cancelled$
+        reason:
+          $ref: '#/components/schemas/changeReason'
+  responses:
+    409Conflict:
+      description: Conflict
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '409'
+                code: '40900'
+                title: Entity in wrong state
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
+    413PayloadTooLarge:
+      description: Payload Too Large
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+    403Forbidden:
+      description: Forbidden
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '403'
+                code: '40300'
+                title: Invalid Entitlement
+            No Entitlement:
+              value:
+                status: '403'
+                code: '40301'
+                title: No Entitlement
+            No permission to entity:
+              value:
+                status: '403'
+                code: '40302'
+                title: No permission to entity
+            User not registered:
+              value:
+                status: '403'
+                code: '40303'
+                title: User not registered
+            Usage limit reached:
+              value:
+                status: '403'
+                code: '40304'
+                title: Usage limit reached
+            Email account not verified:
+              value:
+                status: '403'
+                code: '40305'
+                title: Email account not verified
+            Token expiry too long:
+              value:
+                status: '403'
+                code: '40306'
+                title: Token expiry too long
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+  headers:
+    lgsTraceResponse:
+      description: Trace context providing an unique identifier for an individual requests
+      schema:
+        type: string
+        minLength: 39
+        maxLength: 39
+        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
+      examples:
+        Example traceresponse:
+          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: General
+  tags:
+  - milestones

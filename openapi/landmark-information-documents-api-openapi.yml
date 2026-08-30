@@ -1,0 +1,604 @@
+openapi: 3.2.0
+info:
+  title: Landmark Information Documents API
+  contact:
+    name: API Support
+    email: support@ochresoft.com
+    x-phone-number: +44 (0)3300 366 700
+  version: '1.0'
+  description: 'Operations tagged Documents across 2 of this provider''s published API definitions: landmark-information-document-vault-api-openapi.yml, landmark-information-intelliworks-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.landmarkcloudservices.com/
+  description: Production API
+- url: https://uat-api.landmarkcloudservices.com/
+  description: UAT API
+security:
+- bearerAuth: []
+tags:
+- name: Documents
+  description: Add and remove the files held in a vault.
+paths:
+  /{documentVaultId}/documents:
+    post:
+      tags:
+      - Documents
+      summary: Add Document
+      description: Adds one document to the vault. Supported file types are PDF, DOC, DOCX, JPEG and PNG; maximum 25 MB per file and 60 documents per vault. Returns a document `id`.
+      operationId: document-vault-documents-create
+      x-external-entitlement: external:document-vault:documents:create
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              description: Each property will be a subpart of the multipart body.
+              type: object
+              additionalProperties: false
+              required:
+              - file
+              properties:
+                file:
+                  description: File content transferred as binary. Content-Type and filename should be sent within this sub-part of the multi-part body.
+                  type: string
+                  format: binary
+                  maxLength: 26214400
+                filename:
+                  description: This property should be sent as part of the file sub-part of the multi-part body; this is present only to show the filename restrictions
+                  type: string
+                  minLength: 5
+                  maxLength: 250
+                  pattern: ^(?!.*\.\..*)[^\:\/\*""\<\>\|]+?\.[a-zA-Z\d]{1,10}$
+            encoding:
+              file:
+                contentType: application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addDocumentToDocumentVaultResponse'
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '413':
+          $ref: '#/components/responses/413PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+    servers:
+    - url: https://api.landmarkcloudservices.com/
+      description: Production API
+    - url: https://uat-api.landmarkcloudservices.com/
+      description: UAT API
+  /{documentVaultId}/documents/{documentId}:
+    delete:
+      tags:
+      - Documents
+      summary: Delete Document
+      description: Permanently removes a document from the vault.
+      operationId: document-vault-documents-delete
+      x-external-entitlement: external:document-vault:documents:delete
+      parameters:
+      - name: Account-Id
+        in: header
+        required: true
+        schema:
+          $ref: '#/components/schemas/accountId'
+      - name: documentVaultId
+        in: path
+        description: The Document Vault ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      - name: documentId
+        in: path
+        description: The Document ID
+        required: true
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      responses:
+        '200':
+          description: 200 OK
+          headers:
+            lgsTraceResponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+    servers:
+    - url: https://api.landmarkcloudservices.com/
+      description: Production API
+    - url: https://uat-api.landmarkcloudservices.com/
+      description: UAT API
+  /documents:
+    get:
+      summary: List case documents
+      description: 'Returns the list of completed documents held against a case in Intelliworks for the specified branch.
+
+        Supply at least one of `caseId` (Intelliworks case reference, e.g. `EXP-000762`) and/or `externalCaseId` (e.g. `AAR801/1`).
+
+        Both are forwarded to Intelliworks when provided.
+
+        Each document in the response can be downloaded using `GET /documents/{id}/download`.
+
+        '
+      operationId: getCompletedDocuments
+      tags:
+      - Documents
+      parameters:
+      - name: branchId
+        in: query
+        required: true
+        description: Branch identifier (UUID) used to resolve Intelliworks company and site identifiers.
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      - name: caseId
+        in: query
+        required: false
+        description: Intelliworks case reference (e.g. `EXP-000762`).
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          maxLength: 50
+      - name: externalCaseId
+        in: query
+        required: false
+        description: External case reference (e.g. `AAR801/1`).
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          maxLength: 50
+      - name: workflowId
+        in: query
+        required: false
+        description: Intelliworks workflow identifier.
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+      responses:
+        '200':
+          description: Completed documents retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/completedDocumentsResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound_2'
+        '406':
+          $ref: '#/components/responses/500InternalServerError'
+        '415':
+          $ref: '#/components/responses/500InternalServerError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+    servers:
+    - url: https://api.landmarkcloudservices.com/
+      description: Production API
+    - url: https://uat-api.landmarkcloudservices.com/
+      description: UAT API
+  /documents/{id}/download:
+    get:
+      summary: Download document
+      description: Downloads a document by document ID (as returned in the List case documents response). Auth0Id is extracted from the authenticated user context and forwarded to Intelliworks Web API.
+      operationId: downloadDocument
+      tags:
+      - Documents
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Document ID.
+        schema:
+          $ref: '#/components/schemas/lgsUuid'
+      responses:
+        '200':
+          description: Document downloaded successfully
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request. Document ID is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User does not have access to the requested document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    servers:
+    - url: https://api.landmarkcloudservices.com/
+      description: Production API
+    - url: https://uat-api.landmarkcloudservices.com/
+      description: UAT API
+components:
+  responses:
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40400'
+                title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    413PayloadTooLarge:
+      description: Payload Too Large
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    403Forbidden:
+      description: Forbidden
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '403'
+                code: '40300'
+                title: Invalid Entitlement
+            No Entitlement:
+              value:
+                status: '403'
+                code: '40301'
+                title: No Entitlement
+            No permission to entity:
+              value:
+                status: '403'
+                code: '40302'
+                title: No permission to entity
+            User not registered:
+              value:
+                status: '403'
+                code: '40303'
+                title: User not registered
+            Usage limit reached:
+              value:
+                status: '403'
+                code: '40304'
+                title: Usage limit reached
+            Email account not verified:
+              value:
+                status: '403'
+                code: '40305'
+                title: Email account not verified
+            Token expiry too long:
+              value:
+                status: '403'
+                code: '40306'
+                title: Token expiry too long
+    404NotFound_2:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+  schemas:
+    accountId:
+      description: Your Landmark account ID - this will be provided to you during onboarding
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    addDocumentToDocumentVaultResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    Error:
+      required:
+      - code
+      - message
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          pattern: ^.*$
+    completedDocumentItem:
+      type: object
+      additionalProperties: false
+      title: Completed document
+      description: A single completed document held against a case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Document ID. Use this value with `GET /documents/{id}/download` to download the document.
+        description:
+          type: string
+          maxLength: 255
+          description: Document description.
+        fileName:
+          type: string
+          maxLength: 255
+          description: Resolved document file name.
+        extension:
+          type: string
+          maxLength: 25
+          description: File extension.
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Document size in bytes.
+        externalType:
+          type: string
+          maxLength: 50
+          description: Document classification (e.g. CaseDocument, CaseImport).
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp (UTC).
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last updated timestamp (UTC).
+    completedDocumentsResponse:
+      type: object
+      additionalProperties: false
+      title: Completed documents
+      description: Read-only list of completed documents returned by Get Completed Documents.
+      properties:
+        caseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference.
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: External case reference from the originating system.
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 99999
+          description: Intelliworks workflow identifier.
+        documents:
+          type: array
+          description: Completed documents held against the case.
+          items:
+            $ref: '#/components/schemas/completedDocumentItem'
+  headers:
+    lgsTraceResponse:
+      description: Trace context providing an unique identifier for an individual requests
+      schema:
+        type: string
+        minLength: 39
+        maxLength: 39
+        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
+      examples:
+        Example traceresponse:
+          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- landmark-information-document-vault-api-openapi.yml
+- landmark-information-intelliworks-api-openapi.yml
+x-tagGroups:
+- name: Conveyancing API
+  tags:
+  - Quotes
+  - Cases
+  - Product Schemas

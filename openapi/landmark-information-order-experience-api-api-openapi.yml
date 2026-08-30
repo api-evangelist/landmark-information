@@ -1,0 +1,908 @@
+openapi: 3.2.0
+info:
+  version: 1.3.1
+  title: Order Experience API
+  description: "An experience API to create and receive order results.\n\n## Versions\n- **1.3.1** (2026-04-15)\n  - Added `Identity Verification Check` product.\n- **1.3.0** (2026-02-03)\n  - Added `Source of Funds Check` product.\n- **1.2.4** (2025-07-14)\n  - Added `drivingLicenceNumber` option for AML - Individual.\n- **1.2.3** (2024-06-14)\n  - Added `title` property to the Scottish Title Check (Results).\n- **1.2.2** (2024-05-17)\n  - Added `useExactNameMatching` option to Landmark Ownership Check.\n- **1.2.1** (2024-04-23)\n  - Added additional check information to International AML with Facial Recognition product results `pepsAndSanctions` sections.\n- **1.2.0** (2024-04-05)\n  - `transactionAddress` is no longer required for all products.\n  - Added `oldestAccount` and `dataSources` to the `addressAndMortality` section for AML Products.\n  - Added additional ID Document details to the results schema for AML with Facial Recognition products.\n  - Updated `dateOfBirth` description to clarify that the date must not be within the last 16 years to Order AML Products.\n  - Added `personReference` to the `Clients` array in the Ownership Check results.\n- **1.1.1** (2024-03-04)\n  - Updated `idVerification` and `supportingDocuments` sections within AML results schema to address inconsistencies with the data returned by the service.\n- **1.1.0** (2024-02-16)\n  - Added `overallStatus` to AML - Individual, AML UK with Facial Recognition and International AML with Facial Recognition product results.\n  - Added additional check information to AML `pepsAndSanctions` and `addressAndMortality` sections.\n  - Added `filename` and `createdDate` properties to `documents` on retrieved orders.\n- **1.0.0** (2024-01-29)\n  - Added Persons with Significant Control Product for Company Information. \n- **0.9.2** (2024-01-02)\n  - Added `fullName` property to AML - Individual, AML UK with Facial Recognition and International AML with Facial Recognition products' responses.\n  - Added `dateOfBirth` property to person objects.\n  - Added `Cancelled` value to `orderStatus` enum.\n- **0.9.1** (2023-11-17)\n  - Removed `enableOngoingMonitoring` property from AML - Individual, AML UK with Facial Recognition and International AML with Facial Recognition products. This will now be enabled for all checks automatically.\n  - Updated AML UK with Facial Recognition product to require either a `telephoneNumber` or `mobileTelephoneNumber` to be supplied for the person.\n  - Updated AML UK with Facial Recognition product to no longer require `email` to be supplied for the person.\n- **0.9.0** (2023-11-09)\n  - Added 'Add Override AML Result Section' endpoint.\n  - Added `companyName` and `companyRegistrationNumber` to the `additionalProprietors` property in the Ownership Check Results.\n- **0.8.0** (2023-11-01)\n  - First issued.\n"
+servers:
+- url: https://api.landmarkcloudservices.com/connect
+  description: Production environment
+- url: https://uat-api.landmarkcloudservices.com/connect
+  description: Test environment
+security:
+- bearerAuth: []
+tags:
+- name: Order Experience API
+  description: Operations to create and receive order results.
+paths:
+  /orders:
+    post:
+      tags:
+      - Order Experience API
+      summary: Create Orders
+      description: Creates orders associated with a transaction for the given products.
+      operationId: order-experience-create-order
+      x-external-entitlement: external:order-experience:order:create
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOrderRequest'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            traceresponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createOrderResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+      callbacks:
+        orderStatus:
+          '{$request.body#/callback/url}':
+            post:
+              summary: Order Status
+              description: A callback is triggered every time an Order staus is updated.
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/orderStatusResponse'
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+  /orders/{orderId}:
+    get:
+      tags:
+      - Order Experience API
+      summary: Get Order
+      description: Retrieves an order with the given orderId.
+      operationId: order-experience-get-order
+      x-external-entitlement: external:order-experience:order:read
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/orderId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            traceresponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getOrderResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /orders/{orderId}/status:
+    get:
+      tags:
+      - Order Experience API
+      summary: Get Order Status
+      description: Retrieves the order status.
+      operationId: order-experience-get-order-status
+      x-external-entitlement: external:order-experience:order:status:read
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/orderId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            traceresponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orderStatusResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /orders/{orderId}/documents/{documentId}:
+    get:
+      tags:
+      - Order Experience API
+      summary: Download Document
+      description: Downloads a results document for an order.
+      operationId: order-experience-download-order-documents
+      x-external-entitlement: external:order-experience:order:documents:download
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/orderId'
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/documentId'
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                maxLength: 1048576
+                format: binary
+          headers:
+            Content-Disposition:
+              description: Specifies that the response is an attachment, and includes the filename for the document.
+              schema:
+                type: string
+                maxLength: 1000
+                example: attachment; filename="document.pdf"
+            traceresponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '410':
+          $ref: '#/components/responses/410GoneError'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+  /orders/{orderId}/results/override-aml-section:
+    put:
+      tags:
+      - Order Experience API
+      summary: Override AML Result Section
+      description: Overrides a result section of an AML order from a 'Refer' to a 'Pass'.
+      operationId: order-experience-override-order-result-aml-section
+      x-external-entitlement: external:order-experience:order:results:override-aml-section
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/orderId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/overrideAmlResultSectionRequest'
+      responses:
+        '204':
+          description: No Content
+          headers:
+            traceresponse:
+              $ref: '#/components/headers/lgsTraceResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+components:
+  responses:
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    410GoneError:
+      description: Gone Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Gone Error:
+              value:
+                status: '410'
+                code: '41000'
+                title: Gone Error
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+            examples:
+              Invalid content type supplied:
+                value: null
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+              Validation error:
+                value: null
+                status: '400'
+                code: '40001'
+                title: Validation error
+              Invalid traceparent http header:
+                value: null
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+              No matching data found:
+                value: null
+                status: '400'
+                code: '40003'
+                title: No matching data found
+              Invalid header:
+                value: null
+                status: '400'
+                code: '40004'
+                title: Invalid header
+              Third party error:
+                value: null
+                status: '400'
+                code: '40005'
+                title: Third party error
+    403Forbidden:
+      description: Forbidden
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '403'
+                code: '40300'
+                title: Invalid Entitlement
+            No Entitlement:
+              value:
+                status: '403'
+                code: '40301'
+                title: No Entitlement
+            No permission to entity:
+              value:
+                status: '403'
+                code: '40302'
+                title: No permission to entity
+            User not registered:
+              value:
+                status: '403'
+                code: '40303'
+                title: User not registered
+            Usage limit reached:
+              value:
+                status: '403'
+                code: '40304'
+                title: Usage limit reached
+            Email account not verified:
+              value:
+                status: '403'
+                code: '40305'
+                title: Email account not verified
+            Token expiry too long:
+              value:
+                status: '403'
+                code: '40306'
+                title: Token expiry too long
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+  schemas:
+    lgsCallbackBasic:
+      type: object
+      additionalProperties: false
+      required:
+      - url
+      properties:
+        headers:
+          description: The headers to be included within the callback request.
+          type: array
+          maxItems: 20
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - key
+            - value
+            properties:
+              key:
+                description: The header name.
+                type: string
+                maxLength: 200
+              value:
+                description: The header value.
+                type: string
+                maxLength: 8192
+        url:
+          description: The url to receive callbacks.
+          type: string
+          maxLength: 2048
+          pattern: ^([hH][tT][tT][pP][sS]:\/\/)([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})([\/\w \.-]*)*\/?
+    orderReference:
+      description: Your reference that uniquely identifies the product order.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    orderDocuments:
+      type: object
+      additionalProperties: false
+      required:
+      - documentId
+      - mimeType
+      - documentType
+      - filename
+      - createdDate
+      properties:
+        documentId:
+          $ref: '#/components/schemas/documentId'
+        mimeType:
+          description: The media type (also known as a Multipurpose Internet Mail Extensions or MIME type) indicating the format of the document. (eg application/pdf)
+          type: string
+          maxLength: 127
+          pattern: ^[\w!#$&\-^.+]+\/[\w!#$&\-^.+]+$
+        documentType:
+          description: Landmark document type indicating the nature and category of the document content (eg AMLReport).
+          type: string
+          maxLength: 100
+        filename:
+          description: Name of the file.
+          type: string
+          minLength: 3
+          maxLength: 250
+          pattern: ^(?!.*\.\..*)[^\:/\*"\<\>\|]+?\.[a-zA-Z\d]{1,10}$
+        createdDate:
+          description: The date the file was created.
+          type: string
+          format: date-time
+    transactionId:
+      description: The unique Landmark ID for the transaction. This ID can be used to associate multiple orders to a single transaction.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    lgsPersonWithRoles:
+      type: object
+      additionalProperties: false
+      required:
+      - reference
+      - firstName
+      - lastName
+      - roles
+      properties:
+        reference:
+          type: string
+          description: Your unique reference for the person.
+          minLength: 1
+          maxLength: 100
+        title:
+          type: string
+          maxLength: 20
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+        firstName:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        middleName:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        lastName:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        email:
+          description: Email format based on https://datatracker.ietf.org/doc/html/rfc3696#section-3
+          type: string
+          format: email
+          maxLength: 320
+        telephoneNumber:
+          description: Limits set inline with https://en.wikipedia.org/wiki/E.164
+          type: string
+          minLength: 8
+          maxLength: 15
+        mobileTelephoneNumber:
+          description: Limits set inline with https://en.wikipedia.org/wiki/E.164, ideally this should be used when it is known that the number relates to a mobile number or when there is already a value in the telephoneNumber
+          type: string
+          minLength: 8
+          maxLength: 15
+        dateOfBirth:
+          type: string
+          format: date
+          description: Date ISO8601 format, YYYY-MM-DD
+        address:
+          allOf:
+          - description: Main residential address for the person
+          - $ref: '#/components/schemas/lgsAddressPAF'
+        roles:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            description: The role of the person in this transaction request. Primary role used to identify the main applicant, vendor, buyer etc.
+            enum:
+            - PrimaryContact
+            - Applicant
+            - Occupier
+            - Vendor
+            - Buyer
+            - Creator
+            - Requestor
+            - Recipient
+            - Surveyor
+            - EstateAgent
+            - KeyHolder
+            - MortgageBroker
+    orderStatus:
+      description: The status of the order
+      type: string
+      enum:
+      - Processing
+      - Completed
+      - Errored
+      - Cancelled
+    accountId:
+      description: Your Landmark account ID - this will be provided to you during onboarding.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    orderStatusResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        reference:
+          $ref: '#/components/schemas/orderReference'
+        status:
+          $ref: '#/components/schemas/orderStatus'
+        statusDescription:
+          type: string
+          maxLength: 1000
+          description: Provides further detail regarding the order status.
+      example:
+        orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
+        reference: 513ba615-1e78-4751-968b-2402a49e5594
+        status: Completed
+        statusDescription: AML order is Completed.
+    createOrderRequest:
+      type: object
+      required:
+      - reference
+      - accountId
+      - products
+      additionalProperties: false
+      properties:
+        reference:
+          type: string
+          maxLength: 100
+          description: Your reference to identify the transaction.
+        accountId:
+          $ref: '#/components/schemas/accountId'
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        transactionAddress:
+          description: The property address for the transaction related to the products being ordered.
+          allOf:
+          - $ref: '#/components/schemas/lgsAddressPAF'
+        callback:
+          description: Callback uri that should receive status updates. Each product will receieve a status update.
+          allOf:
+          - $ref: '#/components/schemas/lgsCallbackBasic'
+        persons:
+          description: "The details of the people involved in your transaction - some Products will require these for processing (e.g. AML searches). \n\nYou must set a unique reference for each of these people for use in ordering products. \n"
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/lgsPersonWithRoles'
+        products:
+          description: "An array of the products that you require. For each of these, an order will be created in the Landmark system and will begin processing. \nYou must provide a reference GUID for each product which we will use in the response and callbacks, if you are using them, to help you identify the Order. \n\nSee the [Product Request Schemas](#tag/Product-Request-Schemas) for details on how to order each one. \n"
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/product'
+    productId:
+      description: Unique Landmark ID for the product.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    lgsAddressPAF:
+      type: object
+      additionalProperties: false
+      properties:
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        organisationName:
+          type: string
+          example: JW Simpsons Ltd
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        subBuildingName:
+          type: string
+          example: The Old Mill
+          maxLength: 30
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        buildingName:
+          type: string
+          example: The Annexe
+          maxLength: 50
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        buildingNumber:
+          type: string
+          example: 7
+          maxLength: 4
+          pattern: ^[A-Za-z0-9-/\s]*$
+        poBoxNumber:
+          type: string
+          example: 5422
+          maxLength: 14
+          pattern: ^[A-Za-z0-9.#\s]*$
+        dependentThoroughfare:
+          type: string
+          example: Richmond Terrace
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        thoroughfare:
+          type: string
+          example: Main Street
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        doubleDependentLocality:
+          type: string
+          example: Hook
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        dependentLocality:
+          type: string
+          example: Warsash
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        postTown:
+          type: string
+          example: Southampton
+          maxLength: 30
+          pattern: ^[A-Za-zÀ-ž\u2010-\u201F-.'&!\s]*$
+        postcode:
+          type: string
+          example: SO99 9ZZ
+          maxLength: 10
+          pattern: ^[A-Za-z0-9\s]*$
+    transactionReference:
+      type: string
+      maxLength: 100
+      description: Your reference to identify the transaction.
+    documentId:
+      description: Unique Landmark ID for the document.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    getOrderResponse:
+      title: Order Response
+      type: object
+      additionalProperties: false
+      required:
+      - transactionId
+      - orderId
+      - reference
+      - status
+      - statusDescription
+      - product
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        reference:
+          $ref: '#/components/schemas/orderReference'
+        status:
+          $ref: '#/components/schemas/orderStatus'
+        statusDescription:
+          type: string
+          maxLength: 1000
+          description: Provides more context to the status.
+        product:
+          description: Details relating to the ordered product.
+          type: object
+          additionalProperties: false
+          required:
+          - productId
+          properties:
+            productId:
+              $ref: '#/components/schemas/productId'
+        results:
+          type: object
+          description: JSON results specific to each product. See [Product Results Schemas](#tag/Product-Results-Schemas) for further details.
+        documents:
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/orderDocuments'
+      example:
+        transactionId: 458f6a73-607b-4a06-bc23-b3553e7233ec
+        orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
+        reference: 513ba615-1e78-4751-968b-2402a49e5594
+        status: Completed
+        statusDescription: AML order is Completed.
+        product:
+          productId: aefdf370-caef-479b-94df-5a9ba28cc7cc
+        results: null
+        documents:
+        - documentId: 300041f8-91c8-4e95-b4bc-9e58ca0fc9e1
+          mimeType: application/pdf
+          documentType: AMLReport
+          filename: ResultsDocument.pdf
+          createdDate: '2020-07-02T12:00:00Z'
+    lgsUprn:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775000
+    createOrderResponse:
+      title: Create Order Response
+      type: object
+      required:
+      - transactionId
+      - orders
+      additionalProperties: false
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        reference:
+          $ref: '#/components/schemas/transactionReference'
+        orders:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              orderId:
+                $ref: '#/components/schemas/orderId'
+              productId:
+                $ref: '#/components/schemas/productId'
+              reference:
+                $ref: '#/components/schemas/orderReference'
+      example:
+        transactionId: 458f6a73-607b-4a06-bc23-b3553e7233ec
+        reference: 25GWT/JS/45.5
+        orders:
+        - orderId: 33220999-6922-4f87-a2ee-045fca06eba2
+          productId: c61c761a-baff-4b5a-a437-7c1247019436
+          reference: 742edeff-c267-490d-b5b0-3997ce2e6170
+        - orderId: 5e55b92c-2e45-4b5c-a354-cd272e6adb67
+          productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
+          reference: 825a6106-e8ac-4d93-ba87-97357fc619a7
+        - orderId: a70da744-50f0-4952-b3a2-73e64428e969
+          productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
+          reference: 6363e54b-e83a-45b4-96e0-5528cc36e27f
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    product:
+      type: object
+      required:
+      - productId
+      - reference
+      additionalProperties: false
+      properties:
+        productId:
+          description: Unique Landmark ID for the product.
+          allOf:
+          - $ref: '#/components/schemas/lgsUuid'
+        reference:
+          description: Your reference that uniquely identifies the product order.
+          allOf:
+          - $ref: '#/components/schemas/lgsUuid'
+        productOptions:
+          type: object
+          description: An object to provide data and options specific to the product. See [Product Request Schemas](#tag/Product-Request-Schemas) for further details on the product options.
+    orderId:
+      description: Unique Landmark ID for the order.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    overrideAmlResultSectionRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - section
+      - status
+      - comment
+      - actionedBy
+      properties:
+        section:
+          description: 'The AML result section to override. The result section must be valid for the product associated to the order.
+
+
+            Valid result section names per AML product:
+
+
+            AML - Individual: "AddressAndMortality" or "PepsAndSanctions"
+
+
+            AML UK with Facial Recognition: "LivenessVerification", "IdVerification", "AddressAndMortality" or "PepsAndSanctions"
+
+
+            International AML with Facial Recognition: "LivenessVerification", "IdVerification" or "PepsAndSanctions"
+
+            '
+          type: string
+          enum:
+          - LivenessVerification
+          - IdVerification
+          - AddressAndMortality
+          - PepsAndSanctions
+        status:
+          description: The new status for the AML result section.
+          type: string
+          enum:
+          - Pass
+        comment:
+          description: A comment to explain why the AML result section is being overridden.
+          type: string
+          minLength: 1
+          maxLength: 300
+          pattern: ^(?=.*\S).+$
+        actionedBy:
+          description: The name or email address of the individual who is overriding the AML result section.
+          type: string
+          minLength: 2
+          maxLength: 150
+          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[0-9A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' @!#$%&*+/=?^_`{|}~-]*$
+      example:
+        section: AddressAndMortality
+        status: Pass
+        comment: Approving manually as customer has provided me with a utility bill, confirming their address.
+        actionedBy: john.doe@company.co.uk
+  headers:
+    lgsTraceResponse:
+      description: Trace context providing an unique identifier for an individual requests
+      schema:
+        type: string
+        minLength: 39
+        maxLength: 39
+        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
+      examples:
+        Example traceresponse:
+          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
