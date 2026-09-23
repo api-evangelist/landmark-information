@@ -1,0 +1,44 @@
+{
+  "provider": "landmark-information",
+  "sources": [
+    "_original/landmark-information-conveyancing-experience-api-openapi.yml",
+    "_original/landmark-information-document-vault-api-openapi.yml",
+    "_original/landmark-information-intelliworks-api-openapi.yml",
+    "_original/landmark-information-milestone-notification-service-api-openapi.yml",
+    "_original/landmark-information-order-experience-api-openapi.yml"
+  ],
+  "outputs": [
+    "landmark-information-cases-api-openapi.yml",
+    "landmark-information-quotes-api-openapi.yml",
+    "landmark-information-activities-api-openapi.yml",
+    "landmark-information-document-vaults-api-openapi.yml",
+    "landmark-information-documents-api-openapi.yml",
+    "landmark-information-transaction-requests-api-openapi.yml",
+    "landmark-information-milestones-api-openapi.yml",
+    "landmark-information-order-experience-api-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (5 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "landmark-information-conveyancing-experience-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "landmark-information-document-vault-api-openapi.yml: upgraded openapi 3.0.4 -> OpenAPI 3.2.0",
+    "landmark-information-intelliworks-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "landmark-information-milestone-notification-service-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "landmark-information-order-experience-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0; renamed 1 component key(s) illegal in 3.x (e.g. $defs-lgsAddressPAF)",
+    "tag 'Cases' spans 2 source specs (landmark-information-conveyancing-experience-api-openapi.yml, landmark-information-intelliworks-api-openapi.yml): per-path servers applied",
+    "tag 'Documents' spans 2 source specs (landmark-information-document-vault-api-openapi.yml, landmark-information-intelliworks-api-openapi.yml): per-path servers applied",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "landmark-information-activities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-cases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-document-vaults-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-documents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-milestones-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-order-experience-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-quotes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "landmark-information-transaction-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

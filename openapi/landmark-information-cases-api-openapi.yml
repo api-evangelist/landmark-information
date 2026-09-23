@@ -14,12 +14,7 @@ servers:
   description: UAT API
 tags:
 - name: Cases
-  description: 'Once you instruct a quote it becomes a case. If you''re the conveyancer, these are the cases assigned to you: you work them through to completion and post updates as you go. If you''re the introducer, this is how you follow the work you''ve referred and see how it''s progressing. Either way, you only see the cases your account is party to.
-
-
-    From here you can retrieve your cases, read the full detail of one, update its status and handler, work the task hierarchy, follow the activity history, and add notes. Document exchange is marked Preview.
-
-    '
+  description: Once you instruct a quote it becomes a case.
 paths:
   /cases:
     get:
@@ -27,9 +22,7 @@ paths:
       description: 'Retrieve your cases, most recently updated first. As a conveyancer these are the cases assigned to you; as an introducer these are the cases you''ve instructed.
 
 
-        Filter, sort, and page the results with the OData-style query parameters below.
-
-        '
+        Filter, sort, and page the results with the OData-style query parameters below.'
       operationId: conveyances-experience-case-list
       x-external-entitlement: external:conveyancesexperience:case:list
       tags:
@@ -112,9 +105,7 @@ paths:
   /cases/{caseId}:
     get:
       summary: Retrieve Case Details
-      description: 'Retrieve the full detail of one of your cases, including its current status, activities, and documents.
-
-        '
+      description: Retrieve the full detail of one of your cases, including its current status, activities, and documents.
       operationId: conveyances-experience-case-read
       x-external-entitlement: external:conveyancesexperience:case:read
       tags:
@@ -158,9 +149,7 @@ paths:
   /cases/{caseId}/accept:
     post:
       summary: Accept Case
-      description: 'Accept a case that has been instructed to you.
-
-        '
+      description: Accept a case that has been instructed to you.
       operationId: conveyances-experience-case-accept
       x-external-entitlement: external:conveyancesexperience:case:accept
       tags:
@@ -197,9 +186,7 @@ paths:
   /cases/{caseId}/reject:
     post:
       summary: Reject Case
-      description: 'Reject a case that has been instructed to you. A reason must be provided.
-
-        '
+      description: Reject a case that has been instructed to you. A reason must be provided.
       operationId: conveyances-experience-case-reject
       x-external-entitlement: external:conveyancesexperience:case:reject
       tags:
@@ -245,9 +232,7 @@ paths:
   /cases/{caseId}/status:
     post:
       summary: Change Case Status
-      description: 'Update the status of a case — place on hold, cancel, or resume from hold back to in progress. A reason must be provided for the change.
-
-        '
+      description: Update the status of a case — place on hold, cancel, or resume from hold back to in progress. A reason must be provided for the change.
       operationId: conveyances-experience-case-status-update
       x-external-entitlement: external:conveyancesexperience:case:status:update
       tags:
@@ -293,9 +278,7 @@ paths:
   /cases/{caseId}/handler:
     put:
       summary: Add Case Handler
-      description: 'Assign a specific conveyancer to a case, making the responsible contact visible to all parties and tracked in the case history.
-
-        '
+      description: Assign a specific conveyancer to a case, making the responsible contact visible to all parties and tracked in the case history.
       operationId: conveyances-experience-case-handler-add
       x-external-entitlement: external:conveyancesexperience:case:handler:add
       tags:
@@ -348,9 +331,7 @@ paths:
       description: 'Retrieve the activity history on a case — milestones, notes, task updates, and contact logs. This is how you follow a case''s progress.
 
 
-        Filter and page the results with the OData-style query parameters below.
-
-        '
+        Filter and page the results with the OData-style query parameters below.'
       operationId: conveyances-experience-case-activity-list
       x-external-entitlement: external:conveyancesexperience:case:activity:list
       tags:
@@ -428,9 +409,7 @@ paths:
         Tasks are organised as parents and children. Completing a parent completes all uncompleted children; completing the last uncompleted child completes the parent.
 
 
-        Each task has a `reference` that is consistent across cases where that task applies. Use `reference` when mapping events in your own platform; use `taskId` when completing a specific instance on a case.
-
-        '
+        Each task has a `reference` that is consistent across cases where that task applies. Use `reference` when mapping events in your own platform; use `taskId` when completing a specific instance on a case.'
       operationId: conveyances-experience-case-task-list
       x-external-entitlement: external:conveyancesexperience:case:task:list
       tags:
@@ -474,9 +453,7 @@ paths:
   /cases/{caseId}/tasks/{taskId}/complete:
     put:
       summary: Complete Case Task
-      description: 'Mark a task on a case as complete. Completing a parent completes all uncompleted children; completing the last uncompleted child completes the parent.
-
-        '
+      description: Mark a task on a case as complete. Completing a parent completes all uncompleted children; completing the last uncompleted child completes the parent.
       operationId: conveyances-experience-case-task-complete
       x-external-entitlement: external:conveyancesexperience:case:task:complete
       tags:
@@ -519,9 +496,7 @@ paths:
   /cases/{caseId}/notes:
     get:
       summary: List Case Notes
-      description: 'Retrieve all notes recorded on a case. Notes are visible to all parties on the case.
-
-        '
+      description: Retrieve all notes recorded on a case. Notes are visible to all parties on the case.
       operationId: conveyances-experience-case-note-list
       x-external-entitlement: external:conveyancesexperience:case:note:list
       tags:
@@ -559,9 +534,7 @@ paths:
       - BearerAuth: []
     post:
       summary: Add Note to Case
-      description: 'Add a note to a case. Notes are recorded in the case activity history and are visible to all parties on the case.
-
-        '
+      description: Add a note to a case. Notes are recorded in the case activity history and are visible to all parties on the case.
       operationId: conveyances-experience-case-note-create
       x-external-entitlement: external:conveyancesexperience:case:note:create
       tags:
@@ -617,9 +590,7 @@ paths:
       x-badges:
       - name: Preview
         color: '#6e7781'
-      description: 'Add a document to a case.
-
-        '
+      description: Add a document to a case.
       operationId: conveyances-experience-case-document-create
       x-external-entitlement: external:conveyancesexperience:case:document:create
       tags:
@@ -676,9 +647,7 @@ paths:
       x-badges:
       - name: Preview
         color: '#6e7781'
-      description: 'Download a document from a case.
-
-        '
+      description: Download a document from a case.
       operationId: conveyances-experience-case-document-read
       x-external-entitlement: external:conveyancesexperience:case:document:read
       tags:
@@ -873,9 +842,7 @@ paths:
       - Cases
       description: 'Create or update an unscheduled task on an existing case. At least one of `caseId` or `externalCaseId` must be supplied.
 
-        Only supported combinations of `processReference`, `taskReference`, and `taskType` may be used - see [Supported unscheduled task mappings](#supported-unscheduled-task-mappings).
-
-        '
+        Only supported combinations of `processReference`, `taskReference`, and `taskType` may be used - see Supported unscheduled task mappings.'
       requestBody:
         description: Request body containing task data to create or update
         required: true
@@ -926,9 +893,7 @@ paths:
       summary: Get milestone
       description: 'Returns the actual completion date of a milestone for a case. Supply at least one of `caseId` or `externalCaseId`.
 
-        Valid `milestoneId` values are listed in [Supported milestone IDs by workflow](#supported-milestone-ids).
-
-        '
+        Valid `milestoneId` values are listed in Supported milestone IDs by workflow.'
       operationId: getMilestone
       tags:
       - Cases
@@ -989,9 +954,7 @@ paths:
       - bearerAuth: []
     post:
       summary: Create or update milestone dates
-      description: 'Set or update milestone actual and/or forecast dates for a case. The request is accepted for asynchronous processing.
-
-        '
+      description: Set or update milestone actual and/or forecast dates for a case. The request is accepted for asynchronous processing.
       operationId: upsertMilestone
       tags:
       - Cases
@@ -1031,9 +994,7 @@ paths:
 
         `taskId` is optional; when omitted the document is stored against a new default task rather than an existing task.
 
-        Upload the file directly using `multipart/form-data`, or optionally use `application/json` with document metadata.
-
-        '
+        Upload the file directly using `multipart/form-data`, or optionally use `application/json` with document metadata.'
       operationId: uploadDocument
       tags:
       - Cases
@@ -1118,411 +1079,35 @@ paths:
     - url: https://uat-api.landmarkcloudservices.com/
       description: UAT API
 components:
-  examples:
-    CaseNoteListResponseExample:
-      summary: List Case Notes Response Example
-      description: Example response for retrieving notes on a case
-      value:
-        notes:
-        - noteId: '10001234'
-          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-          title: ID documents received
-          body: Client confirmed they have submitted ID documents.
-          createdDate: '2024-01-20T10:30:00Z'
-          modifiedDate: '2024-01-20T10:30:00Z'
-          supersedesNoteId: null
-        - noteId: '10001235'
-          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-          title: null
-          body: Chased the lender for the mortgage offer.
-          createdDate: '2024-01-21T09:05:00Z'
-          modifiedDate: '2024-01-21T11:20:00Z'
-          supersedesNoteId: null
-    CaseActivityListResponseExample:
-      summary: Case Activities Response Example
-      description: Example response for retrieving activities on a case
-      value:
-        activities:
-        - activityId: '10001234'
-          type: Note
-          message: Case status updated to In Progress
-          metadata: null
-          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-          createdDate: '2024-01-20T10:30:00Z'
-        - activityId: '10001235'
-          type: Note
-          message: Client confirmed they have submitted ID documents.
-          metadata: null
-          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-          createdDate: '2024-01-20T14:15:00Z'
-    CreateCaseNoteResponseExample:
-      summary: Add Note to Case Response Example
-      description: Example response when a note is added to a case
-      value:
-        title: ID documents received
-        body: Client confirmed they have submitted ID documents.
-        createdDate: '2024-01-20T10:30:00Z'
-    AddCaseHandlerContactIdExample:
-      summary: Add Case Handler by ContactId Example
-      description: Example request for adding a case handler by contactId
-      value:
-        contactId: d1e2f3a4-b5c6-7890-def1-234567890abc
-    CaseListResponseExample:
-      summary: Case List Response Example
-      description: Example response for retrieving a list of cases
-      value:
-        count: 3
-        cases:
-        - caseId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-          status: In Progress
-          propertyAddress:
-            thoroughfare: High Street
-            postTown: London
-            postcode: SW1A 1AA
-          product:
-            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            propertyLocation: EnglandWales
-          conveyancer:
-            conveyancerId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            name: Key Conveyancing LLP
-          caseHandler:
-            contactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-            name: Sarah Johnson
-          lastUpdatedDate: '2024-01-20T14:30:00Z'
-        - caseId: b2c3d4e5-f6a7-8901-bcde-f1234567890a
-          status: On hold
-          propertyAddress:
-            thoroughfare: Oak Avenue
-            postTown: Manchester
-            postcode: M1 1AA
-          product:
-            productId: e5e42a0e-6717-4b45-8cd5-0f3a3b79cf4d
-            propertyLocation: EnglandWales
-          conveyancer:
-            conveyancerId: b2c3d4e5-f6a7-8901-bcde-f1234567890a
-            name: O'Neill Patient Solicitors LLP
-          lastUpdatedDate: '2024-01-19T10:15:00Z'
-        - caseId: c3d4e5f6-a7b8-9012-cdef-1234567890ab
-          status: Pending Approval
-          propertyAddress:
-            thoroughfare: Highland Way
-            postTown: Edinburgh
-            postcode: EH1 1AA
-          product:
-            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            propertyLocation: Scotland
-          conveyancer:
-            conveyancerId: c3d4e5f6-a7b8-9012-cdef-1234567890ab
-            name: Scottish Property Lawyers
-          lastUpdatedDate: '2024-01-18T09:00:00Z'
-    UpdateCaseStatusExample:
-      summary: Update Case Status Example
-      description: Example request for updating a case status
-      value:
-        status: On Hold
-        reason: Awaiting additional documentation from the client
-    CaseTaskListResponseExample:
-      summary: Case Tasks Response Example
-      description: Example response for retrieving tasks on a case
-      value:
-        tasks:
-        - taskId: 1234567
-          name: Pre-completion
-          reference: PRECOMP
-          depth: 0
-          ordinal: 1
-          status: In Progress
-          isComplete: false
-          metadata: null
-          children:
-          - taskId: 1234568
-            name: Initial review
-            reference: INIT
-            depth: 1
-            ordinal: 1
-            status: Done
-            isComplete: true
-            completedDate: '2024-01-20T10:30:00Z'
-            metadata: null
-            children: []
-        - taskId: 1234569
-          name: Exchange of contracts
-          reference: EXCH
-          depth: 0
-          ordinal: 2
-          status: To Do
-          isComplete: false
-          metadata: null
-          children: []
-        count: 12
-    DocumentUploadExample:
-      summary: Document Upload Example
-      description: Example request for uploading a document to a case
-      value:
-        mimeType: application/pdf
-        documentType: Undefined
-        filename: search-report.pdf
-        file: <binary file content>
-    AddCaseHandlerEmailExample:
-      summary: Add Case Handler by Email Example
-      description: Example request for adding a case handler by email
-      value:
-        email: case.handler@example.com
-    RetrieveCaseResponseExample:
-      summary: Retrieve Case Response Example
-      description: Example response for retrieving a complete case
-      value:
-        caseId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        status: In Progress
-        additionalReferences:
-        - type: Introducer
-          reference: purchase - 123456
-        propertyAddress:
-          thoroughfare: High Street
-          postTown: London
-          postcode: SW1A 1AA
-          country: England
-        product:
-          productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-          propertyLocation: EnglandWales
-          productDetails:
-            property:
-              value: 350000
-              tenure: Freehold
-              exceedsHeightThreshold: false
-              isHMO: false
-              isNewBuild: false
-            referralFee: 150
-            hasOfferBeenAccepted: true
-            doesReservationFormApply: false
-            isRightToBuy: false
-            isAuctionPurchase: false
-            isPropertyBeingBoughtWithMortgage: true
-            lender: Halifax
-        persons:
-        - reference: a1b2c3d4-e5f6-7890-abcd-ef1234567890a
-          title: Mr
-          firstName: John
-          lastName: Smith
-          email: john.smith@example.com
-          telephoneNumber: '+447123456789'
-          correspondenceAddress:
-            thoroughfare: High Street
-            postTown: London
-            county: Greater London
-            postcode: SW1A 1AA
-            country: England
-          roles:
-          - Applicant
-        conveyancer:
-          conveyancerId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-          name: Key Conveyancing LLP
-          location: Northampton
-          logoUrl: https://cdn.optimus.com/logos/key-conveyancing.png
-        documents:
-        - documentId: d1e2f3a4-b5c6-7890-def1-234567890abc
-          mimeType: application/pdf
-          documentType: Undefined
-          filename: search-report.pdf
-          createdDate: '2024-01-20T10:30:00Z'
-        - documentId: e2f3a4b5-c6d7-8901-ef12-34567890abcd
-          mimeType: image/jpeg
-          documentType: Undefined
-          filename: property-photo.jpg
-          createdDate: '2024-01-21T14:15:00Z'
-        accounts:
-        - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
-          roles:
-          - Originator
-        - accountId: d7eaff45-0c1a-4809-9aa2-49e09fbdc9c9
-          roles:
-          - Introducer
-        contacts:
-        - contactId: 6a969045-973e-428d-b664-7e51a7d73bf0
-          roles:
-          - Requestor
-        - contactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-          name: Sarah Johnson
-          roles:
-          - CaseHandler
-    RejectCaseExample:
-      summary: Reject Case Example
-      description: Example request for rejecting a case
-      value:
-        reason: Unable to take on this case due to capacity constraints
-    CreateCaseNoteExample:
-      summary: Add Note to Case Example
-      description: Example request for adding a note to a case
-      value:
-        title: ID documents received
-        body: Client confirmed they have submitted ID documents.
   schemas:
-    RejectCaseRequest:
+    CaseConveyancer:
       type: object
       additionalProperties: false
       required:
-      - reason
-      description: Request to reject a case
+      - conveyancerId
+      - name
+      - location
+      description: The conveyancer assigned to this case
       properties:
-        reason:
-          type: string
-          maxLength: 1000
-          description: Reason for rejecting the case
-          example: Unable to take on this case due to capacity constraints
-    CaseNoteListResponse:
-      type: object
-      additionalProperties: false
-      description: Response containing a list of notes on a case
-      required:
-      - notes
-      properties:
-        notes:
-          type: array
-          description: Array of notes on the case
-          items:
-            $ref: '#/components/schemas/CaseNoteItem'
-    Products:
-      type: object
-      additionalProperties: false
-      required:
-      - productId
-      - propertyLocation
-      - productDetails
-      description: 'Product information for a quote or case. The `productDetails` object must match the schema
-
-        for the selected product type and property location. See [Product Schemas](#tag/Product-Schemas).
-
-        '
-      properties:
-        productId:
-          description: Product ID — see [Product Schemas](#tag/Product-Schemas) for valid values per product type
+        conveyancerId:
+          description: Conveyancer identifier
           allOf:
           - $ref: '#/components/schemas/LgsUuid'
-        propertyLocation:
-          type: string
-          enum:
-          - EnglandWales
-          - Scotland
-          description: Property location
-        productDetails:
-          type: object
-          description: 'Product-specific details. Must match the `productDetails` object structure
-
-            for the selected product type and property location as defined in [Product Schemas](#tag/Product-Schemas).
-
-            '
-    CaseActivityListResponse:
-      type: object
-      additionalProperties: false
-      description: Response containing a list of activities on a case
-      required:
-      - activities
-      properties:
-        activities:
-          type: array
-          description: Array of activities on the case
-          items:
-            $ref: '#/components/schemas/CaseActivityItem'
-    TelephoneNumber:
-      type: string
-      minLength: 8
-      maxLength: 20
-    CaseTaskListResponse:
-      type: object
-      additionalProperties: false
-      description: Task hierarchy for a case; not a bare array of tasks
-      required:
-      - tasks
-      - count
-      properties:
-        tasks:
-          type: array
-          description: Top-level tasks in the hierarchy
-          maxItems: 250
-          items:
-            $ref: '#/components/schemas/TaskItem'
-        count:
-          type: integer
-          description: Total number of tasks in the hierarchy
-    LgsUuid:
-      type: string
-      format: uuid
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-      minLength: 36
-      maxLength: 36
-    ProductSummary:
-      type: object
-      additionalProperties: false
-      required:
-      - productId
-      - propertyLocation
-      description: 'Product identifier summary (e.g. on quote create response, quote list, or case list).
-
-        '
-      properties:
-        productId:
-          type: string
-          format: uuid
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-          minLength: 36
-          maxLength: 36
-          description: Product ID (GUID) for the quoted product
           example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-        propertyLocation:
+        name:
           type: string
-          enum:
-          - EnglandWales
-          - Scotland
-          description: Property location
-          example: EnglandWales
-    Account:
-      type: object
-      additionalProperties: false
-      required:
-      - accountId
-      - roles
-      description: 'An account acting in one or more roles for a quote or case.
-
-        Both an originator and an introducer must be represented across the `accounts` array.
-
-        The same account may include both `Originator` and `Introducer` in its `roles`.
-
-        '
-      properties:
-        accountId:
-          description: Account identifier provided during API onboarding
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
-        roles:
-          type: array
-          minItems: 1
-          maxItems: 10
-          items:
-            type: string
-            enum:
-            - Originator
-            - Introducer
-          description: Role(s) this account plays in the quote or case
-          example:
-          - Originator
-          - Introducer
-    PropertyAddress:
-      description: Property address using PAF Plus format
-      allOf:
-      - $ref: '#/components/schemas/Address'
-      - type: object
-        required:
-        - thoroughfare
-        - postTown
-        - country
-        properties:
-          country:
-            type: string
-            description: Country - must be England, Wales, or Scotland (case insensitive)
-            maxLength: 200
-            pattern: ^([Ee]ngland|[Ww]ales|[Ss]cotland)$
-            example: England
+          maxLength: 100
+          description: Conveyancer name
+          example: Key Conveyancing LLP
+        location:
+          type: string
+          description: Conveyancer location
+          example: Northampton
+        logoUrl:
+          type: string
+          format: uri
+          description: URL to conveyancer logo
+          example: https://cdn.optimus.com/logos/key-conveyancing.png
     CaseActivityItem:
       type: object
       additionalProperties: false
@@ -1557,15 +1142,132 @@ components:
           type: string
           format: date-time
           description: The date when the activity was created
-    DocumentUpload:
+    LgsReferenceId:
+      type: string
+      pattern: ^[0-9]{6,16}$
+      description: Numeric identifier for a task instance on a case (`TaskItem.taskId`)
+    TaskItem:
+      type: object
+      additionalProperties: false
+      description: Hierarchical task node in the case workflow.
+      required:
+      - taskId
+      - name
+      - reference
+      - status
+      - ordinal
+      - children
+      properties:
+        taskId:
+          type: integer
+          description: 'Unique identifier for this task instance on the case. Each time a task is created for a case it gets its own taskId. Use this value in `{taskId}` when completing a task. Distinct from `reference`, which is the static task definition identifier.
+
+            '
+        name:
+          type: string
+          description: Task display name
+        reference:
+          type: string
+          description: 'Stable identifier for this task type, consistent across all cases where the task applies. Use this when mapping conveyancing events in your own platform. Distinct from `taskId`, which identifies this instance on this case.
+
+            '
+        depth:
+          type: integer
+          description: The depth level of this task in the hierarchy
+        ordinal:
+          type: integer
+          description: The ordinal position of this task within its parent
+        status:
+          $ref: '#/components/schemas/TaskItemStatus'
+        isComplete:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the task is complete
+        completedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the task was completed
+        metadata:
+          type:
+          - object
+          - 'null'
+          description: Additional metadata for the task
+          additionalProperties: true
+        children:
+          type: array
+          description: The child tasks of this task. Each item has the same structure as TaskItem, forming a recursive hierarchy.
+          maxItems: 250
+          items:
+            $ref: '#/components/schemas/TaskItem'
+    Contact:
       type: object
       additionalProperties: false
       required:
+      - roles
+      description: 'A contact involved in a quote or case.
+
+        The requestor is the individual placing the quote or order for the applicant.
+
+        The case handler is the conveyancer or solicitor instructed to process the case.
+
+        Identify the contact using either `contactId` or `email`.
+
+        '
+      properties:
+        contactId:
+          description: Contact identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 6a969045-973e-428d-b664-7e51a7d73bf0
+        name:
+          type: string
+          maxLength: 100
+          description: Contact name
+          example: Sarah Johnson
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 5
+          description: Email address of the contact
+          example: requestor@example.com
+        roles:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+            enum:
+            - Requestor
+            - CaseHandler
+          description: Role(s) this contact plays in the quote or case
+          example:
+          - Requestor
+    CaseDocument:
+      type: object
+      additionalProperties: false
+      required:
+      - documentId
+      - mimeType
       - documentType
       - filename
-      - file
-      description: Document upload metadata and file.
+      - createdDate
+      description: Document information associated with a case
       properties:
+        documentId:
+          description: Unique document identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: d1e2f3a4-b5c6-7890-def1-234567890abc
+        mimeType:
+          type: string
+          maxLength: 127
+          pattern: ^[\w!#$&\-^.+]+\/[\w!#$&\-^.+]+$
+          description: MIME type of the document
+          example: application/pdf
         documentType:
           type: string
           enum:
@@ -1573,54 +1275,71 @@ components:
           description: Type of document (currently only Undefined; will be expanded in future updates)
           example: Undefined
         filename:
-          description: Name of the file being uploaded
+          description: Name of the document file
           allOf:
           - $ref: '#/components/schemas/Filename'
           example: search-report.pdf
-        file:
+        createdDate:
           type: string
-          format: binary
-          maxLength: 99614720
-          description: The document file content
-    lgsErrorResponse:
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Date and time when the document was created (ISO 8601 format)
+          example: '2024-01-20T10:30:00Z'
+    TaskItemStatus:
+      type: string
+      description: The current status of a case task
+      enum:
+      - To Do
+      - In Progress
+      - Done
+      - On Hold
+      - Cancelled
+      - Suspended
+      - Stalled
+    CaseListResponse:
       type: object
       additionalProperties: false
       required:
-      - status
-      - code
-      - title
+      - cases
+      description: 'Response containing a list of case summaries.
+
+        '
       properties:
-        status:
-          type: string
-          minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
-          type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
-          type: string
-          minLength: 1
-          maxLength: 100
-        messages:
+        cases:
           type: array
-          maxItems: 100
+          description: Array of case summaries
           items:
-            type: object
-            additionalProperties: false
-            required:
-            - message
-            properties:
-              property:
-                type: string
-                minLength: 1
-                maxLength: 1000
-              message:
-                type: string
-                minLength: 1
-                maxLength: 1000
+            $ref: '#/components/schemas/CaseSummary'
+        count:
+          type: integer
+          format: int32
+          maximum: 9999
+          description: Total number of cases matching the query. Returned when `$count` or `countOnly` is true.
+    ProductSummary:
+      type: object
+      additionalProperties: false
+      required:
+      - productId
+      - propertyLocation
+      description: 'Product identifier summary (e.g. on quote create response, quote list, or case list).
+
+        '
+      properties:
+        productId:
+          type: string
+          format: uuid
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          minLength: 36
+          maxLength: 36
+          description: Product ID (GUID) for the quoted product
+          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+        propertyLocation:
+          type: string
+          enum:
+          - EnglandWales
+          - Scotland
+          description: Property location
+          example: EnglandWales
     Address:
       type: object
       additionalProperties: false
@@ -1712,113 +1431,22 @@ components:
           description: Unique Delivery Point Reference Number
           minimum: 0
           maximum: 99999999
-    ActivityType:
-      type: string
-      description: The type of activity
-      enum:
-      - Milestone
-      - Note
-      - Task
-      - Contact Log
-    AdditionalReference:
+    CreateCaseNoteRequest:
       type: object
       additionalProperties: false
-      required:
-      - type
-      - reference
+      description: Request to create a note on a case
       properties:
-        type:
-          type: string
-          enum:
-          - Introducer
-          description: Type of reference. Currently only "Introducer" is supported.
-          example: Introducer
-        reference:
-          type: string
-          minLength: 3
+        title:
+          type:
+          - string
+          - 'null'
           maxLength: 100
-          pattern: ^(?!.*[<>])(?!(.*&(?:[a-z]+|#\d+);))(?!(.*%(?:3[CcEe]|2[23])))(?!.*https?:\/\/)(?!.*www\.)[A-Za-z0-9£$.,;:!?_'\"()\[\]{}@#&*%+=\/\\|~`^\- \u00B4\u02BB-\u02BD\u2018\u2019\u2013-\u2015\u201C\u201D]+$
-          description: Reference value
-          example: purchase - 123456
-    RetrieveCaseResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - caseId
-      - status
-      - accounts
-      - propertyAddress
-      - product
-      - persons
-      - conveyancer
-      - documents
-      description: 'Complete case details combining the original quote data with case-specific information.
-
-        Contains all property information, applicant details, product configuration, assigned conveyancer, case status, documents, accounts, and contacts.
-
-        '
-      properties:
-        caseId:
-          description: Unique case identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        status:
+        body:
           type: string
-          enum:
-          - Pending callback
-          - Pending Approval
-          - Quote expired
-          - Instructed
-          - In Progress
-          - On hold
-          - Completed
-          - Cancelled
-          - Under Review
-          - Stalled
-          - Errored
-          description: Current status of the case
-          example: In Progress
-        additionalReferences:
-          type: array
-          description: External references provided by introducers (if any)
-          items:
-            $ref: '#/components/schemas/AdditionalReference'
-        propertyAddress:
-          $ref: '#/components/schemas/PropertyAddress'
-        product:
-          $ref: '#/components/schemas/Products'
-        persons:
-          type: array
-          minItems: 1
-          maxItems: 8
-          description: Array of persons involved in the transaction (maximum 8 applicants). Each person includes a `reference`.
-          items:
-            $ref: '#/components/schemas/Person'
-        conveyancer:
-          $ref: '#/components/schemas/CaseConveyancer'
-        documents:
-          type: array
-          description: Array of documents associated with the case
-          items:
-            $ref: '#/components/schemas/CaseDocument'
-        accounts:
-          type: array
-          minItems: 1
-          maxItems: 10
-          description: Accounts involved in this case
-          items:
-            $ref: '#/components/schemas/Account'
-        contacts:
-          type: array
-          maxItems: 10
-          description: 'Contacts involved in this case.
-
-            Includes the requestor and, when assigned, the case handler with role `CaseHandler`.
-
-            '
-          items:
-            $ref: '#/components/schemas/Contact'
+          minLength: 1
+          maxLength: 5000
+      required:
+      - body
     CreateCaseNoteResponse:
       type: object
       additionalProperties: false
@@ -1846,41 +1474,52 @@ components:
           pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
           description: Date and time when the note was created (ISO 8601 format)
           example: '2024-01-20T10:30:00Z'
-    CreateCaseNoteRequest:
+    DocumentUpload:
       type: object
       additionalProperties: false
-      description: Request to create a note on a case
+      required:
+      - documentType
+      - filename
+      - file
+      description: Document upload metadata and file.
       properties:
-        title:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        body:
+        documentType:
           type: string
-          minLength: 1
-          maxLength: 5000
-      required:
-      - body
-    CaseListResponse:
+          enum:
+          - Undefined
+          description: Type of document (currently only Undefined; will be expanded in future updates)
+          example: Undefined
+        filename:
+          description: Name of the file being uploaded
+          allOf:
+          - $ref: '#/components/schemas/Filename'
+          example: search-report.pdf
+        file:
+          type: string
+          format: binary
+          maxLength: 99614720
+          description: The document file content
+    Filename:
+      type: string
+      minLength: 3
+      maxLength: 250
+      pattern: ^(?!.*\.\..*)[^\:/\*"\<\>\|]+?\.[a-zA-Z\d]{1,10}$
+    CaseActivityListResponse:
       type: object
       additionalProperties: false
+      description: Response containing a list of activities on a case
       required:
-      - cases
-      description: 'Response containing a list of case summaries.
-
-        '
+      - activities
       properties:
-        cases:
+        activities:
           type: array
-          description: Array of case summaries
+          description: Array of activities on the case
           items:
-            $ref: '#/components/schemas/CaseSummary'
-        count:
-          type: integer
-          format: int32
-          maximum: 9999
-          description: Total number of cases matching the query. Returned when `$count` or `countOnly` is true.
+            $ref: '#/components/schemas/CaseActivityItem'
+    TelephoneNumber:
+      type: string
+      minLength: 8
+      maxLength: 20
     CaseNoteItem:
       type: object
       additionalProperties: false
@@ -1934,75 +1573,44 @@ components:
           maxLength: 100
           description: Identifier of the note this note supersedes, if any
           example: null
-    UpdateCaseStatusRequest:
+    AdditionalReference:
       type: object
       additionalProperties: false
       required:
-      - status
-      - reason
-      description: Request to update the case status
+      - type
+      - reference
       properties:
-        status:
+        type:
           type: string
           enum:
-          - In Progress
-          - On Hold
-          - Cancelled
-          description: 'The status to set on the case. Use "On Hold" or "Cancelled" when the case is in progress.
-
-            Use "In Progress" to resume a case that is on hold.
-
-            '
-          example: On Hold
+          - Introducer
+          description: Type of reference. Currently only "Introducer" is supported.
+          example: Introducer
+        reference:
+          type: string
+          minLength: 3
+          maxLength: 100
+          pattern: ^(?!.*[<>])(?!(.*&(?:[a-z]+|#\d+);))(?!(.*%(?:3[CcEe]|2[23])))(?!.*https?:\/\/)(?!.*www\.)[A-Za-z0-9£$.,;:!?_'\"()\[\]{}@#&*%+=\/\\|~`^\- \u00B4\u02BB-\u02BD\u2018\u2019\u2013-\u2015\u201C\u201D]+$
+          description: Reference value
+          example: purchase - 123456
+    RejectCaseRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - reason
+      description: Request to reject a case
+      properties:
         reason:
           type: string
           maxLength: 1000
-          description: Reason for the status change
-          example: Awaiting additional documentation from the client
-    Contact:
-      type: object
-      additionalProperties: false
-      required:
-      - roles
-      description: 'A contact involved in a quote or case.
-
-        The requestor is the individual placing the quote or order for the applicant.
-
-        The case handler is the conveyancer or solicitor instructed to process the case.
-
-        Identify the contact using either `contactId` or `email`.
-
-        '
-      properties:
-        contactId:
-          description: Contact identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 6a969045-973e-428d-b664-7e51a7d73bf0
-        name:
-          type: string
-          maxLength: 100
-          description: Contact name
-          example: Sarah Johnson
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          minLength: 5
-          description: Email address of the contact
-          example: requestor@example.com
-        roles:
-          type: array
-          minItems: 1
-          maxItems: 10
-          items:
-            type: string
-            enum:
-            - Requestor
-            - CaseHandler
-          description: Role(s) this contact plays in the quote or case
-          example:
-          - Requestor
+          description: Reason for rejecting the case
+          example: Unable to take on this case due to capacity constraints
+    LgsUuid:
+      type: string
+      format: uuid
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      minLength: 36
+      maxLength: 36
     CaseSummary:
       type: object
       additionalProperties: false
@@ -2100,6 +1708,115 @@ components:
           format: date-time
           description: Date and time when the case was last updated (ISO 8601 format)
           example: '2024-01-20T14:30:00Z'
+    AddCaseHandlerRequest:
+      type: object
+      additionalProperties: false
+      description: Request to add a case handler contact. Either contactId or email must be provided.
+      anyOf:
+      - required:
+        - contactId
+      - required:
+        - email
+      properties:
+        contactId:
+          description: Unique identifier for the case handler contact
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 5
+          description: Email address of the case handler contact
+          example: case.handler@example.com
+    ActivityType:
+      type: string
+      description: The type of activity
+      enum:
+      - Milestone
+      - Note
+      - Task
+      - Contact Log
+    RetrieveCaseResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - caseId
+      - status
+      - accounts
+      - propertyAddress
+      - product
+      - persons
+      - conveyancer
+      - documents
+      description: 'Complete case details combining the original quote data with case-specific information.
+
+        Contains all property information, applicant details, product configuration, assigned conveyancer, case status, documents, accounts, and contacts.
+
+        '
+      properties:
+        caseId:
+          description: Unique case identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        status:
+          type: string
+          enum:
+          - Pending callback
+          - Pending Approval
+          - Quote expired
+          - Instructed
+          - In Progress
+          - On hold
+          - Completed
+          - Cancelled
+          - Under Review
+          - Stalled
+          - Errored
+          description: Current status of the case
+          example: In Progress
+        additionalReferences:
+          type: array
+          description: External references provided by introducers (if any)
+          items:
+            $ref: '#/components/schemas/AdditionalReference'
+        propertyAddress:
+          $ref: '#/components/schemas/PropertyAddress'
+        product:
+          $ref: '#/components/schemas/Products'
+        persons:
+          type: array
+          minItems: 1
+          maxItems: 8
+          description: Array of persons involved in the transaction (maximum 8 applicants). Each person includes a `reference`.
+          items:
+            $ref: '#/components/schemas/Person'
+        conveyancer:
+          $ref: '#/components/schemas/CaseConveyancer'
+        documents:
+          type: array
+          description: Array of documents associated with the case
+          items:
+            $ref: '#/components/schemas/CaseDocument'
+        accounts:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: Accounts involved in this case
+          items:
+            $ref: '#/components/schemas/Account'
+        contacts:
+          type: array
+          maxItems: 10
+          description: 'Contacts involved in this case.
+
+            Includes the requestor and, when assigned, the case handler with role `CaseHandler`.
+
+            '
+          items:
+            $ref: '#/components/schemas/Contact'
     Person:
       type: object
       additionalProperties: false
@@ -2165,464 +1882,228 @@ components:
             - Applicant
           example:
           - Applicant
-    CaseConveyancer:
+    CaseTaskListResponse:
       type: object
       additionalProperties: false
+      description: Task hierarchy for a case; not a bare array of tasks
       required:
-      - conveyancerId
-      - name
-      - location
-      description: The conveyancer assigned to this case
+      - tasks
+      - count
       properties:
-        conveyancerId:
-          description: Conveyancer identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-        name:
-          type: string
-          maxLength: 100
-          description: Conveyancer name
-          example: Key Conveyancing LLP
-        location:
-          type: string
-          description: Conveyancer location
-          example: Northampton
-        logoUrl:
-          type: string
-          format: uri
-          description: URL to conveyancer logo
-          example: https://cdn.optimus.com/logos/key-conveyancing.png
-    TaskItemStatus:
-      type: string
-      description: The current status of a case task
-      enum:
-      - To Do
-      - In Progress
-      - Done
-      - On Hold
-      - Cancelled
-      - Suspended
-      - Stalled
-    CaseDocument:
-      type: object
-      additionalProperties: false
-      required:
-      - documentId
-      - mimeType
-      - documentType
-      - filename
-      - createdDate
-      description: Document information associated with a case
-      properties:
-        documentId:
-          description: Unique document identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: d1e2f3a4-b5c6-7890-def1-234567890abc
-        mimeType:
-          type: string
-          maxLength: 127
-          pattern: ^[\w!#$&\-^.+]+\/[\w!#$&\-^.+]+$
-          description: MIME type of the document
-          example: application/pdf
-        documentType:
-          type: string
-          enum:
-          - Undefined
-          description: Type of document (currently only Undefined; will be expanded in future updates)
-          example: Undefined
-        filename:
-          description: Name of the document file
-          allOf:
-          - $ref: '#/components/schemas/Filename'
-          example: search-report.pdf
-        createdDate:
-          type: string
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
-          description: Date and time when the document was created (ISO 8601 format)
-          example: '2024-01-20T10:30:00Z'
-    LgsReferenceId:
-      type: string
-      pattern: ^[0-9]{6,16}$
-      description: Numeric identifier for a task instance on a case (`TaskItem.taskId`)
-    TaskItem:
-      type: object
-      additionalProperties: false
-      description: Hierarchical task node in the case workflow.
-      required:
-      - taskId
-      - name
-      - reference
-      - status
-      - ordinal
-      - children
-      properties:
-        taskId:
-          type: integer
-          description: 'Unique identifier for this task instance on the case. Each time a task is created for a case it gets its own taskId. Use this value in `{taskId}` when completing a task. Distinct from `reference`, which is the static task definition identifier.
-
-            '
-        name:
-          type: string
-          description: Task display name
-        reference:
-          type: string
-          description: 'Stable identifier for this task type, consistent across all cases where the task applies. Use this when mapping conveyancing events in your own platform. Distinct from `taskId`, which identifies this instance on this case.
-
-            '
-        depth:
-          type: integer
-          description: The depth level of this task in the hierarchy
-        ordinal:
-          type: integer
-          description: The ordinal position of this task within its parent
-        status:
-          $ref: '#/components/schemas/TaskItemStatus'
-        isComplete:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the task is complete
-        completedDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the task was completed
-        metadata:
-          type:
-          - object
-          - 'null'
-          description: Additional metadata for the task
-          additionalProperties: true
-        children:
+        tasks:
           type: array
-          description: The child tasks of this task. Each item has the same structure as TaskItem, forming a recursive hierarchy.
+          description: Top-level tasks in the hierarchy
           maxItems: 250
           items:
             $ref: '#/components/schemas/TaskItem'
-    Filename:
-      type: string
-      minLength: 3
-      maxLength: 250
-      pattern: ^(?!.*\.\..*)[^\:/\*"\<\>\|]+?\.[a-zA-Z\d]{1,10}$
-    AddCaseHandlerRequest:
+        count:
+          type: integer
+          description: Total number of tasks in the hierarchy
+    PropertyAddress:
+      description: Property address using PAF Plus format
+      allOf:
+      - $ref: '#/components/schemas/Address'
+      - type: object
+        required:
+        - thoroughfare
+        - postTown
+        - country
+        properties:
+          country:
+            type: string
+            description: Country - must be England, Wales, or Scotland (case insensitive)
+            maxLength: 200
+            pattern: ^([Ee]ngland|[Ww]ales|[Ss]cotland)$
+            example: England
+    Products:
       type: object
       additionalProperties: false
-      description: Request to add a case handler contact. Either contactId or email must be provided.
-      anyOf:
-      - required:
-        - contactId
-      - required:
-        - email
+      required:
+      - productId
+      - propertyLocation
+      - productDetails
+      description: 'Product information for a quote or case. The `productDetails` object must match the schema
+
+        for the selected product type and property location. See [Product Schemas](#tag/Product-Schemas).
+
+        '
       properties:
-        contactId:
-          description: Unique identifier for the case handler contact
+        productId:
+          description: Product ID — see [Product Schemas](#tag/Product-Schemas) for valid values per product type
           allOf:
           - $ref: '#/components/schemas/LgsUuid'
-          example: c1d2e3f4-a5b6-7890-cdef-1234567890ab
-        email:
+        propertyLocation:
           type: string
-          format: email
-          maxLength: 254
-          minLength: 5
-          description: Email address of the case handler contact
-          example: case.handler@example.com
-    clientParty:
-      oneOf:
-      - $ref: '#/components/schemas/personParty'
-      - $ref: '#/components/schemas/organisationParty'
-    upsertMilestoneRequest:
+          enum:
+          - EnglandWales
+          - Scotland
+          description: Property location
+        productDetails:
+          type: object
+          description: 'Product-specific details. Must match the `productDetails` object structure
+
+            for the selected product type and property location as defined in [Product Schemas](#tag/Product-Schemas).
+
+            '
+    Account:
       type: object
       additionalProperties: false
-      description: Request to create or update milestone dates for an Intelliworks case
       required:
-      - branchId
-      - milestones
+      - accountId
+      - roles
+      description: 'An account acting in one or more roles for a quote or case.
+
+        Both an originator and an introducer must be represented across the `accounts` array.
+
+        The same account may include both `Originator` and `Introducer` in its `roles`.
+
+        '
       properties:
-        transactionId:
-          type:
-          - string
-          - 'null'
-          pattern: ^$|^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-          description: Parent case transaction identifier from create case. Optional.
-        transactionRequestId:
-          $ref: '#/components/schemas/lgsUuid'
-          description: Milestone transaction request identifier. Auto-generated when omitted.
-        branchId:
-          $ref: '#/components/schemas/lgsUuid'
-          description: Branch identifier used to resolve company and site context
-        caseId:
-          type: string
-          maxLength: 25
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-          description: Intelliworks case identifier
-        externalCaseId:
-          type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: External system case reference
-        workflowId:
-          type: integer
-          format: int32
-          minimum: 1
-          description: Optional Intelliworks workflow identifier. When omitted, workflow context is resolved from the case.
-        callbackUrl:
-          type:
-          - string
-          - 'null'
-          format: url
-          description: Optional callback URL.
-        milestones:
+        accountId:
+          description: Account identifier provided during API onboarding
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
+        roles:
           type: array
           minItems: 1
+          maxItems: 10
           items:
-            $ref: '#/components/schemas/milestoneUpsertItem'
-    createCaseRequestIwProbate:
+            type: string
+            enum:
+            - Originator
+            - Introducer
+          description: Role(s) this account plays in the quote or case
+          example:
+          - Originator
+          - Introducer
+    CaseNoteListResponse:
       type: object
       additionalProperties: false
-      title: A case data as a request for Private Client workflow (Probate)
-      description: request for a Private Client workflow (Probate) create case
+      description: Response containing a list of notes on a case
       required:
-      - workflowId
-      - caseSummary
-      - externalCaseId
-      - clients
+      - notes
       properties:
-        workflowId:
-          type: string
-          enum:
-          - '601'
-          title: A workflowid for workflow
-          description: A workflowid is associated with a case which belongs to specific workflow
-          default: ''
-        branchId:
-          $ref: '#/components/schemas/lgsUuid'
-        caseSummary:
-          type: string
-          pattern: ^.*$
-          maxLength: 60
-          title: case summary for a workflow case
-          description: A casesummary is what we are creating for a case
-          default: ''
-        externalCaseId:
-          type: string
-          pattern: ^.*$
-          maxLength: 50
-          title: externalCaseId
-          description: The case reference from the external system
-          default: ''
-        casePriorty:
-          type: string
-          title: The casepriorty
-          enum:
-          - '3'
-          - '2'
-          - '1'
-          description: ''
-          default: '3'
-        clients:
-          $ref: '#/components/schemas/clientsIwProbate'
-          title: The clients details
-          description: Up to 4 clients - consists of names, contact and address details
-        transactionId:
-          $ref: '#/components/schemas/lgsUuid'
-          title: The transactionid
-          description: every case is associated with a transaction
-    organisationParty:
+        notes:
+          type: array
+          description: Array of notes on the case
+          items:
+            $ref: '#/components/schemas/CaseNoteItem'
+    lgsErrorResponse:
       type: object
       additionalProperties: false
+      required:
+      - status
+      - code
+      - title
       properties:
-        partyType:
+        status:
           type: string
-          enum:
-          - organisation
-          description: Party type discriminator.
-        name:
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
           type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        email:
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
           type: string
-          maxLength: 320
-          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-        email2:
-          type: string
-          maxLength: 320
-          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-        officePhone:
-          type: string
-          maxLength: 25
-          pattern: ^[\d\s\+\-\(\)]*$
-        officeFax:
-          type: string
-          maxLength: 25
-          pattern: ^[\d\s\+\-\(\)]*$
-        website:
-          type: string
-          maxLength: 250
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*;()_+-/,.':]*$
-        dxNumber:
-          type: string
-          maxLength: 30
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        dxExchange:
-          type: string
-          maxLength: 30
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        address:
-          $ref: '#/components/schemas/propertyAddress'
-    workReferrer:
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    UpdateCaseStatusRequest:
       type: object
       additionalProperties: false
+      required:
+      - status
+      - reason
+      description: Request to update the case status
       properties:
-        sourceOfWork:
+        status:
           type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        referrer:
-          $ref: '#/components/schemas/organisationParty'
-        referrerWorkSource:
-          $ref: '#/components/schemas/organisationParty'
-        referrerFeePayableTo:
-          $ref: '#/components/schemas/organisationParty'
-        referrerReference:
+          enum:
+          - In Progress
+          - On Hold
+          - Cancelled
+          description: 'The status to set on the case. Use "On Hold" or "Cancelled" when the case is in progress.
+
+            Use "In Progress" to resume a case that is on hold.
+
+            '
+          example: On Hold
+        reason:
           type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-        referrerFee:
-          $ref: '#/components/schemas/price'
-    lgsAddressSingleLine:
-      $comment: Singleline is suitable for those applications where a structured address is not required.
+          maxLength: 1000
+          description: Reason for the status change
+          example: Awaiting additional documentation from the client
+    lgsAddressFixedLine:
+      $comment: FixedLine is suitable for those applications where a user friendly, structured address is required.
       type: object
       required:
       - addressType
-      - addressLine
+      - postcode
       properties:
         addressType:
           type: string
           enum:
-          - addressSingleLine
+          - addressFixedLine
         uprn:
           $ref: '#/components/schemas/lgsUprn'
-        addressLine:
+        name:
           type: string
-          description: 'example: The Old Mill, 7A-9 Main Street, Hook, Warsash, Southampton, SO99 9ZZ'
-          maxLength: 1000
+          maxLength: 200
           pattern: ^.*$
-    uploadDocumentResponse:
-      type: object
-      additionalProperties: false
-      description: Accepted document upload response
-      required:
-      - transactionRequestId
-      - transactionId
-      - documentId
-      properties:
-        transactionRequestId:
-          $ref: '#/components/schemas/lgsUuid'
-        transactionId:
-          $ref: '#/components/schemas/lgsUuid'
-        documentId:
-          $ref: '#/components/schemas/lgsUuid'
-    clientsIw:
-      type: array
-      additionalProperties: false
-      minItems: 1
-      maxItems: 4
-      items:
-        $ref: '#/components/schemas/lgsPerson'
-    createCaseResponse:
-      type: object
-      additionalProperties: false
-      description: response for a workflow create case
-      properties:
-        case:
-          $ref: '#/components/schemas/caseResponse'
-    caseResponse:
-      type: object
-      properties:
-        lgsTransactionId:
-          $ref: '#/components/schemas/lgsUuid'
-          description: A transactionId is associated with a case which belongs to specific workflow
-          default: ''
-        lgsTransactionRequestId:
-          $ref: '#/components/schemas/lgsUuid'
-          description: A transactionRequestId is associated with a case which belongs to specific workflow
-          default: ''
-        href:
+        number:
           type: string
-          format: url
-          description: href link in case request response
-          default: ''
-    uploadDocumentJsonDocument:
-      type: object
-      additionalProperties: false
-      description: Document metadata and content for JSON upload requests
-      required:
-      - fileName
-      - contentType
-      - extension
-      properties:
-        fileName:
+          maxLength: 200
+          pattern: ^.*$
+        street:
           type: string
-          maxLength: 255
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,']*$
-        description:
+          description: 'example: 7-9 Main Street'
+          maxLength: 200
+          pattern: ^.*$
+        area:
           type: string
-          maxLength: 500
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,' ]*$
-        contentBase64:
+          description: 'example: Hook'
+          maxLength: 200
+          pattern: ^.*$
+        town:
           type: string
-          minLength: 1
-          description: Optional Base64-encoded document content. Prefer `multipart/form-data` to upload the file directly.
-        contentType:
-          $ref: '#/components/schemas/uploadDocumentAllowedContentType'
-        extension:
-          $ref: '#/components/schemas/uploadDocumentAllowedExtension'
-    milestoneQueryResponse:
-      type: object
-      additionalProperties: false
-      description: Response containing milestone actual completion date for a case
-      required:
-      - caseId
-      - milestoneId
-      - actualDate
-      properties:
-        caseId:
+          description: 'example: Warsash'
+          maxLength: 200
+          pattern: ^.*$
+        county:
           type: string
-          maxLength: 25
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-          description: Intelliworks case identifier (e.g. PBX-000867, GPR-000039)
-        externalCaseId:
+          description: 'example: Hampshire'
+          maxLength: 200
+          pattern: ^.*$
+        country:
           type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: External system case reference when supplied in the request
-          default: ''
-        milestoneId:
-          type: integer
-          format: int32
-          minimum: 1
-        actualDate:
+          description: 'example: England'
+          maxLength: 200
+          pattern: ^.*$
+        postcode:
           type: string
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
-          description: Milestone actual completion date/time in UTC (ISO 8601)
-    price:
-      type: object
-      additionalProperties: false
-      properties:
-        amount:
-          type: number
-          format: double
-          minimum: 0
-        currency:
-          type: string
-          maxLength: 3
-          pattern: ^$|^[A-Z]{3}$
+          description: 'example: SO99 9ZZ'
+          maxLength: 10
+          pattern: ^.*$
     lgsAddressBS7666:
       $comment: BS7666 no longer includes field lengths, however, field lengths included to conform to Landmark Standard 2.5.1. Addresses defined in BS 7666 are designed to be applicable to land and property, not just properties that recieve mail.
       type: object
@@ -2714,238 +2195,6 @@ components:
         blpuNorthing:
           type: number
           description: 'example: 92288'
-    lgsAddressUprnOnly:
-      $comment: UprnOnly is suitable when client or application has a valid uprn. If an address is required an address match will need to be made.
-      type: object
-      required:
-      - addressType
-      - uprn
-      properties:
-        addressType:
-          type: string
-          enum:
-          - addressUprnOnly
-        uprn:
-          $ref: '#/components/schemas/lgsUprn'
-    upsertTaskResponse:
-      type: object
-      additionalProperties: false
-      description: Response for an accepted task upsert request
-      required:
-      - task
-      properties:
-        task:
-          $ref: '#/components/schemas/upsertTaskResult'
-    upsertMilestoneResponse:
-      type: object
-      additionalProperties: false
-      description: Response indicating the milestone upsert request was accepted for asynchronous processing
-      required:
-      - transactionRequestId
-      - status
-      properties:
-        transactionRequestId:
-          $ref: '#/components/schemas/lgsUuid'
-          description: Unique identifier for this milestone upsert transaction request
-        transactionId:
-          $ref: '#/components/schemas/lgsUuid'
-          description: Parent case transaction identifier
-        status:
-          type: string
-          const: Accepted
-          description: Processing status of the accepted request
-    getCaseIwResponse:
-      type: object
-      additionalProperties: false
-      title: Case summary
-      description: Read-only case summary returned by Get Case IW.
-      properties:
-        caseReference:
-          type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-          description: Intelliworks case reference.
-        externalCaseReference:
-          type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-          description: External case reference from the originating system.
-        workflowId:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 99999
-          description: Intelliworks workflow identifier.
-        workflowDisplayName:
-          type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: Display name of the workflow.
-        caseType:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        caseDescription:
-          type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        caseStatus:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        caseProgress:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        purchaseDate:
-          type: string
-          maxLength: 10
-          pattern: ^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$
-          description: ISO 8601 date (yyyy-MM-dd) or empty when not set.
-        feeEarnerDetails:
-          $ref: '#/components/schemas/feeEarnerDetails'
-        clients:
-          type: array
-          maxItems: 6
-          items:
-            $ref: '#/components/schemas/clientParty'
-        workReferrer:
-          $ref: '#/components/schemas/workReferrer'
-        buyersConveyancer:
-          $ref: '#/components/schemas/buyersConveyancer'
-        sellersConveyancer:
-          $ref: '#/components/schemas/buyersConveyancer'
-        estateAgent:
-          $ref: '#/components/schemas/organisationParty'
-        lenders:
-          type: array
-          maxItems: 6
-          items:
-            $ref: '#/components/schemas/lenderParty'
-        lenderAccountNumbers:
-          type: array
-          maxItems: 10
-          items:
-            type: string
-            maxLength: 50
-            pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        lenderNotes:
-          type: string
-          maxLength: 500
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*;()_+-/,.']*$
-        propertyAddress:
-          $ref: '#/components/schemas/propertyAddress'
-        sellers:
-          type: array
-          maxItems: 6
-          items:
-            $ref: '#/components/schemas/personParty'
-        price:
-          $ref: '#/components/schemas/price'
-    lgsAddress:
-      oneOf:
-      - $ref: '#/components/schemas/lgsAddressPAF'
-      - $ref: '#/components/schemas/lgsAddressBS7666'
-      - $ref: '#/components/schemas/lgsAddressSingleLine'
-      - $ref: '#/components/schemas/lgsAddress9Line'
-      - $ref: '#/components/schemas/lgsAddressFixedLine'
-      - $ref: '#/components/schemas/lgsAddressUprnOnly'
-      - $ref: '#/components/schemas/lgsAddressAddressBaseCore'
-    lgsAddressPAF:
-      $comment: Based https://www.poweredbypaf.com/wp-content/uploads/2017/07/Latest-Programmers_guide_Edition-7-Version-6.pdf. Addresses defined in PAF are designed to be applicable properties that recieve mail.
-      type: object
-      required:
-      - addressType
-      properties:
-        addressType:
-          type: string
-          enum:
-          - addressPAF
-        uprn:
-          $ref: '#/components/schemas/lgsUprn'
-        udprn:
-          type: integer
-          description: Royal Mail’s Unique Delivery Point Reference Number (UDPRN)
-          minimum: 0
-          maximum: 99999999
-        departmentName:
-          type: string
-          description: 'example: Customer Service Department'
-          maxLength: 60
-          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
-        organisationName:
-          type: string
-          description: 'example: JW Simpsons Ltd'
-          maxLength: 60
-          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
-        subBuildingName:
-          type: string
-          description: 'example: The Old Mill'
-          maxLength: 30
-          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
-        buildingName:
-          type: string
-          description: 'example: The Annexe'
-          maxLength: 50
-          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
-        buildingNumber:
-          type: string
-          description: 'example: 7'
-          maxLength: 4
-          pattern: ^[A-Za-z0-9-/\s]*$
-        poBoxNumber:
-          type: string
-          description: 'example: 5422'
-          maxLength: 14
-          pattern: ^[A-Za-z0-9.#\s]*$
-        dependentThoroughfare:
-          type: string
-          description: 'example: Richmond Terrace'
-          maxLength: 60
-          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
-        thoroughfare:
-          type: string
-          description: 'example: Main Street'
-          maxLength: 60
-          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
-        doubleDependentLocality:
-          type: string
-          description: 'example: Hook'
-          maxLength: 35
-          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
-        dependentLocality:
-          type: string
-          description: 'example: Warsash'
-          maxLength: 35
-          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
-        postTown:
-          type: string
-          description: 'example: Southampton'
-          maxLength: 30
-          pattern: ^[A-Za-zÀ-ž\u2010-\u201F-.'&!\s]*$
-        postcode:
-          type: string
-          description: 'example: SO99 9ZZ'
-          maxLength: 10
-          pattern: ^[A-Za-z0-9\s]*$
-        blpuEasting:
-          type: number
-          description: 'example: 296701'
-        blpuNorthing:
-          type: number
-          description: 'example: 92288'
-    lenderParty:
-      allOf:
-      - $ref: '#/components/schemas/organisationParty'
-      - type: object
-        additionalProperties: false
-        properties:
-          type:
-            type: string
-            enum:
-            - existing
-            - new
-            description: Indicates whether the lender is the existing mortgage lender or a new lender.
     uploadDocumentJsonRequest:
       type: object
       additionalProperties: false
@@ -2984,42 +2233,20 @@ components:
           description: Optional task identifier. When omitted, a new default task is created and the document is stored against it.
         document:
           $ref: '#/components/schemas/uploadDocumentJsonDocument'
-    address:
-      allOf:
-      - $ref: '#/components/schemas/lgsAddressAddressBaseCore'
-      - type: object
-        additionalProperties: false
-        description: address to associate with case
-        required:
-        - postcode
-        - addressType
-        - townName
-        - streetName
-        - locality
-    buyersConveyancer:
-      allOf:
-      - $ref: '#/components/schemas/organisationParty'
-      - type: object
-        additionalProperties: false
-        properties:
-          conveyancerReference:
-            type: string
-            maxLength: 50
-            pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-    uploadDocumentAllowedContentType:
-      type: string
-      enum:
-      - application/pdf
-      - application/msword
-      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-      - text/plain
-      - image/png
-      - image/jpeg
-    createCaseRequestIwPrivateClient:
+    upsertTaskResponse:
       type: object
       additionalProperties: false
-      title: A case data as a request for Private Client workflow (LPA, Wills)
-      description: request for a Private Client workflow (LPA, Wills) create case
+      description: Response for an accepted task upsert request
+      required:
+      - task
+      properties:
+        task:
+          $ref: '#/components/schemas/upsertTaskResult'
+    createCaseRequestIwProbate:
+      type: object
+      additionalProperties: false
+      title: A case data as a request for Private Client workflow (Probate)
+      description: request for a Private Client workflow (Probate) create case
       required:
       - workflowId
       - caseSummary
@@ -3029,10 +2256,10 @@ components:
         workflowId:
           type: string
           enum:
-          - '415'
-          - '500'
+          - '601'
           title: A workflowid for workflow
           description: A workflowid is associated with a case which belongs to specific workflow
+          default: ''
         branchId:
           $ref: '#/components/schemas/lgsUuid'
         caseSummary:
@@ -3059,64 +2286,201 @@ components:
           description: ''
           default: '3'
         clients:
-          $ref: '#/components/schemas/clientsIw'
+          $ref: '#/components/schemas/clientsIwProbate'
           title: The clients details
           description: Up to 4 clients - consists of names, contact and address details
         transactionId:
           $ref: '#/components/schemas/lgsUuid'
           title: The transactionid
           description: every case is associated with a transaction
-    lgsAddressFixedLine:
-      $comment: FixedLine is suitable for those applications where a user friendly, structured address is required.
+    uploadDocumentAllowedExtension:
+      type: string
+      enum:
+      - pdf
+      - doc
+      - docx
+      - txt
+      - png
+      - jpg
+      - jpeg
+    lenderParty:
+      allOf:
+      - $ref: '#/components/schemas/organisationParty'
+      - type: object
+        additionalProperties: false
+        properties:
+          type:
+            type: string
+            enum:
+            - existing
+            - new
+            description: Indicates whether the lender is the existing mortgage lender or a new lender.
+    lgsAddress:
+      oneOf:
+      - $ref: '#/components/schemas/lgsAddressPAF'
+      - $ref: '#/components/schemas/lgsAddressBS7666'
+      - $ref: '#/components/schemas/lgsAddressSingleLine'
+      - $ref: '#/components/schemas/lgsAddress9Line'
+      - $ref: '#/components/schemas/lgsAddressFixedLine'
+      - $ref: '#/components/schemas/lgsAddressUprnOnly'
+      - $ref: '#/components/schemas/lgsAddressAddressBaseCore'
+    upsertMilestoneRequest:
+      type: object
+      additionalProperties: false
+      description: Request to create or update milestone dates for an Intelliworks case
+      required:
+      - branchId
+      - milestones
+      properties:
+        transactionId:
+          type:
+          - string
+          - 'null'
+          pattern: ^$|^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          description: Parent case transaction identifier from create case. Optional.
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Milestone transaction request identifier. Auto-generated when omitted.
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Branch identifier used to resolve company and site context
+        caseId:
+          type: string
+          maxLength: 25
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case identifier
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: External system case reference
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Optional Intelliworks workflow identifier. When omitted, workflow context is resolved from the case.
+        callbackUrl:
+          type:
+          - string
+          - 'null'
+          format: url
+          description: Optional callback URL.
+        milestones:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/milestoneUpsertItem'
+    propertyAddress:
+      type: object
+      additionalProperties: false
+      properties:
+        subbuildingName:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Subbuilding name (flat / room / unit); mapped from Intelliworks subDwellingNumber.
+        subbuildingRange:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Subbuilding range (no / range); mapped from Intelliworks subDwellingDescription.
+        buildingName:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Building name; mapped from Intelliworks dwellingNumber.
+        buildingNumber:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Building number; mapped from Intelliworks dwellingDescription.
+        street:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        locality:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        town:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        county:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        postcode:
+          type: string
+          maxLength: 8
+          pattern: ^[A-Za-z0-9 ]{1,8}$
+        country:
+          type: string
+          maxLength: 60
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+    upsertMilestoneResponse:
+      type: object
+      additionalProperties: false
+      description: Response indicating the milestone upsert request was accepted for asynchronous processing
+      required:
+      - transactionRequestId
+      - status
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Unique identifier for this milestone upsert transaction request
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: Parent case transaction identifier
+        status:
+          type: string
+          const: Accepted
+          description: Processing status of the accepted request
+    createCaseResponse:
+      type: object
+      additionalProperties: false
+      description: response for a workflow create case
+      properties:
+        case:
+          $ref: '#/components/schemas/caseResponse'
+    buyersConveyancer:
+      allOf:
+      - $ref: '#/components/schemas/organisationParty'
+      - type: object
+        additionalProperties: false
+        properties:
+          conveyancerReference:
+            type: string
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+    lgsAddressSingleLine:
+      $comment: Singleline is suitable for those applications where a structured address is not required.
       type: object
       required:
       - addressType
-      - postcode
+      - addressLine
       properties:
         addressType:
           type: string
           enum:
-          - addressFixedLine
+          - addressSingleLine
         uprn:
           $ref: '#/components/schemas/lgsUprn'
-        name:
+        addressLine:
           type: string
-          maxLength: 200
+          description: 'example: The Old Mill, 7A-9 Main Street, Hook, Warsash, Southampton, SO99 9ZZ'
+          maxLength: 1000
           pattern: ^.*$
-        number:
-          type: string
-          maxLength: 200
-          pattern: ^.*$
-        street:
-          type: string
-          description: 'example: 7-9 Main Street'
-          maxLength: 200
-          pattern: ^.*$
-        area:
-          type: string
-          description: 'example: Hook'
-          maxLength: 200
-          pattern: ^.*$
-        town:
-          type: string
-          description: 'example: Warsash'
-          maxLength: 200
-          pattern: ^.*$
-        county:
-          type: string
-          description: 'example: Hampshire'
-          maxLength: 200
-          pattern: ^.*$
-        country:
-          type: string
-          description: 'example: England'
-          maxLength: 200
-          pattern: ^.*$
-        postcode:
-          type: string
-          description: 'example: SO99 9ZZ'
-          maxLength: 10
-          pattern: ^.*$
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    clientParty:
+      oneOf:
+      - $ref: '#/components/schemas/personParty'
+      - $ref: '#/components/schemas/organisationParty'
     lgsAddressAddressBaseCore:
       $comment: Based https://www.ordnancesurvey.co.uk/documents/product-support/tech-spec/addressbasecore-technical-specification.pdf.
       type: object
@@ -3218,111 +2582,31 @@ components:
           description: A postcode assigned by Royal Mail for the address record
           maxLength: 8
           pattern: ^.*$
-    propertyAddress:
+    uploadDocumentJsonDocument:
       type: object
       additionalProperties: false
-      properties:
-        subbuildingName:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: Subbuilding name (flat / room / unit); mapped from Intelliworks subDwellingNumber.
-        subbuildingRange:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: Subbuilding range (no / range); mapped from Intelliworks subDwellingDescription.
-        buildingName:
-          type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: Building name; mapped from Intelliworks dwellingNumber.
-        buildingNumber:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-          description: Building number; mapped from Intelliworks dwellingDescription.
-        street:
-          type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        locality:
-          type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        town:
-          type: string
-          maxLength: 150
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        county:
-          type: string
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-        postcode:
-          type: string
-          maxLength: 8
-          pattern: ^[A-Za-z0-9 ]{1,8}$
-        country:
-          type: string
-          maxLength: 60
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
-    clientsIwProbate:
-      type: array
-      additionalProperties: false
-      minItems: 1
-      maxItems: 4
-      items:
-        allOf:
-        - $ref: '#/components/schemas/lgsPerson'
-        - type: object
-          properties:
-            gender:
-              type: string
-              enum:
-              - Male
-              - Female
-              - Unknown
-            placeOfDeath:
-              type: string
-              pattern: ^.*$
-            dateOfBirth:
-              type: string
-              title: The dateOfBirth
-              description: dateofbirth
-              format: datetime
-            dateOfDeath:
-              type: string
-              title: The DateOfDeath
-              description: DateOfDeath
-              format: datetime
-          required:
-          - dateOfDeath
-    lgsUprn:
-      type: integer
-      format: int64
-      minimum: 0
-      maximum: 9223372036854775000
-    milestoneUpsertItem:
-      type: object
-      additionalProperties: false
+      description: Document metadata and content for JSON upload requests
       required:
-      - milestoneId
+      - fileName
+      - contentType
+      - extension
       properties:
-        milestoneId:
-          type: integer
-          format: int32
-          minimum: 1
-          description: Milestone identifier. See [Supported milestone IDs by workflow](#supported-milestone-ids).
-        actualDate:
+        fileName:
           type: string
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
-          description: Milestone actual completion date/time in UTC (ISO 8601)
-        forecastDate:
+          maxLength: 255
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,']*$
+        description:
           type: string
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
-          description: Milestone forecast date/time in UTC (ISO 8601)
+          maxLength: 500
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/.,' ]*$
+        contentBase64:
+          type: string
+          minLength: 1
+          description: Optional Base64-encoded document content. Prefer `multipart/form-data` to upload the file directly.
+        contentType:
+          $ref: '#/components/schemas/uploadDocumentAllowedContentType'
+        extension:
+          $ref: '#/components/schemas/uploadDocumentAllowedExtension'
     createCaseRequestIw:
       type: object
       additionalProperties: false
@@ -3396,24 +2680,155 @@ components:
           description: Address of property for the new case eg lgsAddressAddressBaseCore
           oneOf:
           - $ref: '#/components/schemas/address'
-    feeEarnerDetails:
+    lgsAddressPAF:
+      $comment: Based https://www.poweredbypaf.com/wp-content/uploads/2017/07/Latest-Programmers_guide_Edition-7-Version-6.pdf. Addresses defined in PAF are designed to be applicable properties that recieve mail.
+      type: object
+      required:
+      - addressType
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressPAF
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+        udprn:
+          type: integer
+          description: Royal Mail’s Unique Delivery Point Reference Number (UDPRN)
+          minimum: 0
+          maximum: 99999999
+        departmentName:
+          type: string
+          description: 'example: Customer Service Department'
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        organisationName:
+          type: string
+          description: 'example: JW Simpsons Ltd'
+          maxLength: 60
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        subBuildingName:
+          type: string
+          description: 'example: The Old Mill'
+          maxLength: 30
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        buildingName:
+          type: string
+          description: 'example: The Annexe'
+          maxLength: 50
+          pattern: ^(?!(&lt;[^&gt;].*&gt;|%3c[^%3e].*%3e|<[^>].*>)).*$
+        buildingNumber:
+          type: string
+          description: 'example: 7'
+          maxLength: 4
+          pattern: ^[A-Za-z0-9-/\s]*$
+        poBoxNumber:
+          type: string
+          description: 'example: 5422'
+          maxLength: 14
+          pattern: ^[A-Za-z0-9.#\s]*$
+        dependentThoroughfare:
+          type: string
+          description: 'example: Richmond Terrace'
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        thoroughfare:
+          type: string
+          description: 'example: Main Street'
+          maxLength: 60
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        doubleDependentLocality:
+          type: string
+          description: 'example: Hook'
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        dependentLocality:
+          type: string
+          description: 'example: Warsash'
+          maxLength: 35
+          pattern: ^[A-Za-zÀ-ž0-9\u2010-\u201F-.,'&\s]*$
+        postTown:
+          type: string
+          description: 'example: Southampton'
+          maxLength: 30
+          pattern: ^[A-Za-zÀ-ž\u2010-\u201F-.'&!\s]*$
+        postcode:
+          type: string
+          description: 'example: SO99 9ZZ'
+          maxLength: 10
+          pattern: ^[A-Za-z0-9\s]*$
+        blpuEasting:
+          type: number
+          description: 'example: 296701'
+        blpuNorthing:
+          type: number
+          description: 'example: 92288'
+    workReferrer:
       type: object
       additionalProperties: false
       properties:
-        feeEarnerName:
+        sourceOfWork:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        referrer:
+          $ref: '#/components/schemas/organisationParty'
+        referrerWorkSource:
+          $ref: '#/components/schemas/organisationParty'
+        referrerFeePayableTo:
+          $ref: '#/components/schemas/organisationParty'
+        referrerReference:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+        referrerFee:
+          $ref: '#/components/schemas/price'
+    lgsPerson:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          $comment: Unique person id
+          $ref: '#/components/schemas/lgsUuid'
+        title:
+          type: string
+          maxLength: 20
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+        firstName:
           type: string
           maxLength: 100
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
-        supervisorName:
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        middleName:
           type: string
           maxLength: 100
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        lastName:
+          type: string
+          maxLength: 100
+          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        email:
+          $comment: Email format based on https://datatracker.ietf.org/doc/html/rfc3696#section-3
+          type: string
+          format: email
+          maxLength: 320
+        telephoneNumber:
+          $comment: Limits set inline with https://en.wikipedia.org/wiki/E.164
+          type: string
+          minLength: 8
+          maxLength: 15
+        mobileTelephoneNumber:
+          $comment: 'Limits set inline with https://en.wikipedia.org/wiki/E.164, ideally this should be used when it is known that the number relates to a mobile number or when there is already a value in the telephoneNumber  '
+          type: string
+          minLength: 8
+          maxLength: 15
+        address:
+          description: Main residential address
+          $ref: '#/components/schemas/lgsAddress'
+        correspondenceAddress:
+          description: Alternative address for correspondence
+          $ref: '#/components/schemas/lgsAddress'
+      required:
+      - lastName
     upsertTaskRequest:
       type: object
       additionalProperties: false
@@ -3557,52 +2972,127 @@ components:
           maxLength: 100
           pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
           description: Resource assigned to the task
-    lgsPerson:
+    price:
       type: object
-      additionalProperties: true
+      additionalProperties: false
       properties:
-        id:
-          $comment: Unique person id
-          $ref: '#/components/schemas/lgsUuid'
+        amount:
+          type: number
+          format: double
+          minimum: 0
+        currency:
+          type: string
+          maxLength: 3
+          pattern: ^$|^[A-Z]{3}$
+    address:
+      allOf:
+      - $ref: '#/components/schemas/lgsAddressAddressBaseCore'
+      - type: object
+        additionalProperties: false
+        description: address to associate with case
+        required:
+        - postcode
+        - addressType
+        - townName
+        - streetName
+        - locality
+    organisationParty:
+      type: object
+      additionalProperties: false
+      properties:
+        partyType:
+          type: string
+          enum:
+          - organisation
+          description: Party type discriminator.
+        name:
+          type: string
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        email:
+          type: string
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        email2:
+          type: string
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        officePhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        officeFax:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        website:
+          type: string
+          maxLength: 250
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*;()_+-/,.':]*$
+        dxNumber:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        dxExchange:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        address:
+          $ref: '#/components/schemas/propertyAddress'
+    personParty:
+      type: object
+      additionalProperties: false
+      properties:
+        partyType:
+          type: string
+          enum:
+          - person
+          description: Party type discriminator.
         title:
           type: string
           maxLength: 20
-          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+.'-]*$
         firstName:
           type: string
           maxLength: 100
-          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
         middleName:
           type: string
           maxLength: 100
-          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-        lastName:
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+        surname:
           type: string
           maxLength: 100
-          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-        email:
-          $comment: Email format based on https://datatracker.ietf.org/doc/html/rfc3696#section-3
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
+        personalEmail:
           type: string
-          format: email
           maxLength: 320
-        telephoneNumber:
-          $comment: Limits set inline with https://en.wikipedia.org/wiki/E.164
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        workEmail:
           type: string
-          minLength: 8
-          maxLength: 15
-        mobileTelephoneNumber:
-          $comment: 'Limits set inline with https://en.wikipedia.org/wiki/E.164, ideally this should be used when it is known that the number relates to a mobile number or when there is already a value in the telephoneNumber  '
+          maxLength: 320
+          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+        homePhone:
           type: string
-          minLength: 8
-          maxLength: 15
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        workPhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
+        mobilePhone:
+          type: string
+          maxLength: 25
+          pattern: ^[\d\s\+\-\(\)]*$
         address:
-          description: Main residential address
-          $ref: '#/components/schemas/lgsAddress'
-        correspondenceAddress:
-          description: Alternative address for correspondence
-          $ref: '#/components/schemas/lgsAddress'
-      required:
-      - lastName
+          $ref: '#/components/schemas/propertyAddress'
+    clientsIw:
+      type: array
+      additionalProperties: false
+      minItems: 1
+      maxItems: 4
+      items:
+        $ref: '#/components/schemas/lgsPerson'
     lgsAddress9Line:
       $comment: 9Line is suitable for those applications where a structured address is required but flexibility around the address elements is desired.
       type: object
@@ -3662,63 +3152,127 @@ components:
           description: 'example: SO99 9ZZ'
           maxLength: 200
           pattern: ^.*$
-    personParty:
+    feeEarnerDetails:
       type: object
       additionalProperties: false
       properties:
-        partyType:
-          type: string
-          enum:
-          - person
-          description: Party type discriminator.
-        title:
-          type: string
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+.'-]*$
-        firstName:
+        feeEarnerName:
           type: string
           maxLength: 100
           pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
-        middleName:
+        supervisorName:
           type: string
           maxLength: 100
           pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
-        surname:
+    getCaseIwResponse:
+      type: object
+      additionalProperties: false
+      title: Case summary
+      description: Read-only case summary returned by Get Case IW.
+      properties:
+        caseReference:
           type: string
-          maxLength: 100
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+'-]*$
-        personalEmail:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference.
+        externalCaseReference:
           type: string
-          maxLength: 320
-          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-        workEmail:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: External case reference from the originating system.
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 99999
+          description: Intelliworks workflow identifier.
+        workflowDisplayName:
           type: string
-          maxLength: 320
-          pattern: ^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-        homePhone:
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: Display name of the workflow.
+        caseType:
           type: string
-          maxLength: 25
-          pattern: ^[\d\s\+\-\(\)]*$
-        workPhone:
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        caseDescription:
           type: string
-          maxLength: 25
-          pattern: ^[\d\s\+\-\(\)]*$
-        mobilePhone:
+          maxLength: 150
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        caseStatus:
           type: string
-          maxLength: 25
-          pattern: ^[\d\s\+\-\(\)]*$
-        address:
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        caseProgress:
+          type: string
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        purchaseDate:
+          type: string
+          maxLength: 10
+          pattern: ^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+          description: ISO 8601 date (yyyy-MM-dd) or empty when not set.
+        feeEarnerDetails:
+          $ref: '#/components/schemas/feeEarnerDetails'
+        clients:
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/clientParty'
+        workReferrer:
+          $ref: '#/components/schemas/workReferrer'
+        buyersConveyancer:
+          $ref: '#/components/schemas/buyersConveyancer'
+        sellersConveyancer:
+          $ref: '#/components/schemas/buyersConveyancer'
+        estateAgent:
+          $ref: '#/components/schemas/organisationParty'
+        lenders:
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/lenderParty'
+        lenderAccountNumbers:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+        lenderNotes:
+          type: string
+          maxLength: 500
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*;()_+-/,.']*$
+        propertyAddress:
           $ref: '#/components/schemas/propertyAddress'
-    uploadDocumentAllowedExtension:
-      type: string
-      enum:
-      - pdf
-      - doc
-      - docx
-      - txt
-      - png
-      - jpg
-      - jpeg
+        sellers:
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/personParty'
+        price:
+          $ref: '#/components/schemas/price'
+    milestoneUpsertItem:
+      type: object
+      additionalProperties: false
+      required:
+      - milestoneId
+      properties:
+        milestoneId:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Milestone identifier. See [Supported milestone IDs by workflow](#supported-milestone-ids).
+        actualDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Milestone actual completion date/time in UTC (ISO 8601)
+        forecastDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Milestone forecast date/time in UTC (ISO 8601)
     upsertTaskResult:
       type: object
       additionalProperties: false
@@ -3746,110 +3300,414 @@ components:
         transactionId:
           $ref: '#/components/schemas/lgsUuid'
           description: Parent transaction id for the task
+    lgsUprn:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775000
+    lgsAddressUprnOnly:
+      $comment: UprnOnly is suitable when client or application has a valid uprn. If an address is required an address match will need to be made.
+      type: object
+      required:
+      - addressType
+      - uprn
+      properties:
+        addressType:
+          type: string
+          enum:
+          - addressUprnOnly
+        uprn:
+          $ref: '#/components/schemas/lgsUprn'
+    uploadDocumentAllowedContentType:
+      type: string
+      enum:
+      - application/pdf
+      - application/msword
+      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - text/plain
+      - image/png
+      - image/jpeg
+    clientsIwProbate:
+      type: array
+      additionalProperties: false
+      minItems: 1
+      maxItems: 4
+      items:
+        allOf:
+        - $ref: '#/components/schemas/lgsPerson'
+        - type: object
+          properties:
+            gender:
+              type: string
+              enum:
+              - Male
+              - Female
+              - Unknown
+            placeOfDeath:
+              type: string
+              pattern: ^.*$
+            dateOfBirth:
+              type: string
+              title: The dateOfBirth
+              description: dateofbirth
+              format: datetime
+            dateOfDeath:
+              type: string
+              title: The DateOfDeath
+              description: DateOfDeath
+              format: datetime
+          required:
+          - dateOfDeath
+    uploadDocumentResponse:
+      type: object
+      additionalProperties: false
+      description: Accepted document upload response
+      required:
+      - transactionRequestId
+      - transactionId
+      - documentId
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+        documentId:
+          $ref: '#/components/schemas/lgsUuid'
+    milestoneQueryResponse:
+      type: object
+      additionalProperties: false
+      description: Response containing milestone actual completion date for a case
+      required:
+      - caseId
+      - milestoneId
+      - actualDate
+      properties:
+        caseId:
+          type: string
+          maxLength: 25
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case identifier (e.g. PBX-000867, GPR-000039)
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-]*$
+          description: External system case reference when supplied in the request
+          default: ''
+        milestoneId:
+          type: integer
+          format: int32
+          minimum: 1
+        actualDate:
+          type: string
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          description: Milestone actual completion date/time in UTC (ISO 8601)
+    caseResponse:
+      type: object
+      properties:
+        lgsTransactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: A transactionId is associated with a case which belongs to specific workflow
+          default: ''
+        lgsTransactionRequestId:
+          $ref: '#/components/schemas/lgsUuid'
+          description: A transactionRequestId is associated with a case which belongs to specific workflow
+          default: ''
+        href:
+          type: string
+          format: url
+          description: href link in case request response
+          default: ''
+    createCaseRequestIwPrivateClient:
+      type: object
+      additionalProperties: false
+      title: A case data as a request for Private Client workflow (LPA, Wills)
+      description: request for a Private Client workflow (LPA, Wills) create case
+      required:
+      - workflowId
+      - caseSummary
+      - externalCaseId
+      - clients
+      properties:
+        workflowId:
+          type: string
+          enum:
+          - '415'
+          - '500'
+          title: A workflowid for workflow
+          description: A workflowid is associated with a case which belongs to specific workflow
+        branchId:
+          $ref: '#/components/schemas/lgsUuid'
+        caseSummary:
+          type: string
+          pattern: ^.*$
+          maxLength: 60
+          title: case summary for a workflow case
+          description: A casesummary is what we are creating for a case
+          default: ''
+        externalCaseId:
+          type: string
+          pattern: ^.*$
+          maxLength: 50
+          title: externalCaseId
+          description: The case reference from the external system
+          default: ''
+        casePriorty:
+          type: string
+          title: The casepriorty
+          enum:
+          - '3'
+          - '2'
+          - '1'
+          description: ''
+          default: '3'
+        clients:
+          $ref: '#/components/schemas/clientsIw'
+          title: The clients details
+          description: Up to 4 clients - consists of names, contact and address details
+        transactionId:
+          $ref: '#/components/schemas/lgsUuid'
+          title: The transactionid
+          description: every case is associated with a transaction
+  examples:
+    AddCaseHandlerContactIdExample:
+      summary: Add Case Handler by ContactId Example
+      description: Example request for adding a case handler by contactId
+      value:
+        contactId: d1e2f3a4-b5c6-7890-def1-234567890abc
+    RetrieveCaseResponseExample:
+      summary: Retrieve Case Response Example
+      description: Example response for retrieving a complete case
+      value:
+        caseId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        status: In Progress
+        additionalReferences:
+        - type: Introducer
+          reference: purchase - 123456
+        propertyAddress:
+          thoroughfare: High Street
+          postTown: London
+          postcode: SW1A 1AA
+          country: England
+        product:
+          productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+          propertyLocation: EnglandWales
+          productDetails:
+            property:
+              value: 350000
+              tenure: Freehold
+              exceedsHeightThreshold: false
+              isHMO: false
+              isNewBuild: false
+            referralFee: 150
+            hasOfferBeenAccepted: true
+            doesReservationFormApply: false
+            isRightToBuy: false
+            isAuctionPurchase: false
+            isPropertyBeingBoughtWithMortgage: true
+            lender: Halifax
+        persons:
+        - reference: a1b2c3d4-e5f6-7890-abcd-ef1234567890a
+          title: Mr
+          firstName: John
+          lastName: Smith
+          email: john.smith@example.com
+          telephoneNumber: '+447123456789'
+          correspondenceAddress:
+            thoroughfare: High Street
+            postTown: London
+            county: Greater London
+            postcode: SW1A 1AA
+            country: England
+          roles:
+          - Applicant
+        conveyancer:
+          conveyancerId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+          name: Key Conveyancing LLP
+          location: Northampton
+          logoUrl: https://cdn.optimus.com/logos/key-conveyancing.png
+        documents:
+        - documentId: d1e2f3a4-b5c6-7890-def1-234567890abc
+          mimeType: application/pdf
+          documentType: Undefined
+          filename: search-report.pdf
+          createdDate: '2024-01-20T10:30:00Z'
+        - documentId: e2f3a4b5-c6d7-8901-ef12-34567890abcd
+          mimeType: image/jpeg
+          documentType: Undefined
+          filename: property-photo.jpg
+          createdDate: '2024-01-21T14:15:00Z'
+        accounts:
+        - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
+          roles:
+          - Originator
+        - accountId: d7eaff45-0c1a-4809-9aa2-49e09fbdc9c9
+          roles:
+          - Introducer
+        contacts:
+        - contactId: 6a969045-973e-428d-b664-7e51a7d73bf0
+          roles:
+          - Requestor
+        - contactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+          name: Sarah Johnson
+          roles:
+          - CaseHandler
+    CaseActivityListResponseExample:
+      summary: Case Activities Response Example
+      description: Example response for retrieving activities on a case
+      value:
+        activities:
+        - activityId: '10001234'
+          type: Note
+          message: Case status updated to In Progress
+          metadata: null
+          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+          createdDate: '2024-01-20T10:30:00Z'
+        - activityId: '10001235'
+          type: Note
+          message: Client confirmed they have submitted ID documents.
+          metadata: null
+          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+          createdDate: '2024-01-20T14:15:00Z'
+    CreateCaseNoteResponseExample:
+      summary: Add Note to Case Response Example
+      description: Example response when a note is added to a case
+      value:
+        title: ID documents received
+        body: Client confirmed they have submitted ID documents.
+        createdDate: '2024-01-20T10:30:00Z'
+    CaseNoteListResponseExample:
+      summary: List Case Notes Response Example
+      description: Example response for retrieving notes on a case
+      value:
+        notes:
+        - noteId: '10001234'
+          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+          title: ID documents received
+          body: Client confirmed they have submitted ID documents.
+          createdDate: '2024-01-20T10:30:00Z'
+          modifiedDate: '2024-01-20T10:30:00Z'
+          supersedesNoteId: null
+        - noteId: '10001235'
+          createdByContactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+          title: null
+          body: Chased the lender for the mortgage offer.
+          createdDate: '2024-01-21T09:05:00Z'
+          modifiedDate: '2024-01-21T11:20:00Z'
+          supersedesNoteId: null
+    DocumentUploadExample:
+      summary: Document Upload Example
+      description: Example request for uploading a document to a case
+      value:
+        mimeType: application/pdf
+        documentType: Undefined
+        filename: search-report.pdf
+        file: <binary file content>
+    CaseListResponseExample:
+      summary: Case List Response Example
+      description: Example response for retrieving a list of cases
+      value:
+        count: 3
+        cases:
+        - caseId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+          status: In Progress
+          propertyAddress:
+            thoroughfare: High Street
+            postTown: London
+            postcode: SW1A 1AA
+          product:
+            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            propertyLocation: EnglandWales
+          conveyancer:
+            conveyancerId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            name: Key Conveyancing LLP
+          caseHandler:
+            contactId: c1d2e3f4-a5b6-7890-cdef-1234567890ab
+            name: Sarah Johnson
+          lastUpdatedDate: '2024-01-20T14:30:00Z'
+        - caseId: b2c3d4e5-f6a7-8901-bcde-f1234567890a
+          status: On hold
+          propertyAddress:
+            thoroughfare: Oak Avenue
+            postTown: Manchester
+            postcode: M1 1AA
+          product:
+            productId: e5e42a0e-6717-4b45-8cd5-0f3a3b79cf4d
+            propertyLocation: EnglandWales
+          conveyancer:
+            conveyancerId: b2c3d4e5-f6a7-8901-bcde-f1234567890a
+            name: O'Neill Patient Solicitors LLP
+          lastUpdatedDate: '2024-01-19T10:15:00Z'
+        - caseId: c3d4e5f6-a7b8-9012-cdef-1234567890ab
+          status: Pending Approval
+          propertyAddress:
+            thoroughfare: Highland Way
+            postTown: Edinburgh
+            postcode: EH1 1AA
+          product:
+            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            propertyLocation: Scotland
+          conveyancer:
+            conveyancerId: c3d4e5f6-a7b8-9012-cdef-1234567890ab
+            name: Scottish Property Lawyers
+          lastUpdatedDate: '2024-01-18T09:00:00Z'
+    AddCaseHandlerEmailExample:
+      summary: Add Case Handler by Email Example
+      description: Example request for adding a case handler by email
+      value:
+        email: case.handler@example.com
+    CreateCaseNoteExample:
+      summary: Add Note to Case Example
+      description: Example request for adding a note to a case
+      value:
+        title: ID documents received
+        body: Client confirmed they have submitted ID documents.
+    UpdateCaseStatusExample:
+      summary: Update Case Status Example
+      description: Example request for updating a case status
+      value:
+        status: On Hold
+        reason: Awaiting additional documentation from the client
+    CaseTaskListResponseExample:
+      summary: Case Tasks Response Example
+      description: Example response for retrieving tasks on a case
+      value:
+        tasks:
+        - taskId: 1234567
+          name: Pre-completion
+          reference: PRECOMP
+          depth: 0
+          ordinal: 1
+          status: In Progress
+          isComplete: false
+          metadata: null
+          children:
+          - taskId: 1234568
+            name: Initial review
+            reference: INIT
+            depth: 1
+            ordinal: 1
+            status: Done
+            isComplete: true
+            completedDate: '2024-01-20T10:30:00Z'
+            metadata: null
+            children: []
+        - taskId: 1234569
+          name: Exchange of contracts
+          reference: EXCH
+          depth: 0
+          ordinal: 2
+          status: To Do
+          isComplete: false
+          metadata: null
+          children: []
+        count: 12
+    RejectCaseExample:
+      summary: Reject Case Example
+      description: Example request for rejecting a case
+      value:
+        reason: Unable to take on this case due to capacity constraints
   responses:
-    409Conflict:
-      description: Conflict
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Case not in valid status:
-              value:
-                status: '409'
-                code: '40900'
-                title: Conflict
-                messages:
-                - property: caseId
-                  message: Failed to add case handler for case. Case status not valid.
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
-    404NotFound:
-      description: Not Found
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Entity not found:
-              value:
-                status: '404'
-                code: '40401'
-                title: Entity not found
-    429TooManyRequests:
-      description: Too Many Requests
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Rate Limit Exceeded:
-              value:
-                status: '429'
-                code: '42900'
-                title: Rate limit exceeded
-    400BadRequest:
-      description: Bad Request
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid content type supplied:
-              value:
-                status: '400'
-                code: '40000'
-                title: Invalid content type supplied
-            Validation error:
-              value:
-                status: '400'
-                code: '40001'
-                title: Validation error
-            Invalid traceparent http header:
-              value:
-                status: '400'
-                code: '40002'
-                title: Invalid trace header
-            No matching data found:
-              value:
-                status: '400'
-                code: '40003'
-                title: No matching data found
-            Invalid header:
-              value:
-                status: '400'
-                code: '40004'
-                title: Invalid header
-            Third party error:
-              value:
-                status: '400'
-                code: '40005'
-                title: Third party error
     403Forbidden:
       description: Forbidden
       headers:
@@ -3895,6 +3753,24 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
+    409Conflict:
+      description: Conflict
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Case not in valid status:
+              value:
+                status: '409'
+                code: '40900'
+                title: Conflict
+                messages:
+                - property: caseId
+                  message: Failed to add case handler for case. Case status not valid.
     500InternalServerError:
       description: Internal Server Error
       headers:
@@ -3912,6 +3788,91 @@ components:
                 title: Internal server error
                 messages:
                 - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
     500InternalServerError_2:
       description: Internal Server Error
       headers:

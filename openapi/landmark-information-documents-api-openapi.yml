@@ -150,9 +150,7 @@ paths:
 
         Both are forwarded to Intelliworks when provided.
 
-        Each document in the response can be downloaded using `GET /documents/{id}/download`.
-
-        '
+        Each document in the response can be downloaded using `GET /documents/{id}/download`.'
       operationId: getCompletedDocuments
       tags:
       - Documents
@@ -274,98 +272,6 @@ paths:
       description: UAT API
 components:
   responses:
-    400BadRequest:
-      description: Bad Request
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid content type supplied:
-              value:
-                status: '400'
-                code: '40000'
-                title: Invalid content type supplied
-            Validation error:
-              value:
-                status: '400'
-                code: '40001'
-                title: Validation error
-            Invalid traceparent http header:
-              value:
-                status: '400'
-                code: '40002'
-                title: Invalid trace header
-            No matching data found:
-              value:
-                status: '400'
-                code: '40003'
-                title: No matching data found
-            Invalid header:
-              value:
-                status: '400'
-                code: '40004'
-                title: Invalid header
-            Third party error:
-              value:
-                status: '400'
-                code: '40005'
-                title: Third party error
-    500InternalServerError:
-      description: Internal Server Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Resource not found:
-              value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-    404NotFound:
-      description: Not Found
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Entity not found:
-              value:
-                status: '404'
-                code: '40400'
-                title: Entity not found
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
-    413PayloadTooLarge:
-      description: Payload Too Large
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
     429TooManyRequests:
       description: Too Many Requests
       headers:
@@ -381,6 +287,21 @@ components:
                 status: '429'
                 code: '42900'
                 title: Rate limit exceeded
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40400'
+                title: Entity not found
     403Forbidden:
       description: Forbidden
       headers:
@@ -426,6 +347,83 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    413PayloadTooLarge:
+      description: Payload Too Large
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
     404NotFound_2:
       description: Not Found
       headers:
@@ -446,12 +444,6 @@ components:
       description: Your Landmark account ID - this will be provided to you during onboarding
       allOf:
       - $ref: '#/components/schemas/lgsUuid'
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
     addDocumentToDocumentVaultResponse:
       type: object
       additionalProperties: false
@@ -460,6 +452,12 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/lgsUuid'
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
     lgsErrorResponse:
       type: object
       additionalProperties: false
@@ -499,18 +497,6 @@ components:
                 type: string
                 minLength: 1
                 maxLength: 1000
-    Error:
-      required:
-      - code
-      - message
-      additionalProperties: false
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-          pattern: ^.*$
     completedDocumentItem:
       type: object
       additionalProperties: false
@@ -550,6 +536,18 @@ components:
           type: string
           format: date-time
           description: Last updated timestamp (UTC).
+    Error:
+      required:
+      - code
+      - message
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          pattern: ^.*$
     completedDocumentsResponse:
       type: object
       additionalProperties: false
