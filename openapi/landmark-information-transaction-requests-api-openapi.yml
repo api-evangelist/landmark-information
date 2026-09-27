@@ -55,8 +55,8 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
 components:
   responses:
-    404NotFound:
-      description: Not Found
+    500InternalServerError:
+      description: Internal Server Error
       headers:
         traceresponse:
           $ref: '#/components/headers/lgsTraceResponse'
@@ -65,11 +65,13 @@ components:
           schema:
             $ref: '#/components/schemas/lgsErrorResponse'
           examples:
-            Entity not found:
+            Resource not found:
               value:
-                status: '404'
-                code: '40401'
-                title: Entity not found
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
     403Forbidden:
       description: Forbidden
       headers:
@@ -130,8 +132,8 @@ components:
                 status: '401'
                 code: '40100'
                 title: Invalid identity
-    500InternalServerError:
-      description: Internal Server Error
+    404NotFound:
+      description: Not Found
       headers:
         traceresponse:
           $ref: '#/components/headers/lgsTraceResponse'
@@ -140,13 +142,11 @@ components:
           schema:
             $ref: '#/components/schemas/lgsErrorResponse'
           examples:
-            Resource not found:
+            Entity not found:
               value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+                status: '404'
+                code: '40401'
+                title: Entity not found
     400BadRequest:
       description: Bad Request
       headers:
@@ -253,12 +253,6 @@ components:
           type: string
           format: date-time
           description: UTC timestamp of the latest audit record for this transaction request
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
     lgsErrorResponse:
       type: object
       additionalProperties: false
@@ -298,6 +292,12 @@ components:
                 type: string
                 minLength: 1
                 maxLength: 1000
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
   headers:
     lgsTraceResponse:
       description: Trace context providing an unique identifier for an individual requests

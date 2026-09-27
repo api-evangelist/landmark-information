@@ -381,6 +381,240 @@ components:
       description: Your Landmark account ID - this will be provided to you during onboarding
       allOf:
       - $ref: '#/components/schemas/lgsUuid'
+    individualRecipient:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - firstName
+      - lastName
+      - email
+      properties:
+        type:
+          type: string
+          enum:
+          - Individual
+        title:
+          $ref: '#/components/schemas/title'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        email:
+          $ref: '#/components/schemas/email'
+    propertyDetails:
+      description: The property associated with the vault
+      additionalProperties: false
+      type: object
+      required:
+      - address
+      properties:
+        address:
+          $ref: '#/components/schemas/lgsAddressPAFPlus'
+        tenure:
+          $ref: '#/components/schemas/tenure'
+        registered:
+          $ref: '#/components/schemas/registered'
+        sellingCapacity:
+          $ref: '#/components/schemas/sellingCapacity'
+    createDocumentVaultResponse:
+      description: Reference data that can be used to retrieve a Document
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    title:
+      type: string
+      maxLength: 20
+      pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+      example: Mr
+    sellingCapacity:
+      type: string
+      enum:
+      - LegalAndBeneficialOwner
+      - Attorney
+      - PersonalRepresentative
+      - Trustee
+    getDocumentVaultResponse:
+      description: The details stored about the Document Vault
+      type: object
+      required:
+      - id
+      - createdDate
+      - createdBy
+      - updatedDate
+      - property
+      - documents
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+        reference:
+          $ref: '#/components/schemas/documentVaultReference'
+        createdDate:
+          type: string
+          format: date-time
+          maxLength: 38
+        createdBy:
+          $ref: '#/components/schemas/lgsUuid'
+        updatedDate:
+          type: string
+          format: date-time
+          maxLength: 38
+        property:
+          $ref: '#/components/schemas/propertyDetails'
+        recipientOrganisation:
+          $ref: '#/components/schemas/recipientOrganisationResponse'
+        documents:
+          type: array
+          maxItems: 60
+          items:
+            $ref: '#/components/schemas/document'
+    registered:
+      description: Whether the property is registered or not
+      type: boolean
+    recipientOrganisationResponse:
+      description: The organisation acting for vault recipients
+      additionalProperties: false
+      type: object
+      required:
+      - recipients
+      properties:
+        name:
+          $ref: '#/components/schemas/organisationName'
+        reference:
+          $ref: '#/components/schemas/buyerConveyancerReference'
+        recipients:
+          $ref: '#/components/schemas/recipientsResponse'
+    firstName:
+      type: string
+      maxLength: 40
+      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+      example: John
+    lastName:
+      type: string
+      maxLength: 40
+      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+      example: Smith
+    individualRecipientResponse:
+      allOf:
+      - $ref: '#/components/schemas/individualRecipient'
+      - type: object
+        required:
+        - id
+        properties:
+          id:
+            $ref: '#/components/schemas/lgsUuid'
+    recipientOrganisation:
+      description: The organisation acting for vault recipients
+      additionalProperties: false
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/organisationName'
+        reference:
+          $ref: '#/components/schemas/buyerConveyancerReference'
+        recipients:
+          $ref: '#/components/schemas/recipients'
+    middleName:
+      type: string
+      maxLength: 40
+      pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+      example: Michael
+    email:
+      type: string
+      format: email
+      maxLength: 320
+    recipientsResponse:
+      description: An array of objects containing details of recipients to give access to the Document Vault
+      type: array
+      maxItems: 4
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/individualRecipientResponse'
+        - $ref: '#/components/schemas/teamRecipientResponse'
+    teamRecipient:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - name
+      - email
+      properties:
+        type:
+          type: string
+          enum:
+          - Team
+        name:
+          $ref: '#/components/schemas/teamName'
+        email:
+          $ref: '#/components/schemas/email'
+    documentVaultReference:
+      description: Your reference that uniquely identifies the Document Vault
+      type: string
+      minLength: 1
+      maxLength: 50
+      pattern: ^[\w\-\/\.\|]+$
+      example: UT/PL34JT/04-2025
+    tenure:
+      type: string
+      enum:
+      - Freehold
+      - Leasehold
+      - Commonhold
+    recipients:
+      description: An array of objects containing details of recipients to give access to the Document Vault
+      type: array
+      minItems: 1
+      maxItems: 4
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/individualRecipient'
+        - $ref: '#/components/schemas/teamRecipient'
     lgsAddressPAFPlus:
       description: Either `buildingNumber` or `buildingName` must be provided (both may be present).
       type: object
@@ -485,175 +719,11 @@ components:
           minimum: 0
           maximum: 1300000
           example: 92288
-    email:
-      type: string
-      format: email
-      maxLength: 320
-    buyerConveyancerReference:
-      description: The buyer's conveyancer's reference that uniquely identifies the Document Vault
-      type: string
-      minLength: 1
-      maxLength: 40
-      pattern: ^[\w\-\/\.\|]+$
-      example: UT/PL34JT/04-2025
-    lastName:
-      type: string
-      maxLength: 40
-      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-      example: Smith
-    recipients:
-      description: An array of objects containing details of recipients to give access to the Document Vault
-      type: array
-      minItems: 1
-      maxItems: 4
-      items:
-        oneOf:
-        - $ref: '#/components/schemas/individualRecipient'
-        - $ref: '#/components/schemas/teamRecipient'
-    registered:
-      description: Whether the property is registered or not
-      type: boolean
     teamName:
       type: string
       maxLength: 40
       pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž0-9\u2010-\u2015‘’‛.' -]*$
       example: Conveyancing Team 1
-    sellingCapacity:
-      type: string
-      enum:
-      - LegalAndBeneficialOwner
-      - Attorney
-      - PersonalRepresentative
-      - Trustee
-    title:
-      type: string
-      maxLength: 20
-      pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
-      example: Mr
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-    individualRecipient:
-      type: object
-      additionalProperties: false
-      required:
-      - type
-      - firstName
-      - lastName
-      - email
-      properties:
-        type:
-          type: string
-          enum:
-          - Individual
-        title:
-          $ref: '#/components/schemas/title'
-        firstName:
-          $ref: '#/components/schemas/firstName'
-        middleName:
-          $ref: '#/components/schemas/middleName'
-        lastName:
-          $ref: '#/components/schemas/lastName'
-        email:
-          $ref: '#/components/schemas/email'
-    recipientsResponse:
-      description: An array of objects containing details of recipients to give access to the Document Vault
-      type: array
-      maxItems: 4
-      items:
-        oneOf:
-        - $ref: '#/components/schemas/individualRecipientResponse'
-        - $ref: '#/components/schemas/teamRecipientResponse'
-    individualRecipientResponse:
-      allOf:
-      - $ref: '#/components/schemas/individualRecipient'
-      - type: object
-        required:
-        - id
-        properties:
-          id:
-            $ref: '#/components/schemas/lgsUuid'
-    createDocumentVaultRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - property
-      properties:
-        reference:
-          $ref: '#/components/schemas/documentVaultReference'
-        property:
-          $ref: '#/components/schemas/propertyDetails'
-        recipientOrganisation:
-          $ref: '#/components/schemas/recipientOrganisation'
-    tenure:
-      type: string
-      enum:
-      - Freehold
-      - Leasehold
-      - Commonhold
-    teamRecipientResponse:
-      allOf:
-      - $ref: '#/components/schemas/teamRecipient'
-      - type: object
-        required:
-        - id
-        properties:
-          id:
-            $ref: '#/components/schemas/lgsUuid'
-    organisationName:
-      description: Organisation name
-      type: string
-      minLength: 1
-      maxLength: 128
-      example: Landmark Example Conveyancing
-    firstName:
-      type: string
-      maxLength: 40
-      pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-      example: John
-    createDocumentVaultResponse:
-      description: Reference data that can be used to retrieve a Document
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/lgsUuid'
-    propertyDetails:
-      description: The property associated with the vault
-      additionalProperties: false
-      type: object
-      required:
-      - address
-      properties:
-        address:
-          $ref: '#/components/schemas/lgsAddressPAFPlus'
-        tenure:
-          $ref: '#/components/schemas/tenure'
-        registered:
-          $ref: '#/components/schemas/registered'
-        sellingCapacity:
-          $ref: '#/components/schemas/sellingCapacity'
-    teamRecipient:
-      type: object
-      additionalProperties: false
-      required:
-      - type
-      - name
-      - email
-      properties:
-        type:
-          type: string
-          enum:
-          - Team
-        name:
-          $ref: '#/components/schemas/teamName'
-        email:
-          $ref: '#/components/schemas/email'
     document:
       description: An object containing data relating to a document
       type: object
@@ -672,122 +742,67 @@ components:
           type: string
           format: date-time
           maxLength: 38
-    middleName:
-      type: string
-      maxLength: 40
-      pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-      example: Michael
-    documentVaultReference:
-      description: Your reference that uniquely identifies the Document Vault
+    buyerConveyancerReference:
+      description: The buyer's conveyancer's reference that uniquely identifies the Document Vault
       type: string
       minLength: 1
-      maxLength: 50
+      maxLength: 40
       pattern: ^[\w\-\/\.\|]+$
       example: UT/PL34JT/04-2025
-    getDocumentVaultResponse:
-      description: The details stored about the Document Vault
+    organisationName:
+      description: Organisation name
+      type: string
+      minLength: 1
+      maxLength: 128
+      example: Landmark Example Conveyancing
+    createDocumentVaultRequest:
       type: object
-      required:
-      - id
-      - createdDate
-      - createdBy
-      - updatedDate
-      - property
-      - documents
       additionalProperties: false
+      required:
+      - property
       properties:
-        id:
-          $ref: '#/components/schemas/lgsUuid'
         reference:
           $ref: '#/components/schemas/documentVaultReference'
-        createdDate:
-          type: string
-          format: date-time
-          maxLength: 38
-        createdBy:
-          $ref: '#/components/schemas/lgsUuid'
-        updatedDate:
-          type: string
-          format: date-time
-          maxLength: 38
         property:
           $ref: '#/components/schemas/propertyDetails'
         recipientOrganisation:
-          $ref: '#/components/schemas/recipientOrganisationResponse'
-        documents:
-          type: array
-          maxItems: 60
-          items:
-            $ref: '#/components/schemas/document'
-    recipientOrganisationResponse:
-      description: The organisation acting for vault recipients
-      additionalProperties: false
-      type: object
-      required:
-      - recipients
-      properties:
-        name:
-          $ref: '#/components/schemas/organisationName'
-        reference:
-          $ref: '#/components/schemas/buyerConveyancerReference'
-        recipients:
-          $ref: '#/components/schemas/recipientsResponse'
+          $ref: '#/components/schemas/recipientOrganisation'
     lgsUprn:
       type: integer
       format: int64
       minimum: 0
       maximum: 9223372036854775000
-    recipientOrganisation:
-      description: The organisation acting for vault recipients
-      additionalProperties: false
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/organisationName'
-        reference:
-          $ref: '#/components/schemas/buyerConveyancerReference'
-        recipients:
-          $ref: '#/components/schemas/recipients'
-    lgsErrorResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - status
-      - code
-      - title
-      properties:
-        status:
-          type: string
-          minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
-          type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
-          type: string
-          minLength: 1
-          maxLength: 100
-        messages:
-          type: array
-          maxItems: 100
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - message
-            properties:
-              property:
-                type: string
-                minLength: 1
-                maxLength: 1000
-              message:
-                type: string
-                minLength: 1
-                maxLength: 1000
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    teamRecipientResponse:
+      allOf:
+      - $ref: '#/components/schemas/teamRecipient'
+      - type: object
+        required:
+        - id
+        properties:
+          id:
+            $ref: '#/components/schemas/lgsUuid'
   responses:
+    409Conflict:
+      description: Conflict
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Conflict:
+              value:
+                status: '409'
+                code: '40900'
+                title: Entity in wrong state
     403Forbidden:
       description: Forbidden
       headers:
@@ -833,8 +848,8 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
-    409Conflict:
-      description: Conflict
+    401Unauthorized:
+      description: Unauthorized
       headers:
         traceresponse:
           $ref: '#/components/headers/lgsTraceResponse'
@@ -843,16 +858,41 @@ components:
           schema:
             $ref: '#/components/schemas/lgsErrorResponse'
           examples:
-            Conflict:
+            Invalid identity:
               value:
-                status: '409'
-                code: '40900'
-                title: Entity in wrong state
-    413PayloadTooLarge:
-      description: Payload Too Large
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    404NotFound:
+      description: Not Found
       headers:
         traceresponse:
           $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40400'
+                title: Entity not found
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
     500InternalServerError:
       description: Internal Server Error
       headers:
@@ -870,51 +910,11 @@ components:
                 title: Internal server error
                 messages:
                 - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-    429TooManyRequests:
-      description: Too Many Requests
+    413PayloadTooLarge:
+      description: Payload Too Large
       headers:
         traceresponse:
           $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Rate Limit Exceeded:
-              value:
-                status: '429'
-                code: '42900'
-                title: Rate limit exceeded
-    404NotFound:
-      description: Not Found
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Entity not found:
-              value:
-                status: '404'
-                code: '40400'
-                title: Entity not found
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
     400BadRequest:
       description: Bad Request
       headers:

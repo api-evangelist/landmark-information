@@ -153,22 +153,93 @@ paths:
         '500':
           $ref: '#/components/responses/500InternalServerError'
 components:
+  schemas:
+    accountId:
+      description: Your Landmark account ID - this will be provided to you during onboarding
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    activity:
+      type: object
+      required:
+      - action
+      - createdBy
+      - createdDate
+      additionalProperties: false
+      properties:
+        action:
+          type: string
+          description: The context of the activity
+        detail:
+          type: string
+          description: The activity message
+        createdBy:
+          type: string
+          description: The full name of the person who created the activity
+        createdDate:
+          type: string
+          format: date-time
+          maxLength: 38
+        metadata:
+          type: object
+          description: Additional metadata for the activity
+          additionalProperties: true
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    getActivitiesResponse:
+      description: The activities relating to the associated document vault
+      type: object
+      required:
+      - activities
+      additionalProperties: false
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/activity'
   responses:
-    429TooManyRequests:
-      description: Too Many Requests
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Rate Limit Exceeded:
-              value:
-                status: '429'
-                code: '42900'
-                title: Rate limit exceeded
     404NotFound:
       description: Not Found
       headers:
@@ -184,6 +255,23 @@ components:
                 status: '404'
                 code: '40400'
                 title: Entity not found
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
     403Forbidden:
       description: Forbidden
       headers:
@@ -229,6 +317,21 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
     401Unauthorized:
       description: Unauthorized
       headers:
@@ -244,23 +347,6 @@ components:
                 status: '401'
                 code: '40100'
                 title: Invalid identity
-    500InternalServerError:
-      description: Internal Server Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Resource not found:
-              value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
     400BadRequest:
       description: Bad Request
       headers:
@@ -301,92 +387,6 @@ components:
                 status: '400'
                 code: '40005'
                 title: Third party error
-  schemas:
-    accountId:
-      description: Your Landmark account ID - this will be provided to you during onboarding
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    getActivitiesResponse:
-      description: The activities relating to the associated document vault
-      type: object
-      required:
-      - activities
-      additionalProperties: false
-      properties:
-        activities:
-          type: array
-          items:
-            $ref: '#/components/schemas/activity'
-    activity:
-      type: object
-      required:
-      - action
-      - createdBy
-      - createdDate
-      additionalProperties: false
-      properties:
-        action:
-          type: string
-          description: The context of the activity
-        detail:
-          type: string
-          description: The activity message
-        createdBy:
-          type: string
-          description: The full name of the person who created the activity
-        createdDate:
-          type: string
-          format: date-time
-          maxLength: 38
-        metadata:
-          type: object
-          description: Additional metadata for the activity
-          additionalProperties: true
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-    lgsErrorResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - status
-      - code
-      - title
-      properties:
-        status:
-          type: string
-          minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
-          type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
-          type: string
-          minLength: 1
-          maxLength: 100
-        messages:
-          type: array
-          maxItems: 100
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - message
-            properties:
-              property:
-                type: string
-                minLength: 1
-                maxLength: 1000
-              message:
-                type: string
-                minLength: 1
-                maxLength: 1000
   headers:
     lgsTraceResponse:
       description: Trace context providing an unique identifier for an individual requests

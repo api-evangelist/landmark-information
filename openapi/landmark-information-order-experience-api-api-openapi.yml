@@ -226,198 +226,6 @@ components:
       description: Your Landmark account ID - this will be provided to you during onboarding.
       allOf:
       - $ref: '#/components/schemas/lgsUuid'
-    orderReference:
-      description: Your reference that uniquely identifies the product order.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    orderId:
-      description: Unique Landmark ID for the order.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    createOrderRequest:
-      type: object
-      required:
-      - reference
-      - accountId
-      - products
-      additionalProperties: false
-      properties:
-        reference:
-          type: string
-          maxLength: 100
-          description: Your reference to identify the transaction.
-        accountId:
-          $ref: '#/components/schemas/accountId'
-        transactionId:
-          $ref: '#/components/schemas/transactionId'
-        transactionAddress:
-          description: The property address for the transaction related to the products being ordered.
-          allOf:
-          - $ref: '#/components/schemas/lgsAddressPAF'
-        callback:
-          description: Callback uri that should receive status updates. Each product will receieve a status update.
-          allOf:
-          - $ref: '#/components/schemas/lgsCallbackBasic'
-        persons:
-          description: "The details of the people involved in your transaction - some Products will require these for processing (e.g. AML searches). \n\nYou must set a unique reference for each of these people for use in ordering products. \n"
-          type: array
-          maxItems: 20
-          items:
-            $ref: '#/components/schemas/lgsPersonWithRoles'
-        products:
-          description: "An array of the products that you require. For each of these, an order will be created in the Landmark system and will begin processing. \nYou must provide a reference GUID for each product which we will use in the response and callbacks, if you are using them, to help you identify the Order. \n\nSee the [Product Request Schemas](#tag/Product-Request-Schemas) for details on how to order each one. \n"
-          type: array
-          minItems: 1
-          maxItems: 20
-          items:
-            $ref: '#/components/schemas/product'
-    transactionId:
-      description: The unique Landmark ID for the transaction. This ID can be used to associate multiple orders to a single transaction.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    transactionReference:
-      type: string
-      maxLength: 100
-      description: Your reference to identify the transaction.
-    lgsPersonWithRoles:
-      type: object
-      additionalProperties: false
-      required:
-      - reference
-      - firstName
-      - lastName
-      - roles
-      properties:
-        reference:
-          type: string
-          description: Your unique reference for the person.
-          minLength: 1
-          maxLength: 100
-        title:
-          type: string
-          maxLength: 20
-          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
-        firstName:
-          type: string
-          maxLength: 100
-          minLength: 1
-          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-        middleName:
-          type: string
-          maxLength: 100
-          minLength: 1
-          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-        lastName:
-          type: string
-          maxLength: 100
-          minLength: 1
-          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
-        email:
-          description: Email format based on https://datatracker.ietf.org/doc/html/rfc3696#section-3
-          type: string
-          format: email
-          maxLength: 320
-        telephoneNumber:
-          description: Limits set inline with https://en.wikipedia.org/wiki/E.164
-          type: string
-          minLength: 8
-          maxLength: 15
-        mobileTelephoneNumber:
-          description: Limits set inline with https://en.wikipedia.org/wiki/E.164, ideally this should be used when it is known that the number relates to a mobile number or when there is already a value in the telephoneNumber
-          type: string
-          minLength: 8
-          maxLength: 15
-        dateOfBirth:
-          type: string
-          format: date
-          description: Date ISO8601 format, YYYY-MM-DD
-        address:
-          allOf:
-          - description: Main residential address for the person
-          - $ref: '#/components/schemas/lgsAddressPAF'
-        roles:
-          type: array
-          minItems: 1
-          items:
-            type: string
-            description: The role of the person in this transaction request. Primary role used to identify the main applicant, vendor, buyer etc.
-            enum:
-            - PrimaryContact
-            - Applicant
-            - Occupier
-            - Vendor
-            - Buyer
-            - Creator
-            - Requestor
-            - Recipient
-            - Surveyor
-            - EstateAgent
-            - KeyHolder
-            - MortgageBroker
-    createOrderResponse:
-      title: Create Order Response
-      type: object
-      required:
-      - transactionId
-      - orders
-      additionalProperties: false
-      properties:
-        transactionId:
-          $ref: '#/components/schemas/transactionId'
-        reference:
-          $ref: '#/components/schemas/transactionReference'
-        orders:
-          type: array
-          minItems: 1
-          maxItems: 20
-          items:
-            type: object
-            additionalProperties: false
-            properties:
-              orderId:
-                $ref: '#/components/schemas/orderId'
-              productId:
-                $ref: '#/components/schemas/productId'
-              reference:
-                $ref: '#/components/schemas/orderReference'
-      example:
-        transactionId: 458f6a73-607b-4a06-bc23-b3553e7233ec
-        reference: 25GWT/JS/45.5
-        orders:
-        - orderId: 33220999-6922-4f87-a2ee-045fca06eba2
-          productId: c61c761a-baff-4b5a-a437-7c1247019436
-          reference: 742edeff-c267-490d-b5b0-3997ce2e6170
-        - orderId: 5e55b92c-2e45-4b5c-a354-cd272e6adb67
-          productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
-          reference: 825a6106-e8ac-4d93-ba87-97357fc619a7
-        - orderId: a70da744-50f0-4952-b3a2-73e64428e969
-          productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
-          reference: 6363e54b-e83a-45b4-96e0-5528cc36e27f
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-    orderStatusResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        orderId:
-          $ref: '#/components/schemas/orderId'
-        reference:
-          $ref: '#/components/schemas/orderReference'
-        status:
-          $ref: '#/components/schemas/orderStatus'
-        statusDescription:
-          type: string
-          maxLength: 1000
-          description: Provides further detail regarding the order status.
-      example:
-        orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
-        reference: 513ba615-1e78-4751-968b-2402a49e5594
-        status: Completed
-        statusDescription: AML order is Completed.
     lgsAddressPAF:
       type: object
       additionalProperties: false
@@ -479,6 +287,68 @@ components:
           example: SO99 9ZZ
           maxLength: 10
           pattern: ^[A-Za-z0-9\s]*$
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    orderReference:
+      description: Your reference that uniquely identifies the product order.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    orderStatusResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        reference:
+          $ref: '#/components/schemas/orderReference'
+        status:
+          $ref: '#/components/schemas/orderStatus'
+        statusDescription:
+          type: string
+          maxLength: 1000
+          description: Provides further detail regarding the order status.
+      example:
+        orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
+        reference: 513ba615-1e78-4751-968b-2402a49e5594
+        status: Completed
+        statusDescription: AML order is Completed.
     orderDocuments:
       type: object
       additionalProperties: false
@@ -510,6 +380,83 @@ components:
           description: The date the file was created.
           type: string
           format: date-time
+    orderStatus:
+      description: The status of the order
+      type: string
+      enum:
+      - Processing
+      - Completed
+      - Errored
+      - Cancelled
+    product:
+      type: object
+      required:
+      - productId
+      - reference
+      additionalProperties: false
+      properties:
+        productId:
+          description: Unique Landmark ID for the product.
+          allOf:
+          - $ref: '#/components/schemas/lgsUuid'
+        reference:
+          description: Your reference that uniquely identifies the product order.
+          allOf:
+          - $ref: '#/components/schemas/lgsUuid'
+        productOptions:
+          type: object
+          description: An object to provide data and options specific to the product. See [Product Request Schemas](#tag/Product-Request-Schemas) for further details on the product options.
+    transactionId:
+      description: The unique Landmark ID for the transaction. This ID can be used to associate multiple orders to a single transaction.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    createOrderResponse:
+      title: Create Order Response
+      type: object
+      required:
+      - transactionId
+      - orders
+      additionalProperties: false
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        reference:
+          $ref: '#/components/schemas/transactionReference'
+        orders:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              orderId:
+                $ref: '#/components/schemas/orderId'
+              productId:
+                $ref: '#/components/schemas/productId'
+              reference:
+                $ref: '#/components/schemas/orderReference'
+      example:
+        transactionId: 458f6a73-607b-4a06-bc23-b3553e7233ec
+        reference: 25GWT/JS/45.5
+        orders:
+        - orderId: 33220999-6922-4f87-a2ee-045fca06eba2
+          productId: c61c761a-baff-4b5a-a437-7c1247019436
+          reference: 742edeff-c267-490d-b5b0-3997ce2e6170
+        - orderId: 5e55b92c-2e45-4b5c-a354-cd272e6adb67
+          productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
+          reference: 825a6106-e8ac-4d93-ba87-97357fc619a7
+        - orderId: a70da744-50f0-4952-b3a2-73e64428e969
+          productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
+          reference: 6363e54b-e83a-45b4-96e0-5528cc36e27f
+    orderId:
+      description: Unique Landmark ID for the order.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    productId:
+      description: Unique Landmark ID for the product.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
     lgsCallbackBasic:
       type: object
       additionalProperties: false
@@ -593,33 +540,10 @@ components:
         status: Pass
         comment: Approving manually as customer has provided me with a utility bill, confirming their address.
         actionedBy: john.doe@company.co.uk
-    productId:
-      description: Unique Landmark ID for the product.
+    documentId:
+      description: Unique Landmark ID for the document.
       allOf:
       - $ref: '#/components/schemas/lgsUuid'
-    product:
-      type: object
-      required:
-      - productId
-      - reference
-      additionalProperties: false
-      properties:
-        productId:
-          description: Unique Landmark ID for the product.
-          allOf:
-          - $ref: '#/components/schemas/lgsUuid'
-        reference:
-          description: Your reference that uniquely identifies the product order.
-          allOf:
-          - $ref: '#/components/schemas/lgsUuid'
-        productOptions:
-          type: object
-          description: An object to provide data and options specific to the product. See [Product Request Schemas](#tag/Product-Request-Schemas) for further details on the product options.
-    lgsUprn:
-      type: integer
-      format: int64
-      minimum: 0
-      maximum: 9223372036854775000
     getOrderResponse:
       title: Order Response
       type: object
@@ -676,57 +600,133 @@ components:
           documentType: AMLReport
           filename: ResultsDocument.pdf
           createdDate: '2020-07-02T12:00:00Z'
-    orderStatus:
-      description: The status of the order
+    transactionReference:
       type: string
-      enum:
-      - Processing
-      - Completed
-      - Errored
-      - Cancelled
-    lgsErrorResponse:
+      maxLength: 100
+      description: Your reference to identify the transaction.
+    lgsUprn:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775000
+    createOrderRequest:
+      type: object
+      required:
+      - reference
+      - accountId
+      - products
+      additionalProperties: false
+      properties:
+        reference:
+          type: string
+          maxLength: 100
+          description: Your reference to identify the transaction.
+        accountId:
+          $ref: '#/components/schemas/accountId'
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        transactionAddress:
+          description: The property address for the transaction related to the products being ordered.
+          allOf:
+          - $ref: '#/components/schemas/lgsAddressPAF'
+        callback:
+          description: Callback uri that should receive status updates. Each product will receieve a status update.
+          allOf:
+          - $ref: '#/components/schemas/lgsCallbackBasic'
+        persons:
+          description: "The details of the people involved in your transaction - some Products will require these for processing (e.g. AML searches). \n\nYou must set a unique reference for each of these people for use in ordering products. \n"
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/lgsPersonWithRoles'
+        products:
+          description: "An array of the products that you require. For each of these, an order will be created in the Landmark system and will begin processing. \nYou must provide a reference GUID for each product which we will use in the response and callbacks, if you are using them, to help you identify the Order. \n\nSee the [Product Request Schemas](#tag/Product-Request-Schemas) for details on how to order each one. \n"
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/product'
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    lgsPersonWithRoles:
       type: object
       additionalProperties: false
       required:
-      - status
-      - code
-      - title
+      - reference
+      - firstName
+      - lastName
+      - roles
       properties:
-        status:
+        reference:
           type: string
-          minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
-          type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
-          type: string
+          description: Your unique reference for the person.
           minLength: 1
           maxLength: 100
-        messages:
+        title:
+          type: string
+          maxLength: 20
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž'. -]*$
+        firstName:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        middleName:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^.{0}$|^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        lastName:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^(?=.*[A-Za-zÀ-ÖØ-öø-ž])[A-Za-zÀ-ÖØ-öø-ž\u2010-\u2015‘’‛.' -]*$
+        email:
+          description: Email format based on https://datatracker.ietf.org/doc/html/rfc3696#section-3
+          type: string
+          format: email
+          maxLength: 320
+        telephoneNumber:
+          description: Limits set inline with https://en.wikipedia.org/wiki/E.164
+          type: string
+          minLength: 8
+          maxLength: 15
+        mobileTelephoneNumber:
+          description: Limits set inline with https://en.wikipedia.org/wiki/E.164, ideally this should be used when it is known that the number relates to a mobile number or when there is already a value in the telephoneNumber
+          type: string
+          minLength: 8
+          maxLength: 15
+        dateOfBirth:
+          type: string
+          format: date
+          description: Date ISO8601 format, YYYY-MM-DD
+        address:
+          allOf:
+          - description: Main residential address for the person
+          - $ref: '#/components/schemas/lgsAddressPAF'
+        roles:
           type: array
-          maxItems: 100
+          minItems: 1
           items:
-            type: object
-            additionalProperties: false
-            required:
-            - message
-            properties:
-              property:
-                type: string
-                minLength: 1
-                maxLength: 1000
-              message:
-                type: string
-                minLength: 1
-                maxLength: 1000
-    documentId:
-      description: Unique Landmark ID for the document.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
+            type: string
+            description: The role of the person in this transaction request. Primary role used to identify the main applicant, vendor, buyer etc.
+            enum:
+            - PrimaryContact
+            - Applicant
+            - Occupier
+            - Vendor
+            - Buyer
+            - Creator
+            - Requestor
+            - Recipient
+            - Surveyor
+            - EstateAgent
+            - KeyHolder
+            - MortgageBroker
   responses:
     403Forbidden:
       description: Forbidden
@@ -773,6 +773,51 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
     500InternalServerError:
       description: Internal Server Error
       headers:
@@ -790,51 +835,6 @@ components:
                 title: Internal server error
                 messages:
                 - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-    429TooManyRequests:
-      description: Too Many Requests
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Rate Limit Exceeded:
-              value:
-                status: '429'
-                code: '42900'
-                title: Rate limit exceeded
-    404NotFound:
-      description: Not Found
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Entity not found:
-              value:
-                status: '404'
-                code: '40401'
-                title: Entity not found
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
     410GoneError:
       description: Gone Error
       headers:
