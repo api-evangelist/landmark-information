@@ -271,165 +271,7 @@ paths:
     - url: https://uat-api.landmarkcloudservices.com/
       description: UAT API
 components:
-  schemas:
-    accountId:
-      description: Your Landmark account ID - this will be provided to you during onboarding
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    lgsErrorResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - status
-      - code
-      - title
-      properties:
-        status:
-          type: string
-          minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
-          type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
-          type: string
-          minLength: 1
-          maxLength: 100
-        messages:
-          type: array
-          maxItems: 100
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - message
-            properties:
-              property:
-                type: string
-                minLength: 1
-                maxLength: 1000
-              message:
-                type: string
-                minLength: 1
-                maxLength: 1000
-    addDocumentToDocumentVaultResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/lgsUuid'
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-    completedDocumentItem:
-      type: object
-      additionalProperties: false
-      title: Completed document
-      description: A single completed document held against a case.
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Document ID. Use this value with `GET /documents/{id}/download` to download the document.
-        description:
-          type: string
-          maxLength: 255
-          description: Document description.
-        fileName:
-          type: string
-          maxLength: 255
-          description: Resolved document file name.
-        extension:
-          type: string
-          maxLength: 25
-          description: File extension.
-        sizeBytes:
-          type: integer
-          format: int64
-          minimum: 0
-          description: Document size in bytes.
-        externalType:
-          type: string
-          maxLength: 50
-          description: Document classification (e.g. CaseDocument, CaseImport).
-        createdAt:
-          type: string
-          format: date-time
-          description: Creation timestamp (UTC).
-        updatedAt:
-          type: string
-          format: date-time
-          description: Last updated timestamp (UTC).
-    completedDocumentsResponse:
-      type: object
-      additionalProperties: false
-      title: Completed documents
-      description: Read-only list of completed documents returned by Get Completed Documents.
-      properties:
-        caseId:
-          type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-          description: Intelliworks case reference.
-        externalCaseId:
-          type: string
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
-          description: External case reference from the originating system.
-        workflowId:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 99999
-          description: Intelliworks workflow identifier.
-        documents:
-          type: array
-          description: Completed documents held against the case.
-          items:
-            $ref: '#/components/schemas/completedDocumentItem'
-    Error:
-      required:
-      - code
-      - message
-      additionalProperties: false
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-          pattern: ^.*$
   responses:
-    500InternalServerError:
-      description: Internal Server Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Resource not found:
-              value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-    413PayloadTooLarge:
-      description: Payload Too Large
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
     403Forbidden:
       description: Forbidden
       headers:
@@ -490,8 +332,8 @@ components:
                 status: '429'
                 code: '42900'
                 title: Rate limit exceeded
-    401Unauthorized:
-      description: Unauthorized
+    500InternalServerError:
+      description: Internal Server Error
       headers:
         traceresponse:
           $ref: '#/components/headers/lgsTraceResponse'
@@ -500,11 +342,13 @@ components:
           schema:
             $ref: '#/components/schemas/lgsErrorResponse'
           examples:
-            Invalid identity:
+            Resource not found:
               value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
     404NotFound:
       description: Not Found
       headers:
@@ -520,6 +364,26 @@ components:
                 status: '404'
                 code: '40400'
                 title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    413PayloadTooLarge:
+      description: Payload Too Large
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
     400BadRequest:
       description: Bad Request
       headers:
@@ -575,6 +439,142 @@ components:
                 status: '404'
                 code: '40401'
                 title: Entity not found
+  schemas:
+    addDocumentToDocumentVaultResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/lgsUuid'
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    accountId:
+      description: Your Landmark account ID - this will be provided to you during onboarding
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    completedDocumentsResponse:
+      type: object
+      additionalProperties: false
+      title: Completed documents
+      description: Read-only list of completed documents returned by Get Completed Documents.
+      properties:
+        caseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: Intelliworks case reference.
+        externalCaseId:
+          type: string
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9@ :#$%^&+=*()_+-/]*$
+          description: External case reference from the originating system.
+        workflowId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 99999
+          description: Intelliworks workflow identifier.
+        documents:
+          type: array
+          description: Completed documents held against the case.
+          items:
+            $ref: '#/components/schemas/completedDocumentItem'
+    completedDocumentItem:
+      type: object
+      additionalProperties: false
+      title: Completed document
+      description: A single completed document held against a case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Document ID. Use this value with `GET /documents/{id}/download` to download the document.
+        description:
+          type: string
+          maxLength: 255
+          description: Document description.
+        fileName:
+          type: string
+          maxLength: 255
+          description: Resolved document file name.
+        extension:
+          type: string
+          maxLength: 25
+          description: File extension.
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Document size in bytes.
+        externalType:
+          type: string
+          maxLength: 50
+          description: Document classification (e.g. CaseDocument, CaseImport).
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp (UTC).
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last updated timestamp (UTC).
+    Error:
+      required:
+      - code
+      - message
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          pattern: ^.*$
   headers:
     lgsTraceResponse:
       description: Trace context providing an unique identifier for an individual requests

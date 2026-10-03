@@ -582,17 +582,155 @@ paths:
         '500':
           $ref: '#/components/responses/500InternalServerError'
 components:
+  responses:
+    403Forbidden:
+      description: Forbidden
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid Entitlement:
+              value:
+                status: '403'
+                code: '40300'
+                title: Invalid Entitlement
+            No Entitlement:
+              value:
+                status: '403'
+                code: '40301'
+                title: No Entitlement
+            No permission to entity:
+              value:
+                status: '403'
+                code: '40302'
+                title: No permission to entity
+            User not registered:
+              value:
+                status: '403'
+                code: '40303'
+                title: User not registered
+            Usage limit reached:
+              value:
+                status: '403'
+                code: '40304'
+                title: Usage limit reached
+            Email account not verified:
+              value:
+                status: '403'
+                code: '40305'
+                title: Email account not verified
+            Token expiry too long:
+              value:
+                status: '403'
+                code: '40306'
+                title: Token expiry too long
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Internal server error:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+    429TooManyRequests:
+      description: Too Many Requests
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Rate Limit Exceeded:
+              value:
+                status: '429'
+                code: '42900'
+                title: Rate limit exceeded
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
   examples:
-    UpdateQuotePropertyAddressExample:
-      summary: Update Quote Property Address Example
-      description: Example request for updating a quote property address
-      value:
-        thoroughfare: Kelham Road
-        dependentLocality: Newark
-        postTown: Newark
-        county: Nottinghamshire
-        postcode: NG24 1BU
-        country: England
     UpdateQuoteProductDetailsExample:
       summary: Update Quote Product Details Example
       description: Example request for updating product details on a Purchase England/Wales quote
@@ -610,6 +748,222 @@ components:
         isAuctionPurchase: false
         isPropertyBeingBoughtWithMortgage: true
         lender: Halifax
+    CombinedSaleAndPurchase:
+      summary: Combined Sale and Purchase Request
+      description: Example of a combined Sale and Purchase quote request - two independent quotes in the array
+      value:
+        quotes:
+        - comment: Sale quote
+          additionalReferences:
+          - type: Introducer
+            reference: sale - 123458
+          propertyAddress:
+            thoroughfare: 123 Old Street
+            postTown: Birmingham
+            postcode: B1 1AA
+            country: England
+          product:
+            productId: e5e42a0e-6717-4b45-8cd5-0f3a3b79cf4d
+            propertyLocation: EnglandWales
+            productDetails:
+              isThereAnOnwardPurchase: true
+              property:
+                value: 250000
+                tenure: Freehold
+                exceedsHeightThreshold: false
+                isHMO: false
+                hasHelpToBuyEquityLoan: false
+                isNewBuild: false
+              numberOfMortgagesBeingRedeemed: 1
+              hasOfferBeenAccepted: true
+              doesReservationFormApply: false
+              isPropertyInProbate: false
+              isPropertyBeingSoldWithTenant: false
+          persons:
+          - reference: c2d3e4f5-a6b7-8901-cdef-1234567890ab
+            title: Mr
+            firstName: Robert
+            lastName: Brown
+            email: robert.brown@example.com
+            telephoneNumber: '+447222333444'
+            roles:
+            - Applicant
+          accounts:
+          - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
+            roles:
+            - Originator
+            - Introducer
+          contacts:
+          - email: requestor@example.com
+            roles:
+            - Requestor
+        - comment: Purchase quote
+          additionalReferences:
+          - type: Introducer
+            reference: purchase - 123459
+          propertyAddress:
+            thoroughfare: 456 New Street
+            postTown: Birmingham
+            postcode: B1 1BB
+            country: England
+          product:
+            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            propertyLocation: EnglandWales
+            productDetails:
+              property:
+                value: 350000
+                tenure: Freehold
+                exceedsHeightThreshold: false
+                isHMO: false
+                hasHelpToBuyEquityLoan: false
+                isNewBuild: false
+              hasOfferBeenAccepted: true
+              doesReservationFormApply: false
+              isRightToBuy: false
+              isAuctionPurchase: false
+              isPropertyBeingBoughtWithMortgage: true
+              lender: Nationwide
+          persons:
+          - reference: c2d3e4f5-a6b7-8901-cdef-1234567890ab
+            title: Mr
+            firstName: Robert
+            lastName: Brown
+            email: robert.brown@example.com
+            telephoneNumber: '+447222333444'
+            roles:
+            - Applicant
+          accounts:
+          - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
+            roles:
+            - Originator
+            - Introducer
+          contacts:
+          - email: requestor@example.com
+            roles:
+            - Requestor
+    QuoteListResponseExample:
+      summary: Quote List Response Example
+      description: Example response for retrieving a list of quotes
+      value:
+        count: 3
+        quotes:
+        - quoteId: 550e8400-e29b-41d4-a716-446655440000
+          propertyAddress:
+            thoroughfare: High Street
+            postTown: London
+            postcode: SW1A 1AA
+          product:
+            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            propertyLocation: EnglandWales
+          selectedConveyancer:
+            conveyancerId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            name: Key Conveyancing LLP
+          totalFee: 1982.4
+          createdDate: '2024-01-15T10:30:00Z'
+        - quoteId: 660e8400-e29b-41d4-a716-446655440001
+          propertyAddress:
+            thoroughfare: Oak Avenue
+            postTown: Manchester
+            postcode: M1 1AA
+          product:
+            productId: e5e42a0e-6717-4b45-8cd5-0f3a3b79cf4d
+            propertyLocation: EnglandWales
+          selectedConveyancer:
+            conveyancerId: b2c3d4e5-f6a7-8901-bcde-f1234567890a
+            name: O'Neill Patient Solicitors LLP
+          totalFee: 1750
+          createdDate: '2024-01-14T14:20:00Z'
+        - quoteId: 770e8400-e29b-41d4-a716-446655440002
+          propertyAddress:
+            thoroughfare: Highland Way
+            postTown: Edinburgh
+            postcode: EH1 1AA
+          product:
+            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            propertyLocation: Scotland
+          selectedConveyancer:
+            conveyancerId: c3d4e5f6-a7b8-9012-cdef-1234567890ab
+            name: Scottish Property Lawyers
+          totalFee: 2200
+          createdDate: '2024-01-13T09:15:00Z'
+    UpdateQuotePersonExample:
+      summary: Update Person on Quote Example
+      description: Example request for updating a person on a quote
+      value:
+        title: Mrs
+        firstName: Jane
+        lastName: Smith
+        email: jane.smith@example.com
+        telephoneNumber: '+447987654321'
+        correspondenceAddress:
+          thoroughfare: Kelham Road
+          dependentLocality: Newark
+          postTown: Newark
+          county: Nottinghamshire
+          postcode: NG24 1BU
+          country: United Kingdom
+        roles:
+        - Applicant
+    StandalonePurchaseQuote:
+      summary: Standalone Purchase Quote Request
+      description: Example of a standalone Purchase quote request for England/Wales
+      value:
+        quotes:
+        - additionalReferences:
+          - type: Introducer
+            reference: purchase - 123456
+          propertyAddress:
+            thoroughfare: High Street
+            postTown: London
+            postcode: SW1A 1AA
+            country: England
+          product:
+            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+            propertyLocation: EnglandWales
+            productDetails:
+              property:
+                value: 350000
+                tenure: Freehold
+                exceedsHeightThreshold: false
+                isHMO: false
+                hasHelpToBuyEquityLoan: false
+                isNewBuild: false
+              hasOfferBeenAccepted: true
+              doesReservationFormApply: false
+              isRightToBuy: false
+              isAuctionPurchase: false
+              isPropertyBeingBoughtWithMortgage: true
+              lender: Halifax
+          persons:
+          - reference: a1b2c3d4-e5f6-7890-abcd-ef1234567890a
+            title: Mr
+            firstName: John
+            lastName: Smith
+            email: john.smith@example.com
+            telephoneNumber: '+447123456789'
+            roles:
+            - Applicant
+          accounts:
+          - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
+            roles:
+            - Originator
+          - accountId: d7eaff45-0c1a-4809-9aa2-49e09fbdc9c9
+            roles:
+            - Introducer
+          contacts:
+          - contactId: 6a969045-973e-428d-b664-7e51a7d73bf0
+            roles:
+            - Requestor
+    UpdateQuotePropertyAddressExample:
+      summary: Update Quote Property Address Example
+      description: Example request for updating a quote property address
+      value:
+        thoroughfare: Kelham Road
+        dependentLocality: Newark
+        postTown: Newark
+        county: Nottinghamshire
+        postcode: NG24 1BU
+        country: England
     RetrieveQuoteResponseExample:
       summary: Retrieve Quote Response Example
       description: Example response for retrieving a complete quote
@@ -708,212 +1062,6 @@ components:
         - contactId: 6a969045-973e-428d-b664-7e51a7d73bf0
           roles:
           - Requestor
-    QuoteListResponseExample:
-      summary: Quote List Response Example
-      description: Example response for retrieving a list of quotes
-      value:
-        count: 3
-        quotes:
-        - quoteId: 550e8400-e29b-41d4-a716-446655440000
-          propertyAddress:
-            thoroughfare: High Street
-            postTown: London
-            postcode: SW1A 1AA
-          product:
-            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            propertyLocation: EnglandWales
-          selectedConveyancer:
-            conveyancerId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            name: Key Conveyancing LLP
-          totalFee: 1982.4
-          createdDate: '2024-01-15T10:30:00Z'
-        - quoteId: 660e8400-e29b-41d4-a716-446655440001
-          propertyAddress:
-            thoroughfare: Oak Avenue
-            postTown: Manchester
-            postcode: M1 1AA
-          product:
-            productId: e5e42a0e-6717-4b45-8cd5-0f3a3b79cf4d
-            propertyLocation: EnglandWales
-          selectedConveyancer:
-            conveyancerId: b2c3d4e5-f6a7-8901-bcde-f1234567890a
-            name: O'Neill Patient Solicitors LLP
-          totalFee: 1750
-          createdDate: '2024-01-14T14:20:00Z'
-        - quoteId: 770e8400-e29b-41d4-a716-446655440002
-          propertyAddress:
-            thoroughfare: Highland Way
-            postTown: Edinburgh
-            postcode: EH1 1AA
-          product:
-            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            propertyLocation: Scotland
-          selectedConveyancer:
-            conveyancerId: c3d4e5f6-a7b8-9012-cdef-1234567890ab
-            name: Scottish Property Lawyers
-          totalFee: 2200
-          createdDate: '2024-01-13T09:15:00Z'
-    CombinedSaleAndPurchase:
-      summary: Combined Sale and Purchase Request
-      description: Example of a combined Sale and Purchase quote request - two independent quotes in the array
-      value:
-        quotes:
-        - comment: Sale quote
-          additionalReferences:
-          - type: Introducer
-            reference: sale - 123458
-          propertyAddress:
-            thoroughfare: 123 Old Street
-            postTown: Birmingham
-            postcode: B1 1AA
-            country: England
-          product:
-            productId: e5e42a0e-6717-4b45-8cd5-0f3a3b79cf4d
-            propertyLocation: EnglandWales
-            productDetails:
-              isThereAnOnwardPurchase: true
-              property:
-                value: 250000
-                tenure: Freehold
-                exceedsHeightThreshold: false
-                isHMO: false
-                hasHelpToBuyEquityLoan: false
-                isNewBuild: false
-              numberOfMortgagesBeingRedeemed: 1
-              hasOfferBeenAccepted: true
-              doesReservationFormApply: false
-              isPropertyInProbate: false
-              isPropertyBeingSoldWithTenant: false
-          persons:
-          - reference: c2d3e4f5-a6b7-8901-cdef-1234567890ab
-            title: Mr
-            firstName: Robert
-            lastName: Brown
-            email: robert.brown@example.com
-            telephoneNumber: '+447222333444'
-            roles:
-            - Applicant
-          accounts:
-          - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
-            roles:
-            - Originator
-            - Introducer
-          contacts:
-          - email: requestor@example.com
-            roles:
-            - Requestor
-        - comment: Purchase quote
-          additionalReferences:
-          - type: Introducer
-            reference: purchase - 123459
-          propertyAddress:
-            thoroughfare: 456 New Street
-            postTown: Birmingham
-            postcode: B1 1BB
-            country: England
-          product:
-            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            propertyLocation: EnglandWales
-            productDetails:
-              property:
-                value: 350000
-                tenure: Freehold
-                exceedsHeightThreshold: false
-                isHMO: false
-                hasHelpToBuyEquityLoan: false
-                isNewBuild: false
-              hasOfferBeenAccepted: true
-              doesReservationFormApply: false
-              isRightToBuy: false
-              isAuctionPurchase: false
-              isPropertyBeingBoughtWithMortgage: true
-              lender: Nationwide
-          persons:
-          - reference: c2d3e4f5-a6b7-8901-cdef-1234567890ab
-            title: Mr
-            firstName: Robert
-            lastName: Brown
-            email: robert.brown@example.com
-            telephoneNumber: '+447222333444'
-            roles:
-            - Applicant
-          accounts:
-          - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
-            roles:
-            - Originator
-            - Introducer
-          contacts:
-          - email: requestor@example.com
-            roles:
-            - Requestor
-    UpdateQuotePersonExample:
-      summary: Update Person on Quote Example
-      description: Example request for updating a person on a quote
-      value:
-        title: Mrs
-        firstName: Jane
-        lastName: Smith
-        email: jane.smith@example.com
-        telephoneNumber: '+447987654321'
-        correspondenceAddress:
-          thoroughfare: Kelham Road
-          dependentLocality: Newark
-          postTown: Newark
-          county: Nottinghamshire
-          postcode: NG24 1BU
-          country: United Kingdom
-        roles:
-        - Applicant
-    StandalonePurchaseQuote:
-      summary: Standalone Purchase Quote Request
-      description: Example of a standalone Purchase quote request for England/Wales
-      value:
-        quotes:
-        - additionalReferences:
-          - type: Introducer
-            reference: purchase - 123456
-          propertyAddress:
-            thoroughfare: High Street
-            postTown: London
-            postcode: SW1A 1AA
-            country: England
-          product:
-            productId: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-            propertyLocation: EnglandWales
-            productDetails:
-              property:
-                value: 350000
-                tenure: Freehold
-                exceedsHeightThreshold: false
-                isHMO: false
-                hasHelpToBuyEquityLoan: false
-                isNewBuild: false
-              hasOfferBeenAccepted: true
-              doesReservationFormApply: false
-              isRightToBuy: false
-              isAuctionPurchase: false
-              isPropertyBeingBoughtWithMortgage: true
-              lender: Halifax
-          persons:
-          - reference: a1b2c3d4-e5f6-7890-abcd-ef1234567890a
-            title: Mr
-            firstName: John
-            lastName: Smith
-            email: john.smith@example.com
-            telephoneNumber: '+447123456789'
-            roles:
-            - Applicant
-          accounts:
-          - accountId: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
-            roles:
-            - Originator
-          - accountId: d7eaff45-0c1a-4809-9aa2-49e09fbdc9c9
-            roles:
-            - Introducer
-          contacts:
-          - contactId: 6a969045-973e-428d-b664-7e51a7d73bf0
-            roles:
-            - Requestor
     AddQuotePersonExample:
       summary: Add Person to Quote Example
       description: 'Example request for adding a person to a quote.
@@ -930,713 +1078,6 @@ components:
         roles:
         - Applicant
   schemas:
-    QuoteRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - accounts
-      - product
-      - persons
-      - contacts
-      description: 'Individual quote request. Specify originator and introducer accounts in `accounts`.
-
-        Include the requestor contact in `contacts`. Only one contact with role `Requestor` is allowed per quote.
-
-
-        The `product` object must match one of the [Product Schemas](#tag/Product-Schemas)
-
-        for the selected product type and property location.
-
-        '
-      properties:
-        additionalReferences:
-          type: array
-          maxItems: 1
-          description: 'Optionally provide a single reference that will be associated with this quote.
-
-            It will be returned with the quote data when the quote is retrieved.
-
-            '
-          items:
-            $ref: '#/components/schemas/AdditionalReference'
-        propertyAddress:
-          $ref: '#/components/schemas/PropertyAddress'
-        product:
-          $ref: '#/components/schemas/Products'
-        persons:
-          type: array
-          minItems: 1
-          maxItems: 8
-          description: 'Array of persons involved in the transaction (maximum 8 applicants).
-
-            Each person may include an optional `reference`; a reference is generated automatically if not supplied.
-
-            Once set, a person''s `reference` cannot be changed.
-
-            '
-          items:
-            $ref: '#/components/schemas/Person'
-        accounts:
-          type: array
-          minItems: 1
-          maxItems: 10
-          description: 'Accounts involved in this quote.
-
-            Must include at least one account with role `Originator` and at least one with role `Introducer`.
-
-            These may be the same account entry with both roles.
-
-            '
-          items:
-            $ref: '#/components/schemas/Account'
-        contacts:
-          type: array
-          minItems: 1
-          maxItems: 10
-          description: 'Contacts involved in this quote.
-
-            Include the requestor, identified by `contactId` or `email`.
-
-            Only one contact with role `Requestor` is allowed per quote.
-
-            '
-          items:
-            $ref: '#/components/schemas/QuoteRequestContact'
-    FeeItem:
-      type: object
-      additionalProperties: false
-      required:
-      - description
-      - excVat
-      - vat
-      - incVat
-      properties:
-        description:
-          type: string
-          description: Description of the fee
-          example: Legal Work
-        excVat:
-          type: number
-          format: float
-          description: Amount excluding VAT in GBP
-          example: 755
-        vat:
-          type: number
-          format: float
-          description: VAT amount in GBP
-          example: 151
-        incVat:
-          type: number
-          format: float
-          description: Amount including VAT in GBP
-          example: 906
-    AdditionalReference:
-      type: object
-      additionalProperties: false
-      required:
-      - type
-      - reference
-      properties:
-        type:
-          type: string
-          enum:
-          - Introducer
-          description: Type of reference. Currently only "Introducer" is supported.
-          example: Introducer
-        reference:
-          type: string
-          minLength: 3
-          maxLength: 100
-          pattern: ^(?!.*[<>])(?!(.*&(?:[a-z]+|#\d+);))(?!(.*%(?:3[CcEe]|2[23])))(?!.*https?:\/\/)(?!.*www\.)[A-Za-z0-9£$.,;:!?_'\"()\[\]{}@#&*%+=\/\\|~`^\- \u00B4\u02BB-\u02BD\u2018\u2019\u2013-\u2015\u201C\u201D]+$
-          description: Reference value
-          example: purchase - 123456
-    lgsErrorResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - status
-      - code
-      - title
-      properties:
-        status:
-          type: string
-          minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
-          type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
-          type: string
-          minLength: 1
-          maxLength: 100
-        messages:
-          type: array
-          maxItems: 100
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - message
-            properties:
-              property:
-                type: string
-                minLength: 1
-                maxLength: 1000
-              message:
-                type: string
-                minLength: 1
-                maxLength: 1000
-    Fee:
-      type: object
-      additionalProperties: false
-      required:
-      - totalIncVat
-      - breakdown
-      properties:
-        totalIncVat:
-          type: number
-          format: float
-          description: Total fee including VAT in GBP
-          example: 1982.4
-        breakdown:
-          $ref: '#/components/schemas/FeeBreakdown'
-    Contact:
-      type: object
-      additionalProperties: false
-      required:
-      - roles
-      description: 'A contact involved in a quote or case.
-
-        The requestor is the individual placing the quote or order for the applicant.
-
-        The case handler is the conveyancer or solicitor instructed to process the case.
-
-        Identify the contact using either `contactId` or `email`.
-
-        '
-      properties:
-        contactId:
-          description: Contact identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 6a969045-973e-428d-b664-7e51a7d73bf0
-        name:
-          type: string
-          maxLength: 100
-          description: Contact name
-          example: Sarah Johnson
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          minLength: 5
-          description: Email address of the contact
-          example: requestor@example.com
-        roles:
-          type: array
-          minItems: 1
-          maxItems: 10
-          items:
-            type: string
-            enum:
-            - Requestor
-            - CaseHandler
-          description: Role(s) this contact plays in the quote or case
-          example:
-          - Requestor
-    QuoteSummary:
-      type: object
-      additionalProperties: false
-      required:
-      - quoteId
-      - propertyAddress
-      - product
-      - totalFee
-      description: 'Summary information for a quote. Contains essential metadata for listing and identification purposes.
-
-        '
-      properties:
-        quoteId:
-          description: Unique quote identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 550e8400-e29b-41d4-a716-446655440000
-        propertyAddress:
-          type: object
-          additionalProperties: false
-          description: Property address summary
-          properties:
-            thoroughfare:
-              type: string
-              maxLength: 60
-              pattern: ^.*$
-              description: Street name or thoroughfare
-              example: High Street
-            postTown:
-              type: string
-              maxLength: 60
-              pattern: ^.*$
-              description: Post town
-              example: London
-            postcode:
-              type: string
-              maxLength: 10
-              pattern: ^.*$
-              description: Postcode
-              example: SW1A 1AA
-        product:
-          $ref: '#/components/schemas/ProductSummary'
-        selectedConveyancer:
-          $ref: '#/components/schemas/SelectedConveyancerSummary'
-        totalFee:
-          type: number
-          description: Total fee including VAT in GBP
-          example: 1982.4
-        createdDate:
-          type: string
-          format: date-time
-          description: When the quote was created (ISO 8601 format)
-          example: '2024-01-15T10:30:00Z'
-    QuoteResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - quoteId
-      - product
-      - conveyancers
-      - fee
-      properties:
-        quoteId:
-          description: Unique quote identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 550e8400-e29b-41d4-a716-446655440000
-        product:
-          $ref: '#/components/schemas/ProductSummary'
-        conveyancers:
-          type: array
-          description: All available conveyancers for this quote
-          items:
-            $ref: '#/components/schemas/Conveyancer'
-        fee:
-          $ref: '#/components/schemas/Fee'
-    Conveyancer:
-      allOf:
-      - $ref: '#/components/schemas/ConveyancerBasic'
-      - type: object
-        additionalProperties: false
-        required:
-        - ratingBreakdown
-        properties:
-          ratingBreakdown:
-            $ref: '#/components/schemas/RatingBreakdown'
-    ConveyancerBasic:
-      type: object
-      additionalProperties: false
-      required:
-      - conveyancerId
-      - name
-      - overallRating
-      properties:
-        conveyancerId:
-          description: Conveyancer identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-        name:
-          type: string
-          maxLength: 100
-          description: Conveyancer name
-          example: Key Conveyancing LLP
-        location:
-          type: string
-          description: Conveyancer location
-          example: Northampton
-        logoUrl:
-          type: string
-          format: uri
-          description: URL to conveyancer logo
-          example: https://cdn.optimus.com/logos/key-conveyancing.png
-        overallRating:
-          type: number
-          format: float
-          minimum: 0
-          maximum: 5
-          description: Overall rating (1-5 scale)
-          example: 4.3
-    Account:
-      type: object
-      additionalProperties: false
-      required:
-      - accountId
-      - roles
-      description: 'An account acting in one or more roles for a quote or case.
-
-        Both an originator and an introducer must be represented across the `accounts` array.
-
-        The same account may include both `Originator` and `Introducer` in its `roles`.
-
-        '
-      properties:
-        accountId:
-          description: Account identifier provided during API onboarding
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
-        roles:
-          type: array
-          minItems: 1
-          maxItems: 10
-          items:
-            type: string
-            enum:
-            - Originator
-            - Introducer
-          description: Role(s) this account plays in the quote or case
-          example:
-          - Originator
-          - Introducer
-    QuoteListResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - quotes
-      description: 'Response containing a list of quote summaries.
-
-        '
-      properties:
-        quotes:
-          type: array
-          description: Array of quote summaries
-          items:
-            $ref: '#/components/schemas/QuoteSummary'
-        count:
-          type: integer
-          format: int32
-          maximum: 9999
-          description: Total number of quotes matching the query. Returned when `$count` or `countOnly` is true.
-    CreateQuoteRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - quotes
-      description: "Request to create one or more conveyancing quotes.\n\n**Standalone Quotes**: Provide one quote request in the array.\n**Combined Sale and Purchase**: Provide two quote requests (one Sale, one Purchase) in the array.\n\n**Conditional Requirements**: \n- The `product` object must conform to one of the [Product Schemas](#tag/Product-Schemas) for the selected product type and property location\n"
-      properties:
-        quotes:
-          type: array
-          minItems: 1
-          maxItems: 2
-          description: 'Array of quote requests to create.
-
-
-            - **Standalone**: One quote request (any product type)
-
-            - **Combined Sale and Purchase**: Two quote requests - one must be Sale and one must be Purchase
-
-
-            Each quote is independent with its own accounts, contacts, productId, propertyAddress, persons, and productDetails.
-
-            '
-          items:
-            $ref: '#/components/schemas/QuoteRequest'
-    TelephoneNumber:
-      type: string
-      minLength: 8
-      maxLength: 20
-    SelectedConveyancerSummary:
-      type: object
-      additionalProperties: false
-      required:
-      - conveyancerId
-      - name
-      description: Currently selected conveyancer for this quote (identifier and display name)
-      properties:
-        conveyancerId:
-          description: Conveyancer identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-        name:
-          type: string
-          maxLength: 100
-          description: Conveyancer name
-          example: Key Conveyancing LLP
-    LgsUuid:
-      type: string
-      format: uuid
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-      minLength: 36
-      maxLength: 36
-    FeeBreakdown:
-      type: object
-      additionalProperties: false
-      required:
-      - legalWork
-      - disbursements
-      - supplements
-      properties:
-        legalWork:
-          type: array
-          description: Legal work fees
-          items:
-            $ref: '#/components/schemas/FeeItem'
-        disbursements:
-          type: array
-          description: Disbursement fees
-          items:
-            $ref: '#/components/schemas/FeeItem'
-        supplements:
-          type: array
-          description: Supplement fees
-          items:
-            $ref: '#/components/schemas/FeeItem'
-    PropertyAddress:
-      description: Property address using PAF Plus format
-      allOf:
-      - $ref: '#/components/schemas/Address'
-      - type: object
-        required:
-        - thoroughfare
-        - postTown
-        - country
-        properties:
-          country:
-            type: string
-            description: Country - must be England, Wales, or Scotland (case insensitive)
-            maxLength: 200
-            pattern: ^([Ee]ngland|[Ww]ales|[Ss]cotland)$
-            example: England
-    ProductSummary:
-      type: object
-      additionalProperties: false
-      required:
-      - productId
-      - propertyLocation
-      description: 'Product identifier summary (e.g. on quote create response, quote list, or case list).
-
-        '
-      properties:
-        productId:
-          type: string
-          format: uuid
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-          minLength: 36
-          maxLength: 36
-          description: Product ID (GUID) for the quoted product
-          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
-        propertyLocation:
-          type: string
-          enum:
-          - EnglandWales
-          - Scotland
-          description: Property location
-          example: EnglandWales
-    UpdateQuotePersonRequest:
-      type: object
-      additionalProperties: false
-      description: 'Person details for updating a person on a quote.
-
-        '
-      required:
-      - firstName
-      - lastName
-      - email
-      - telephoneNumber
-      - roles
-      properties:
-        title:
-          type: string
-          maxLength: 20
-          description: Person's title
-          example: Mr
-        firstName:
-          type: string
-          maxLength: 100
-          description: First name
-          example: John
-        middleName:
-          type: string
-          maxLength: 100
-          description: Middle name
-          example: ''
-        lastName:
-          type: string
-          maxLength: 100
-          description: Last name
-          example: Smith
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          minLength: 5
-          description: Email address
-          example: john.smith@example.com
-        telephoneNumber:
-          description: Telephone number
-          allOf:
-          - $ref: '#/components/schemas/TelephoneNumber'
-          example: '+447123456789'
-        correspondenceAddress:
-          $ref: '#/components/schemas/Address'
-        roles:
-          type: array
-          minItems: 1
-          maxItems: 20
-          items:
-            type: string
-            enum:
-            - Applicant
-          example:
-          - Applicant
-    RetrieveQuoteResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - quoteId
-      - accounts
-      - propertyAddress
-      - product
-      - persons
-      - conveyancers
-      - fee
-      description: 'Complete quote details combining the original request data with the quote response data.
-
-        Contains all property information, applicant details, product configuration, and pricing breakdown.
-
-        '
-      properties:
-        quoteId:
-          description: Unique quote identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 550e8400-e29b-41d4-a716-446655440000
-        additionalReferences:
-          type: array
-          description: External references provided by introducers (if any)
-          items:
-            $ref: '#/components/schemas/AdditionalReference'
-        propertyAddress:
-          $ref: '#/components/schemas/PropertyAddress'
-        product:
-          $ref: '#/components/schemas/Products'
-        persons:
-          type: array
-          minItems: 1
-          maxItems: 8
-          description: Array of persons involved in the transaction (maximum 8 applicants). Each person includes a `reference`.
-          items:
-            $ref: '#/components/schemas/Person'
-        selectedConveyancer:
-          $ref: '#/components/schemas/SelectedConveyancerSummary'
-        conveyancers:
-          type: array
-          description: All available conveyancers for this quote
-          items:
-            $ref: '#/components/schemas/Conveyancer'
-        fee:
-          $ref: '#/components/schemas/Fee'
-        accounts:
-          type: array
-          minItems: 1
-          maxItems: 10
-          description: Accounts involved in this quote
-          items:
-            $ref: '#/components/schemas/Account'
-        contacts:
-          type: array
-          maxItems: 10
-          description: Contacts involved in this quote (if any)
-          items:
-            $ref: '#/components/schemas/Contact'
-    CreateQuoteResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - quotes
-      description: Response containing created quote(s). For standalone quotes, array contains one element. For combined sale and purchase, array contains two elements.
-      properties:
-        quotes:
-          type: array
-          minItems: 1
-          maxItems: 2
-          description: Array of quote responses
-          items:
-            $ref: '#/components/schemas/QuoteResponse'
-    Person:
-      type: object
-      additionalProperties: false
-      required:
-      - firstName
-      - lastName
-      - email
-      - telephoneNumber
-      - roles
-      properties:
-        reference:
-          description: 'A value which can be used to refer to a person.
-
-            Optional when creating or adding a person; a reference is generated automatically if not supplied.
-
-            Once set, the reference cannot be changed.
-
-            '
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: bf13cb52-6676-4f3d-a27a-b6cafaf52f19
-        title:
-          type: string
-          maxLength: 20
-          description: Person's title
-          example: Mr
-        firstName:
-          type: string
-          maxLength: 100
-          description: First name
-          example: John
-        middleName:
-          type: string
-          maxLength: 100
-          description: Middle name
-          example: ''
-        lastName:
-          type: string
-          maxLength: 100
-          description: Last name
-          example: Smith
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          minLength: 5
-          description: Email address
-          example: john.smith@example.com
-        telephoneNumber:
-          description: Telephone number
-          allOf:
-          - $ref: '#/components/schemas/TelephoneNumber'
-          example: '+447123456789'
-        correspondenceAddress:
-          $ref: '#/components/schemas/Address'
-        roles:
-          type: array
-          minItems: 1
-          maxItems: 20
-          items:
-            type: string
-            enum:
-            - Applicant
-          example:
-          - Applicant
-    QuoteProductDetails:
-      type: object
-      description: 'Product-specific details for a quote. Must match the `productDetails` object structure
-
-        for the quote''s product as defined in [Product Schemas](#tag/Product-Schemas).
-
-        '
     Products:
       type: object
       additionalProperties: false
@@ -1667,45 +1108,44 @@ components:
             for the selected product type and property location as defined in [Product Schemas](#tag/Product-Schemas).
 
             '
-    QuoteRequestContact:
+    CreateQuoteRequest:
       type: object
       additionalProperties: false
       required:
-      - roles
-      description: 'The requestor placing this quote on behalf of the applicant.
-
-        Identify the contact using either `contactId` or `email`.
-
-        '
+      - quotes
+      description: "Request to create one or more conveyancing quotes.\n\n**Standalone Quotes**: Provide one quote request in the array.\n**Combined Sale and Purchase**: Provide two quote requests (one Sale, one Purchase) in the array.\n\n**Conditional Requirements**: \n- The `product` object must conform to one of the [Product Schemas](#tag/Product-Schemas) for the selected product type and property location\n"
       properties:
-        contactId:
-          description: Contact identifier
-          allOf:
-          - $ref: '#/components/schemas/LgsUuid'
-          example: 6a969045-973e-428d-b664-7e51a7d73bf0
-        name:
-          type: string
-          maxLength: 100
-          description: Contact name
-          example: Sarah Johnson
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          minLength: 5
-          description: Email address of the contact
-          example: requestor@example.com
-        roles:
+        quotes:
           type: array
           minItems: 1
-          maxItems: 1
+          maxItems: 2
+          description: 'Array of quote requests to create.
+
+
+            - **Standalone**: One quote request (any product type)
+
+            - **Combined Sale and Purchase**: Two quote requests - one must be Sale and one must be Purchase
+
+
+            Each quote is independent with its own accounts, contacts, productId, propertyAddress, persons, and productDetails.
+
+            '
           items:
-            type: string
-            enum:
-            - Requestor
-          description: Must be `Requestor` for quote creation
-          example:
-          - Requestor
+            $ref: '#/components/schemas/QuoteRequest'
+    CreateQuoteResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - quotes
+      description: Response containing created quote(s). For standalone quotes, array contains one element. For combined sale and purchase, array contains two elements.
+      properties:
+        quotes:
+          type: array
+          minItems: 1
+          maxItems: 2
+          description: Array of quote responses
+          items:
+            $ref: '#/components/schemas/QuoteResponse'
     Address:
       type: object
       additionalProperties: false
@@ -1797,6 +1237,390 @@ components:
           description: Unique Delivery Point Reference Number
           minimum: 0
           maximum: 99999999
+    FeeItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - excVat
+      - vat
+      - incVat
+      properties:
+        description:
+          type: string
+          description: Description of the fee
+          example: Legal Work
+        excVat:
+          type: number
+          format: float
+          description: Amount excluding VAT in GBP
+          example: 755
+        vat:
+          type: number
+          format: float
+          description: VAT amount in GBP
+          example: 151
+        incVat:
+          type: number
+          format: float
+          description: Amount including VAT in GBP
+          example: 906
+    LgsUuid:
+      type: string
+      format: uuid
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      minLength: 36
+      maxLength: 36
+    UpdateQuotePersonRequest:
+      type: object
+      additionalProperties: false
+      description: 'Person details for updating a person on a quote.
+
+        '
+      required:
+      - firstName
+      - lastName
+      - email
+      - telephoneNumber
+      - roles
+      properties:
+        title:
+          type: string
+          maxLength: 20
+          description: Person's title
+          example: Mr
+        firstName:
+          type: string
+          maxLength: 100
+          description: First name
+          example: John
+        middleName:
+          type: string
+          maxLength: 100
+          description: Middle name
+          example: ''
+        lastName:
+          type: string
+          maxLength: 100
+          description: Last name
+          example: Smith
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 5
+          description: Email address
+          example: john.smith@example.com
+        telephoneNumber:
+          description: Telephone number
+          allOf:
+          - $ref: '#/components/schemas/TelephoneNumber'
+          example: '+447123456789'
+        correspondenceAddress:
+          $ref: '#/components/schemas/Address'
+        roles:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: string
+            enum:
+            - Applicant
+          example:
+          - Applicant
+    lgsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - code
+      - title
+      properties:
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
+    Contact:
+      type: object
+      additionalProperties: false
+      required:
+      - roles
+      description: 'A contact involved in a quote or case.
+
+        The requestor is the individual placing the quote or order for the applicant.
+
+        The case handler is the conveyancer or solicitor instructed to process the case.
+
+        Identify the contact using either `contactId` or `email`.
+
+        '
+      properties:
+        contactId:
+          description: Contact identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 6a969045-973e-428d-b664-7e51a7d73bf0
+        name:
+          type: string
+          maxLength: 100
+          description: Contact name
+          example: Sarah Johnson
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 5
+          description: Email address of the contact
+          example: requestor@example.com
+        roles:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+            enum:
+            - Requestor
+            - CaseHandler
+          description: Role(s) this contact plays in the quote or case
+          example:
+          - Requestor
+    Conveyancer:
+      allOf:
+      - $ref: '#/components/schemas/ConveyancerBasic'
+      - type: object
+        additionalProperties: false
+        required:
+        - ratingBreakdown
+        properties:
+          ratingBreakdown:
+            $ref: '#/components/schemas/RatingBreakdown'
+    QuoteRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - accounts
+      - product
+      - persons
+      - contacts
+      description: 'Individual quote request. Specify originator and introducer accounts in `accounts`.
+
+        Include the requestor contact in `contacts`. Only one contact with role `Requestor` is allowed per quote.
+
+
+        The `product` object must match one of the [Product Schemas](#tag/Product-Schemas)
+
+        for the selected product type and property location.
+
+        '
+      properties:
+        additionalReferences:
+          type: array
+          maxItems: 1
+          description: 'Optionally provide a single reference that will be associated with this quote.
+
+            It will be returned with the quote data when the quote is retrieved.
+
+            '
+          items:
+            $ref: '#/components/schemas/AdditionalReference'
+        propertyAddress:
+          $ref: '#/components/schemas/PropertyAddress'
+        product:
+          $ref: '#/components/schemas/Products'
+        persons:
+          type: array
+          minItems: 1
+          maxItems: 8
+          description: 'Array of persons involved in the transaction (maximum 8 applicants).
+
+            Each person may include an optional `reference`; a reference is generated automatically if not supplied.
+
+            Once set, a person''s `reference` cannot be changed.
+
+            '
+          items:
+            $ref: '#/components/schemas/Person'
+        accounts:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: 'Accounts involved in this quote.
+
+            Must include at least one account with role `Originator` and at least one with role `Introducer`.
+
+            These may be the same account entry with both roles.
+
+            '
+          items:
+            $ref: '#/components/schemas/Account'
+        contacts:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: 'Contacts involved in this quote.
+
+            Include the requestor, identified by `contactId` or `email`.
+
+            Only one contact with role `Requestor` is allowed per quote.
+
+            '
+          items:
+            $ref: '#/components/schemas/QuoteRequestContact'
+    QuoteResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - quoteId
+      - product
+      - conveyancers
+      - fee
+      properties:
+        quoteId:
+          description: Unique quote identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 550e8400-e29b-41d4-a716-446655440000
+        product:
+          $ref: '#/components/schemas/ProductSummary'
+        conveyancers:
+          type: array
+          description: All available conveyancers for this quote
+          items:
+            $ref: '#/components/schemas/Conveyancer'
+        fee:
+          $ref: '#/components/schemas/Fee'
+    QuoteProductDetails:
+      type: object
+      description: 'Product-specific details for a quote. Must match the `productDetails` object structure
+
+        for the quote''s product as defined in [Product Schemas](#tag/Product-Schemas).
+
+        '
+    ProductSummary:
+      type: object
+      additionalProperties: false
+      required:
+      - productId
+      - propertyLocation
+      description: 'Product identifier summary (e.g. on quote create response, quote list, or case list).
+
+        '
+      properties:
+        productId:
+          type: string
+          format: uuid
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          minLength: 36
+          maxLength: 36
+          description: Product ID (GUID) for the quoted product
+          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+        propertyLocation:
+          type: string
+          enum:
+          - EnglandWales
+          - Scotland
+          description: Property location
+          example: EnglandWales
+    QuoteSummary:
+      type: object
+      additionalProperties: false
+      required:
+      - quoteId
+      - propertyAddress
+      - product
+      - totalFee
+      description: 'Summary information for a quote. Contains essential metadata for listing and identification purposes.
+
+        '
+      properties:
+        quoteId:
+          description: Unique quote identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 550e8400-e29b-41d4-a716-446655440000
+        propertyAddress:
+          type: object
+          additionalProperties: false
+          description: Property address summary
+          properties:
+            thoroughfare:
+              type: string
+              maxLength: 60
+              pattern: ^.*$
+              description: Street name or thoroughfare
+              example: High Street
+            postTown:
+              type: string
+              maxLength: 60
+              pattern: ^.*$
+              description: Post town
+              example: London
+            postcode:
+              type: string
+              maxLength: 10
+              pattern: ^.*$
+              description: Postcode
+              example: SW1A 1AA
+        product:
+          $ref: '#/components/schemas/ProductSummary'
+        selectedConveyancer:
+          $ref: '#/components/schemas/SelectedConveyancerSummary'
+        totalFee:
+          type: number
+          description: Total fee including VAT in GBP
+          example: 1982.4
+        createdDate:
+          type: string
+          format: date-time
+          description: When the quote was created (ISO 8601 format)
+          example: '2024-01-15T10:30:00Z'
+    AdditionalReference:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - reference
+      properties:
+        type:
+          type: string
+          enum:
+          - Introducer
+          description: Type of reference. Currently only "Introducer" is supported.
+          example: Introducer
+        reference:
+          type: string
+          minLength: 3
+          maxLength: 100
+          pattern: ^(?!.*[<>])(?!(.*&(?:[a-z]+|#\d+);))(?!(.*%(?:3[CcEe]|2[23])))(?!.*https?:\/\/)(?!.*www\.)[A-Za-z0-9£$.,;:!?_'\"()\[\]{}@#&*%+=\/\\|~`^\- \u00B4\u02BB-\u02BD\u2018\u2019\u2013-\u2015\u201C\u201D]+$
+          description: Reference value
+          example: purchase - 123456
     InstructQuoteRequest:
       type: object
       additionalProperties: false
@@ -1811,6 +1635,75 @@ components:
           allOf:
           - $ref: '#/components/schemas/LgsUuid'
           example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+    Person:
+      type: object
+      additionalProperties: false
+      required:
+      - firstName
+      - lastName
+      - email
+      - telephoneNumber
+      - roles
+      properties:
+        reference:
+          description: 'A value which can be used to refer to a person.
+
+            Optional when creating or adding a person; a reference is generated automatically if not supplied.
+
+            Once set, the reference cannot be changed.
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: bf13cb52-6676-4f3d-a27a-b6cafaf52f19
+        title:
+          type: string
+          maxLength: 20
+          description: Person's title
+          example: Mr
+        firstName:
+          type: string
+          maxLength: 100
+          description: First name
+          example: John
+        middleName:
+          type: string
+          maxLength: 100
+          description: Middle name
+          example: ''
+        lastName:
+          type: string
+          maxLength: 100
+          description: Last name
+          example: Smith
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 5
+          description: Email address
+          example: john.smith@example.com
+        telephoneNumber:
+          description: Telephone number
+          allOf:
+          - $ref: '#/components/schemas/TelephoneNumber'
+          example: '+447123456789'
+        correspondenceAddress:
+          $ref: '#/components/schemas/Address'
+        roles:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: string
+            enum:
+            - Applicant
+          example:
+          - Applicant
+    TelephoneNumber:
+      type: string
+      minLength: 8
+      maxLength: 20
     RatingBreakdown:
       type: object
       additionalProperties: false
@@ -1848,154 +1741,261 @@ components:
           maximum: 5
           description: Completion time rating (1-5 scale)
           example: 4
-  responses:
-    403Forbidden:
-      description: Forbidden
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid Entitlement:
-              value:
-                status: '403'
-                code: '40300'
-                title: Invalid Entitlement
-            No Entitlement:
-              value:
-                status: '403'
-                code: '40301'
-                title: No Entitlement
-            No permission to entity:
-              value:
-                status: '403'
-                code: '40302'
-                title: No permission to entity
-            User not registered:
-              value:
-                status: '403'
-                code: '40303'
-                title: User not registered
-            Usage limit reached:
-              value:
-                status: '403'
-                code: '40304'
-                title: Usage limit reached
-            Email account not verified:
-              value:
-                status: '403'
-                code: '40305'
-                title: Email account not verified
-            Token expiry too long:
-              value:
-                status: '403'
-                code: '40306'
-                title: Token expiry too long
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
-    404NotFound:
-      description: Not Found
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Entity not found:
-              value:
-                status: '404'
-                code: '40401'
-                title: Entity not found
-    429TooManyRequests:
-      description: Too Many Requests
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Rate Limit Exceeded:
-              value:
-                status: '429'
-                code: '42900'
-                title: Rate limit exceeded
-    500InternalServerError:
-      description: Internal Server Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Internal server error:
-              value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-    400BadRequest:
-      description: Bad Request
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid content type supplied:
-              value:
-                status: '400'
-                code: '40000'
-                title: Invalid content type supplied
-            Validation error:
-              value:
-                status: '400'
-                code: '40001'
-                title: Validation error
-            Invalid traceparent http header:
-              value:
-                status: '400'
-                code: '40002'
-                title: Invalid trace header
-            No matching data found:
-              value:
-                status: '400'
-                code: '40003'
-                title: No matching data found
-            Invalid header:
-              value:
-                status: '400'
-                code: '40004'
-                title: Invalid header
-            Third party error:
-              value:
-                status: '400'
-                code: '40005'
-                title: Third party error
+    FeeBreakdown:
+      type: object
+      additionalProperties: false
+      required:
+      - legalWork
+      - disbursements
+      - supplements
+      properties:
+        legalWork:
+          type: array
+          description: Legal work fees
+          items:
+            $ref: '#/components/schemas/FeeItem'
+        disbursements:
+          type: array
+          description: Disbursement fees
+          items:
+            $ref: '#/components/schemas/FeeItem'
+        supplements:
+          type: array
+          description: Supplement fees
+          items:
+            $ref: '#/components/schemas/FeeItem'
+    ConveyancerBasic:
+      type: object
+      additionalProperties: false
+      required:
+      - conveyancerId
+      - name
+      - overallRating
+      properties:
+        conveyancerId:
+          description: Conveyancer identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+        name:
+          type: string
+          maxLength: 100
+          description: Conveyancer name
+          example: Key Conveyancing LLP
+        location:
+          type: string
+          description: Conveyancer location
+          example: Northampton
+        logoUrl:
+          type: string
+          format: uri
+          description: URL to conveyancer logo
+          example: https://cdn.optimus.com/logos/key-conveyancing.png
+        overallRating:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 5
+          description: Overall rating (1-5 scale)
+          example: 4.3
+    QuoteRequestContact:
+      type: object
+      additionalProperties: false
+      required:
+      - roles
+      description: 'The requestor placing this quote on behalf of the applicant.
+
+        Identify the contact using either `contactId` or `email`.
+
+        '
+      properties:
+        contactId:
+          description: Contact identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 6a969045-973e-428d-b664-7e51a7d73bf0
+        name:
+          type: string
+          maxLength: 100
+          description: Contact name
+          example: Sarah Johnson
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 5
+          description: Email address of the contact
+          example: requestor@example.com
+        roles:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            type: string
+            enum:
+            - Requestor
+          description: Must be `Requestor` for quote creation
+          example:
+          - Requestor
+    Account:
+      type: object
+      additionalProperties: false
+      required:
+      - accountId
+      - roles
+      description: 'An account acting in one or more roles for a quote or case.
+
+        Both an originator and an introducer must be represented across the `accounts` array.
+
+        The same account may include both `Originator` and `Introducer` in its `roles`.
+
+        '
+      properties:
+        accountId:
+          description: Account identifier provided during API onboarding
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 27c4cb1e-0c56-4a68-a2aa-8d6a2a1e6f5c
+        roles:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+            enum:
+            - Originator
+            - Introducer
+          description: Role(s) this account plays in the quote or case
+          example:
+          - Originator
+          - Introducer
+    QuoteListResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - quotes
+      description: 'Response containing a list of quote summaries.
+
+        '
+      properties:
+        quotes:
+          type: array
+          description: Array of quote summaries
+          items:
+            $ref: '#/components/schemas/QuoteSummary'
+        count:
+          type: integer
+          format: int32
+          maximum: 9999
+          description: Total number of quotes matching the query. Returned when `$count` or `countOnly` is true.
+    PropertyAddress:
+      description: Property address using PAF Plus format
+      allOf:
+      - $ref: '#/components/schemas/Address'
+      - type: object
+        required:
+        - thoroughfare
+        - postTown
+        - country
+        properties:
+          country:
+            type: string
+            description: Country - must be England, Wales, or Scotland (case insensitive)
+            maxLength: 200
+            pattern: ^([Ee]ngland|[Ww]ales|[Ss]cotland)$
+            example: England
+    Fee:
+      type: object
+      additionalProperties: false
+      required:
+      - totalIncVat
+      - breakdown
+      properties:
+        totalIncVat:
+          type: number
+          format: float
+          description: Total fee including VAT in GBP
+          example: 1982.4
+        breakdown:
+          $ref: '#/components/schemas/FeeBreakdown'
+    RetrieveQuoteResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - quoteId
+      - accounts
+      - propertyAddress
+      - product
+      - persons
+      - conveyancers
+      - fee
+      description: 'Complete quote details combining the original request data with the quote response data.
+
+        Contains all property information, applicant details, product configuration, and pricing breakdown.
+
+        '
+      properties:
+        quoteId:
+          description: Unique quote identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: 550e8400-e29b-41d4-a716-446655440000
+        additionalReferences:
+          type: array
+          description: External references provided by introducers (if any)
+          items:
+            $ref: '#/components/schemas/AdditionalReference'
+        propertyAddress:
+          $ref: '#/components/schemas/PropertyAddress'
+        product:
+          $ref: '#/components/schemas/Products'
+        persons:
+          type: array
+          minItems: 1
+          maxItems: 8
+          description: Array of persons involved in the transaction (maximum 8 applicants). Each person includes a `reference`.
+          items:
+            $ref: '#/components/schemas/Person'
+        selectedConveyancer:
+          $ref: '#/components/schemas/SelectedConveyancerSummary'
+        conveyancers:
+          type: array
+          description: All available conveyancers for this quote
+          items:
+            $ref: '#/components/schemas/Conveyancer'
+        fee:
+          $ref: '#/components/schemas/Fee'
+        accounts:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: Accounts involved in this quote
+          items:
+            $ref: '#/components/schemas/Account'
+        contacts:
+          type: array
+          maxItems: 10
+          description: Contacts involved in this quote (if any)
+          items:
+            $ref: '#/components/schemas/Contact'
+    SelectedConveyancerSummary:
+      type: object
+      additionalProperties: false
+      required:
+      - conveyancerId
+      - name
+      description: Currently selected conveyancer for this quote (identifier and display name)
+      properties:
+        conveyancerId:
+          description: Conveyancer identifier
+          allOf:
+          - $ref: '#/components/schemas/LgsUuid'
+          example: f7a7438b-fe4e-4361-b00b-d3d709a16d01
+        name:
+          type: string
+          maxLength: 100
+          description: Conveyancer name
+          example: Key Conveyancing LLP
   headers:
     lgsTraceResponse:
       description: Trace context providing an unique identifier for an individual requests
