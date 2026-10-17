@@ -222,11 +222,6 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
 components:
   schemas:
-    lgsUprn:
-      type: integer
-      format: int64
-      minimum: 0
-      maximum: 9223372036854775000
     overrideAmlResultSectionRequest:
       type: object
       additionalProperties: false
@@ -280,45 +275,125 @@ components:
         status: Pass
         comment: Approving manually as customer has provided me with a utility bill, confirming their address.
         actionedBy: john.doe@company.co.uk
-    lgsErrorResponse:
+    orderDocuments:
       type: object
       additionalProperties: false
       required:
-      - status
-      - code
-      - title
+      - documentId
+      - mimeType
+      - documentType
+      - filename
+      - createdDate
       properties:
-        status:
+        documentId:
+          $ref: '#/components/schemas/documentId'
+        mimeType:
+          description: The media type (also known as a Multipurpose Internet Mail Extensions or MIME type) indicating the format of the document. (eg application/pdf)
+          type: string
+          maxLength: 127
+          pattern: ^[\w!#$&\-^.+]+\/[\w!#$&\-^.+]+$
+        documentType:
+          description: Landmark document type indicating the nature and category of the document content (eg AMLReport).
+          type: string
+          maxLength: 100
+        filename:
+          description: Name of the file.
           type: string
           minLength: 3
-          maxLength: 3
-          pattern: ^[0-9]{3}$
-        code:
+          maxLength: 250
+          pattern: ^(?!.*\.\..*)[^\:/\*"\<\>\|]+?\.[a-zA-Z\d]{1,10}$
+        createdDate:
+          description: The date the file was created.
           type: string
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]{5}$
-        title:
+          format: date-time
+    orderReference:
+      description: Your reference that uniquely identifies the product order.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    productId:
+      description: Unique Landmark ID for the product.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    transactionId:
+      description: The unique Landmark ID for the transaction. This ID can be used to associate multiple orders to a single transaction.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    orderId:
+      description: Unique Landmark ID for the order.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    lgsUprn:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775000
+    orderStatusResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        reference:
+          $ref: '#/components/schemas/orderReference'
+        status:
+          $ref: '#/components/schemas/orderStatus'
+        statusDescription:
           type: string
-          minLength: 1
-          maxLength: 100
-        messages:
+          maxLength: 1000
+          description: Provides further detail regarding the order status.
+      example:
+        orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
+        reference: 513ba615-1e78-4751-968b-2402a49e5594
+        status: Completed
+        statusDescription: AML order is Completed.
+    product:
+      type: object
+      required:
+      - productId
+      - reference
+      additionalProperties: false
+      properties:
+        productId:
+          description: Unique Landmark ID for the product.
+          allOf:
+          - $ref: '#/components/schemas/lgsUuid'
+        reference:
+          description: Your reference that uniquely identifies the product order.
+          allOf:
+          - $ref: '#/components/schemas/lgsUuid'
+        productOptions:
+          type: object
+          description: An object to provide data and options specific to the product. See [Product Request Schemas](#tag/Product-Request-Schemas) for further details on the product options.
+    lgsCallbackBasic:
+      type: object
+      additionalProperties: false
+      required:
+      - url
+      properties:
+        headers:
+          description: The headers to be included within the callback request.
           type: array
-          maxItems: 100
+          maxItems: 20
           items:
             type: object
             additionalProperties: false
             required:
-            - message
+            - key
+            - value
             properties:
-              property:
+              key:
+                description: The header name.
                 type: string
-                minLength: 1
-                maxLength: 1000
-              message:
+                maxLength: 200
+              value:
+                description: The header value.
                 type: string
-                minLength: 1
-                maxLength: 1000
+                maxLength: 8192
+        url:
+          description: The url to receive callbacks.
+          type: string
+          maxLength: 2048
+          pattern: ^([hH][tT][tT][pP][sS]:\/\/)([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})([\/\w \.-]*)*\/?
     lgsPersonWithRoles:
       type: object
       additionalProperties: false
@@ -394,6 +469,10 @@ components:
             - EstateAgent
             - KeyHolder
             - MortgageBroker
+    transactionReference:
+      type: string
+      maxLength: 100
+      description: Your reference to identify the transaction.
     createOrderResponse:
       title: Create Order Response
       type: object
@@ -433,63 +512,47 @@ components:
         - orderId: a70da744-50f0-4952-b3a2-73e64428e969
           productId: 7e3e5840-41c5-419c-9e85-6a47b443fa56
           reference: 6363e54b-e83a-45b4-96e0-5528cc36e27f
-    product:
+    lgsErrorResponse:
       type: object
-      required:
-      - productId
-      - reference
       additionalProperties: false
+      required:
+      - status
+      - code
+      - title
       properties:
-        productId:
-          description: Unique Landmark ID for the product.
-          allOf:
-          - $ref: '#/components/schemas/lgsUuid'
-        reference:
-          description: Your reference that uniquely identifies the product order.
-          allOf:
-          - $ref: '#/components/schemas/lgsUuid'
-        productOptions:
-          type: object
-          description: An object to provide data and options specific to the product. See [Product Request Schemas](#tag/Product-Request-Schemas) for further details on the product options.
-    transactionReference:
-      type: string
-      maxLength: 100
-      description: Your reference to identify the transaction.
-    orderReference:
-      description: Your reference that uniquely identifies the product order.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    lgsUuid:
-      type: string
-      format: uuid
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        status:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[0-9]{3}$
+        code:
+          type: string
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]{5}$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        messages:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - message
+            properties:
+              property:
+                type: string
+                minLength: 1
+                maxLength: 1000
+              message:
+                type: string
+                minLength: 1
+                maxLength: 1000
     accountId:
       description: Your Landmark account ID - this will be provided to you during onboarding.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    orderStatusResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        orderId:
-          $ref: '#/components/schemas/orderId'
-        reference:
-          $ref: '#/components/schemas/orderReference'
-        status:
-          $ref: '#/components/schemas/orderStatus'
-        statusDescription:
-          type: string
-          maxLength: 1000
-          description: Provides further detail regarding the order status.
-      example:
-        orderId: 4df4d4b1-9a07-4d25-9772-764d1fefe527
-        reference: 513ba615-1e78-4751-968b-2402a49e5594
-        status: Completed
-        statusDescription: AML order is Completed.
-    productId:
-      description: Unique Landmark ID for the product.
       allOf:
       - $ref: '#/components/schemas/lgsUuid'
     getOrderResponse:
@@ -548,124 +611,6 @@ components:
           documentType: AMLReport
           filename: ResultsDocument.pdf
           createdDate: '2020-07-02T12:00:00Z'
-    orderDocuments:
-      type: object
-      additionalProperties: false
-      required:
-      - documentId
-      - mimeType
-      - documentType
-      - filename
-      - createdDate
-      properties:
-        documentId:
-          $ref: '#/components/schemas/documentId'
-        mimeType:
-          description: The media type (also known as a Multipurpose Internet Mail Extensions or MIME type) indicating the format of the document. (eg application/pdf)
-          type: string
-          maxLength: 127
-          pattern: ^[\w!#$&\-^.+]+\/[\w!#$&\-^.+]+$
-        documentType:
-          description: Landmark document type indicating the nature and category of the document content (eg AMLReport).
-          type: string
-          maxLength: 100
-        filename:
-          description: Name of the file.
-          type: string
-          minLength: 3
-          maxLength: 250
-          pattern: ^(?!.*\.\..*)[^\:/\*"\<\>\|]+?\.[a-zA-Z\d]{1,10}$
-        createdDate:
-          description: The date the file was created.
-          type: string
-          format: date-time
-    documentId:
-      description: Unique Landmark ID for the document.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    orderStatus:
-      description: The status of the order
-      type: string
-      enum:
-      - Processing
-      - Completed
-      - Errored
-      - Cancelled
-    createOrderRequest:
-      type: object
-      required:
-      - reference
-      - accountId
-      - products
-      additionalProperties: false
-      properties:
-        reference:
-          type: string
-          maxLength: 100
-          description: Your reference to identify the transaction.
-        accountId:
-          $ref: '#/components/schemas/accountId'
-        transactionId:
-          $ref: '#/components/schemas/transactionId'
-        transactionAddress:
-          description: The property address for the transaction related to the products being ordered.
-          allOf:
-          - $ref: '#/components/schemas/lgsAddressPAF'
-        callback:
-          description: Callback uri that should receive status updates. Each product will receieve a status update.
-          allOf:
-          - $ref: '#/components/schemas/lgsCallbackBasic'
-        persons:
-          description: "The details of the people involved in your transaction - some Products will require these for processing (e.g. AML searches). \n\nYou must set a unique reference for each of these people for use in ordering products. \n"
-          type: array
-          maxItems: 20
-          items:
-            $ref: '#/components/schemas/lgsPersonWithRoles'
-        products:
-          description: "An array of the products that you require. For each of these, an order will be created in the Landmark system and will begin processing. \nYou must provide a reference GUID for each product which we will use in the response and callbacks, if you are using them, to help you identify the Order. \n\nSee the [Product Request Schemas](#tag/Product-Request-Schemas) for details on how to order each one. \n"
-          type: array
-          minItems: 1
-          maxItems: 20
-          items:
-            $ref: '#/components/schemas/product'
-    transactionId:
-      description: The unique Landmark ID for the transaction. This ID can be used to associate multiple orders to a single transaction.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    orderId:
-      description: Unique Landmark ID for the order.
-      allOf:
-      - $ref: '#/components/schemas/lgsUuid'
-    lgsCallbackBasic:
-      type: object
-      additionalProperties: false
-      required:
-      - url
-      properties:
-        headers:
-          description: The headers to be included within the callback request.
-          type: array
-          maxItems: 20
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - key
-            - value
-            properties:
-              key:
-                description: The header name.
-                type: string
-                maxLength: 200
-              value:
-                description: The header value.
-                type: string
-                maxLength: 8192
-        url:
-          description: The url to receive callbacks.
-          type: string
-          maxLength: 2048
-          pattern: ^([hH][tT][tT][pP][sS]:\/\/)([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})([\/\w \.-]*)*\/?
     lgsAddressPAF:
       type: object
       additionalProperties: false
@@ -727,37 +672,62 @@ components:
           example: SO99 9ZZ
           maxLength: 10
           pattern: ^[A-Za-z0-9\s]*$
+    documentId:
+      description: Unique Landmark ID for the document.
+      allOf:
+      - $ref: '#/components/schemas/lgsUuid'
+    lgsUuid:
+      type: string
+      format: uuid
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    orderStatus:
+      description: The status of the order
+      type: string
+      enum:
+      - Processing
+      - Completed
+      - Errored
+      - Cancelled
+    createOrderRequest:
+      type: object
+      required:
+      - reference
+      - accountId
+      - products
+      additionalProperties: false
+      properties:
+        reference:
+          type: string
+          maxLength: 100
+          description: Your reference to identify the transaction.
+        accountId:
+          $ref: '#/components/schemas/accountId'
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        transactionAddress:
+          description: The property address for the transaction related to the products being ordered.
+          allOf:
+          - $ref: '#/components/schemas/lgsAddressPAF'
+        callback:
+          description: Callback uri that should receive status updates. Each product will receieve a status update.
+          allOf:
+          - $ref: '#/components/schemas/lgsCallbackBasic'
+        persons:
+          description: "The details of the people involved in your transaction - some Products will require these for processing (e.g. AML searches). \n\nYou must set a unique reference for each of these people for use in ordering products. \n"
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/lgsPersonWithRoles'
+        products:
+          description: "An array of the products that you require. For each of these, an order will be created in the Landmark system and will begin processing. \nYou must provide a reference GUID for each product which we will use in the response and callbacks, if you are using them, to help you identify the Order. \n\nSee the [Product Request Schemas](#tag/Product-Request-Schemas) for details on how to order each one. \n"
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/product'
   responses:
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
-    410GoneError:
-      description: Gone Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Gone Error:
-              value:
-                status: '410'
-                code: '41000'
-                title: Gone Error
     429TooManyRequests:
       description: Too Many Requests
       headers:
@@ -773,6 +743,68 @@ components:
                 status: '429'
                 code: '42900'
                 title: Rate limit exceeded
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+    410GoneError:
+      description: Gone Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Gone Error:
+              value:
+                status: '410'
+                code: '41000'
+                title: Gone Error
+    404NotFound:
+      description: Not Found
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Entity not found:
+              value:
+                status: '404'
+                code: '40401'
+                title: Entity not found
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
     400BadRequest:
       description: Bad Request
       headers:
@@ -858,38 +890,6 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
-    500InternalServerError:
-      description: Internal Server Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Resource not found:
-              value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-    404NotFound:
-      description: Not Found
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Entity not found:
-              value:
-                status: '404'
-                code: '40401'
-                title: Entity not found
   headers:
     lgsTraceResponse:
       description: Trace context providing an unique identifier for an individual requests

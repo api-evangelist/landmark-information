@@ -154,21 +154,6 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
 components:
   responses:
-    401Unauthorized:
-      description: Unauthorized
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid identity:
-              value:
-                status: '401'
-                code: '40100'
-                title: Invalid identity
     429TooManyRequests:
       description: Too Many Requests
       headers:
@@ -199,6 +184,78 @@ components:
                 status: '404'
                 code: '40400'
                 title: Entity not found
+    500InternalServerError:
+      description: Internal Server Error
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Resource not found:
+              value:
+                status: '500'
+                code: '50000'
+                title: Internal server error
+                messages:
+                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
+    401Unauthorized:
+      description: Unauthorized
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid identity:
+              value:
+                status: '401'
+                code: '40100'
+                title: Invalid identity
+    400BadRequest:
+      description: Bad Request
+      headers:
+        traceresponse:
+          $ref: '#/components/headers/lgsTraceResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/lgsErrorResponse'
+          examples:
+            Invalid content type supplied:
+              value:
+                status: '400'
+                code: '40000'
+                title: Invalid content type supplied
+            Validation error:
+              value:
+                status: '400'
+                code: '40001'
+                title: Validation error
+            Invalid traceparent http header:
+              value:
+                status: '400'
+                code: '40002'
+                title: Invalid trace header
+            No matching data found:
+              value:
+                status: '400'
+                code: '40003'
+                title: No matching data found
+            Invalid header:
+              value:
+                status: '400'
+                code: '40004'
+                title: Invalid header
+            Third party error:
+              value:
+                status: '400'
+                code: '40005'
+                title: Third party error
     403Forbidden:
       description: Forbidden
       headers:
@@ -244,75 +301,43 @@ components:
                 status: '403'
                 code: '40306'
                 title: Token expiry too long
-    400BadRequest:
-      description: Bad Request
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Invalid content type supplied:
-              value:
-                status: '400'
-                code: '40000'
-                title: Invalid content type supplied
-            Validation error:
-              value:
-                status: '400'
-                code: '40001'
-                title: Validation error
-            Invalid traceparent http header:
-              value:
-                status: '400'
-                code: '40002'
-                title: Invalid trace header
-            No matching data found:
-              value:
-                status: '400'
-                code: '40003'
-                title: No matching data found
-            Invalid header:
-              value:
-                status: '400'
-                code: '40004'
-                title: Invalid header
-            Third party error:
-              value:
-                status: '400'
-                code: '40005'
-                title: Third party error
-    500InternalServerError:
-      description: Internal Server Error
-      headers:
-        traceresponse:
-          $ref: '#/components/headers/lgsTraceResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/lgsErrorResponse'
-          examples:
-            Resource not found:
-              value:
-                status: '500'
-                code: '50000'
-                title: Internal server error
-                messages:
-                - message: Sorry, something has gone wrong whilst processing your request. An error has been logged and our support team will investigate this shortly. Please try again later and if the issue persists, please contact your Account Manager referencing the value 00-199c8ce55dc743a88661498aa8eb2cfc--00.
-  headers:
-    lgsTraceResponse:
-      description: Trace context providing an unique identifier for an individual requests
-      schema:
-        type: string
-        minLength: 39
-        maxLength: 39
-        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
-      examples:
-        Example traceresponse:
-          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
   schemas:
+    activity:
+      type: object
+      required:
+      - action
+      - createdBy
+      - createdDate
+      additionalProperties: false
+      properties:
+        action:
+          type: string
+          description: The context of the activity
+        detail:
+          type: string
+          description: The activity message
+        createdBy:
+          type: string
+          description: The full name of the person who created the activity
+        createdDate:
+          type: string
+          format: date-time
+          maxLength: 38
+        metadata:
+          type: object
+          description: Additional metadata for the activity
+          additionalProperties: true
+    getActivitiesResponse:
+      description: The activities relating to the associated document vault
+      type: object
+      required:
+      - activities
+      additionalProperties: false
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/activity'
     lgsErrorResponse:
       type: object
       additionalProperties: false
@@ -352,52 +377,27 @@ components:
                 type: string
                 minLength: 1
                 maxLength: 1000
-    activity:
-      type: object
-      required:
-      - action
-      - createdBy
-      - createdDate
-      additionalProperties: false
-      properties:
-        action:
-          type: string
-          description: The context of the activity
-        detail:
-          type: string
-          description: The activity message
-        createdBy:
-          type: string
-          description: The full name of the person who created the activity
-        createdDate:
-          type: string
-          format: date-time
-          maxLength: 38
-        metadata:
-          type: object
-          description: Additional metadata for the activity
-          additionalProperties: true
     accountId:
       description: Your Landmark account ID - this will be provided to you during onboarding
       allOf:
       - $ref: '#/components/schemas/lgsUuid'
-    getActivitiesResponse:
-      description: The activities relating to the associated document vault
-      type: object
-      required:
-      - activities
-      additionalProperties: false
-      properties:
-        activities:
-          type: array
-          items:
-            $ref: '#/components/schemas/activity'
     lgsUuid:
       type: string
       format: uuid
       minLength: 36
       maxLength: 36
       pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[4][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+  headers:
+    lgsTraceResponse:
+      description: Trace context providing an unique identifier for an individual requests
+      schema:
+        type: string
+        minLength: 39
+        maxLength: 39
+        pattern: ^[0-9a-fA-F]{2}-[0-9a-fA-F]{32}--[0-9a-fA-F]{2}$
+      examples:
+        Example traceresponse:
+          value: 00-199c8ce55dc743a88661498aa8eb2cfc--00
   securitySchemes:
     bearerAuth:
       type: http
